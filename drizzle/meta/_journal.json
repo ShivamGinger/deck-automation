@@ -1,0 +1,13 @@
+{
+  "version": "5",
+  "dialect": "mysql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1697310930799,
+      "tag": "0000_overrated_wallflower",
+      "breakpoints": true
+    }
+  ]
+}
