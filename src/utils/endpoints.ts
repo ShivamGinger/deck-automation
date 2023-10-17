@@ -1,0 +1,1 @@
+export const endpoints = 'http://localhost:3000/api'
