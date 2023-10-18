@@ -1,3 +1,5 @@
+'use client';
+
 import React, { FC } from 'react';
 
 interface InputProps extends React.HTMLAttributes<HTMLInputElement> {
@@ -14,6 +16,7 @@ const Input: FC<InputProps> = ({ id, name, required, moveLabel, ...props }) => {
       <div className="w-72">
         <div className="relative h-10 w-full min-w-[200px]">
           <input
+            value={props.placeholder}
             {...props}
             className={`
             peer 
@@ -29,16 +32,18 @@ const Input: FC<InputProps> = ({ id, name, required, moveLabel, ...props }) => {
             text-sm 
             font-normal 
             transition-all 
+            text-gray-400
             focus:border-2 
             focus:border-red-500 
+            focus:text-black 
             focus:border-t-transparent 
             focus:outline-0 
             `}
           />
           <label className={`
             pointer-events-none 
-            absolute left-2 top-2
-            ${moveLabel && '-top-2'}
+            absolute left-2 
+            ${moveLabel ? '-top-2' : 'top-2'}
             flex h-full w-full 
             select-none 
             text-[16px] font-normal 
