@@ -1,0 +1,54 @@
+body {
+  font-family: 'Cabin', sans-serif;
+}
+
+#role {
+  color: #B06500;
+}
+
+#name {
+  color: #542C06;
+}
+
+#description,
+#other-details,
+#candidate-role,
+#gp-score,
+#details-heading {
+  color: #542C06;
+}
+
+#notes {
+  color: #787878;
+}
+
+#details-right-bg {
+  background-color: #fffaef;
+  width: 87vw;
+}
+
+#key-points,
+#gp-quotient {
+  width: 40rem;
+}
+
+#gp-quotient,
+#top-attributes {
+  height: 22rem;
+}
+
+#experience-achivements,
+#top-attributes {
+  width: 55rem;
+}
+
+#detail-right {
+  width: 100rem;
+}
+
+#key-points,
+#gp-quotient,
+#experience-achivements,
+#top-attributes {
+  box-shadow: #542C06;
+}
