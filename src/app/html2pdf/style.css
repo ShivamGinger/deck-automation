@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
+
 body {
   font-family: 'Cabin', sans-serif;
 }
@@ -14,8 +16,15 @@ body {
 #other-details,
 #candidate-role,
 #gp-score,
-#details-heading {
+#details-heading,
+#personal-details,
+#contact-info {
   color: #542C06;
+}
+
+#personal-details,
+#contact-info {
+  font-weight: 600;
 }
 
 #notes {
@@ -49,6 +58,15 @@ body {
 #key-points,
 #gp-quotient,
 #experience-achivements,
-#top-attributes {
-  box-shadow: #542C06;
+#top-attributes,
+#gp-score {
+  box-shadow: 4px 4px 4px 0px rgba(176, 101, 0, 0.2);
+}
+
+.custom-box-shadow {
+  box-shadow: 2px 0px 12px 4px rgba(0, 0, 0, 0.25);
+}
+
+.custom-border-bottom {
+  border: 1px solid rgba(46, 26, 0, 0.45);
 }

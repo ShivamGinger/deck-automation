@@ -19,8 +19,9 @@ export async function POST(request: NextRequest) {
   const pdf = await page.pdf({
     path: './reports/result.pdf',
     printBackground: true,
-    format: 'A4',
     landscape: true,
+    height: 1920,
+    width: 1070
   });
 
   await browser.close();
