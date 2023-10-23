@@ -1,16 +1,84 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 
 import Image from 'next/image';
 import Link from 'next/link';
+
 import { useSearchParams } from 'next/navigation';
+
+import { ArcElement, Chart as ChartJS, Legend, Tooltip } from 'chart.js';
+import { Doughnut } from 'react-chartjs-2';
+
 import './style.css';
+
+type Attribute = {
+  id: number;
+  title: string;
+  value: number;
+};
+
+ChartJS.register(
+  ArcElement,
+  Tooltip,
+  Legend
+)
+
+function GaugeChart({ value }: { value: number }) {
+
+  const data = {
+    datasets: [
+      {
+        data: [value, 5 - value],
+        backgroundColor: ['rgba(176, 101, 0, 1)', 'rgba(217, 187, 147, 1)'],
+        borderColor: ['rgba(176, 101, 0, 1)', 'rgba(217, 187, 147, 1)'],
+        circumference: 180,
+        rotation: 270,
+      },
+    ],
+  };
+
+  const options = {
+    cutout: '80%',
+
+  };
+
+  return <div className='absolute custom-class -top-2'>
+    <Doughnut data={data} options={options} />
+  </div>;
+}
 
 const Page = () => {
   const searchParams = useSearchParams();
 
   const name = searchParams.get('name');
+  const gender = searchParams.get('gender');
+
+  const keyPointsString = searchParams.get('keyPoints');
+  let keyPoints = [''];
+
+  const top5AttributesString = searchParams.get('topAttributes');
+  let top5Attributes: Attribute[] | undefined;
+
+  if (keyPointsString) {
+    keyPoints = JSON.parse(keyPointsString);
+  }
+
+  if (top5AttributesString) {
+    top5Attributes = JSON.parse(top5AttributesString);
+  }
+
+  const IQValueString = searchParams.get('IQValue');
+  const IQValue = IQValueString ? parseFloat(IQValueString) : 0;
+
+  const EQValueString = searchParams.get('EQValue');
+  const EQValue = EQValueString ? parseFloat(EQValueString) : 0;
+
+  const SQValueString = searchParams.get('SQValue');
+  const SQValue = SQValueString ? parseFloat(SQValueString) : 0;
+
+  const AQValueString = searchParams.get('AQValue');
+  const AQValue = AQValueString ? parseFloat(AQValueString) : 0;
 
   return (
     <>
@@ -52,12 +120,12 @@ const Page = () => {
             <p className="uppercase font-semibold text-lg" id="personal-details">personal details</p>
             <div className='flex gap-4'>
               <div className='flex flex-col gap-y-4 justify-center'>
-                <Image width={25} height={25} src={'/images/gender.png'} alt="profile pic" />
-                <Image width={25} height={25} src={'/images/experience.png'} alt="profile pic" />
-                <Image width={25} height={25} src={'/images/money.png'} alt="profile pic" />
+                {gender === 'M' ? <Image width={25} height={25} src={'/images/gender.png'} alt="male" /> : <Image width={25} height={25} src={'/images/female.png'} alt="female" />}
+                <Image width={25} height={25} src={'/images/experience.png'} alt="experience" />
+                <Image width={25} height={25} src={'/images/money.png'} alt="money" />
               </div>
               <div className='flex flex-col gap-y-4 justify-center '>
-                <div>Male</div>
+                {gender === 'M' ? <div>Male</div> : <div>Female</div>}
                 <div>7+ years</div>
                 <div>INR 70 LPA</div>
               </div>
@@ -95,52 +163,115 @@ const Page = () => {
               GP Score- 4.3
             </div>
           </div>
+
           <div className="flex flex-wrap gap-10" id="detail-right">
-            <div className="bg-white p-16 rounded-xl " id="key-points">
+            <div className="bg-white p-8 rounded-xl " id="key-points">
               <div className="flex flex-col">
                 <div className="font-bold uppercase pb-3" id="details-heading">key points</div>
-                <div className="pl-8">
+                <div className="pl-12">
                   <ul className="list-disc text-sm">
-                    <li>Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus, tempora!</li>
-                    <li>hehe</li>
-                    <li>hehe</li>
+                    {keyPoints.map((point, index) => (
+                      <li key={index} className='text-lg'>{point}</li>
+                    ))}
                   </ul>
                 </div>
               </div>
             </div>
-            <div className="bg-white p-16 rounded-xl" id="experience-achivements">
+
+            <div className="bg-white p-8 rounded-xl" id="experience-achivements">
               <div className="flex flex-col">
                 <div className="font-bold uppercase pb-3" id="details-heading">experience and achivements</div>
-                <div className="pl-8">
+                <div className="pl-12">
                   <ul className="list-disc text-sm">
-                    <li>Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus, tempora!</li>
-                    <li>hehe</li>
-                    <li>hehe</li>
+                    {keyPoints.map((point, index) => (
+                      <li key={index} className='text-lg'>{point}</li>
+                    ))}
                   </ul>
                 </div>
               </div>
             </div>
-            <div className="bg-white p-16 rounded-xl " id="gp-quotient">
+
+            <div className="bg-white p-8 rounded-xl " id="gp-quotient">
               <div className="flex flex-col">
                 <div className="font-bold uppercase pb-3" id="details-heading">gp quotient</div>
-                <div className="pl-8">
-                  <ul className="list-disc text-sm">
-                    <li>Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus, tempora!</li>
-                    <li>hehe</li>
-                    <li>hehe</li>
-                  </ul>
+                <div className="justify-center flex ">
+                  <div className=" flex flex-col gap-8">
+                    <div className='flex gap-8'>
+                      <div className='pt-4 w-28 h-28 flex flex-col justify-center items-center rounded-lg relative' id='quotient'>
+                        <GaugeChart value={IQValue} />
+
+                        <div className='p-3 font-semibold border-b border-gray-500'>
+                          IQ
+                        </div>
+                        <div className='font-semibold p-2'>
+                          {IQValue}
+                        </div>
+                      </div>
+
+                      <div className='pt-4 w-28 h-28 flex flex-col justify-center items-center rounded-lg relative' id='quotient'>
+                        <GaugeChart value={EQValue} />
+
+                        <div className='p-3 font-semibold border-b border-gray-500'>
+                          EQ
+                        </div>
+                        <div className='font-semibold p-2'>
+                          {EQValue}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className='flex gap-8'>
+                      <div className='pt-4 w-28 h-28 flex flex-col justify-center items-center rounded-lg relative' id='quotient'>
+                        <GaugeChart value={SQValue} />
+
+                        <div className='p-3 font-semibold border-b border-gray-500'>
+                          SQ
+                        </div>
+                        <div className='font-semibold p-2'>
+                          {SQValue}
+                        </div>
+                      </div>
+
+                      <div className='pt-4 w-28 h-28 flex flex-col justify-center items-center rounded-lg relative' id='quotient'>
+                        <GaugeChart value={AQValue} />
+
+                        <div className='p-3 font-semibold border-b border-gray-500'>
+                          AQ
+                        </div>
+                        <div className='font-semibold p-2'>
+                          {AQValue}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-            <div className="bg-white p-16 rounded-xl" id="top-attributes">
+
+            <div className="bg-white p-8 rounded-xl" id="top-attributes">
               <div className="flex flex-col">
                 <div className="font-bold uppercase pb-3" id="details-heading">top 5 attributes</div>
-                <div className="pl-8">
-                  <ul className="list-disc text-sm">
-                    <li>Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus, tempora!</li>
-                    <li>hehe</li>
-                    <li>hehe</li>
-                  </ul>
+                <div className="pl-12 pt-4">
+                  <div className="flex gap-5 ">
+                    <div className='flex flex-col gap-6 items-end'>
+                      {top5Attributes?.map((attribute) => (
+                        <p key={attribute.id}>{attribute.title}</p>
+                      ))}
+                    </div>
+
+                    <div className='border-r border-black'></div>
+
+                    <div className=' w-1/2 gap-[2.08rem] flex flex-col'>
+                      {top5Attributes?.map((attribute) => (
+                        <div key={attribute.id} className='rounded-lg pt-3' style={{ width: `${(attribute.value / 5) * 100}%` }} id='top-5-attributes'></div>
+                      ))}
+                    </div>
+                    <div className='flex flex-col gap-6 items-end'>
+                      {top5Attributes?.map((attribute) => (
+                        <p key={attribute.id}>{attribute.value}</p>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

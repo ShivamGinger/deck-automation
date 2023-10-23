@@ -70,3 +70,18 @@ body {
 .custom-border-bottom {
   border: 1px solid rgba(46, 26, 0, 0.45);
 }
+
+#top-5-attributes {
+  background: rgba(250, 143, 45, 1);
+  border: 2px solid rgba(250, 143, 45, 1);
+}
+
+#quotient {
+  background: rgba(247, 204, 165, 0.38);
+  box-shadow: 1.9461181163787842px 4.540942192077637px 5.838354587554932px 0px rgba(176, 101, 0, 0.2);
+}
+
+.custom-class canvas {
+  width: 70px; 
+  height: 70px; 
+}
