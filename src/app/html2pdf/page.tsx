@@ -158,9 +158,12 @@ const Page = () => {
             <h2>Candidate-1</h2>
             <h2>Minus Zero- Role</h2>
           </div>
+
           <div className="pb-6">
-            <div id="gp-score" className="bg-white p-4 text-2xl font-semibold rounded-xl w-52 ">
-              GP Score- 4.3
+            <div id="gp-score" className="bg-[#542C06] text-white p-4 text-3xl font-bold rounded-2xl w-56 flex justify-center">
+              <span>
+                GP Score- 5
+              </span>
             </div>
           </div>
 
@@ -276,6 +279,7 @@ const Page = () => {
               </div>
             </div>
           </div>
+
           <div className="mt-8 " id="notes">
             <p className="italic text-lg">Note(s)- IQ- Intelligence Quotiend; EQ- Emotional Quotient; SQ- Social Quotient; AQ-
               Adversity Quotient</p>

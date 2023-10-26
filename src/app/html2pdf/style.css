@@ -15,7 +15,6 @@ body {
 #description,
 #other-details,
 #candidate-role,
-#gp-score,
 #details-heading,
 #personal-details,
 #contact-info {
@@ -58,8 +57,8 @@ body {
 #key-points,
 #gp-quotient,
 #experience-achivements,
-#top-attributes,
-#gp-score {
+#gp-score,
+#top-attributes {
   box-shadow: 4px 4px 4px 0px rgba(176, 101, 0, 0.2);
 }
 
@@ -82,6 +81,6 @@ body {
 }
 
 .custom-class canvas {
-  width: 70px; 
-  height: 70px; 
+  width: 70px;
+  height: 70px;
 }

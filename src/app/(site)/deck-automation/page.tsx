@@ -9,6 +9,7 @@ import Input from './Components/Input';
 import ProgressBar from './Components/ProgressBar';
 
 import { endpoints } from '@/utils/endpoints';
+import Image from 'next/image';
 
 interface CandidateInfo {
   name: string,
@@ -18,10 +19,10 @@ interface CandidateInfo {
 }
 
 const steps = [
-  'Company Information',
-  'Candidate Information',
-  'Weightage',
-  'Scores',
+  'Company Information Form',
+  'Candidate Information Form',
+  'Weightage Form',
+  'Scores Form',
 ];
 
 const Page = () => {
@@ -174,29 +175,33 @@ const Page = () => {
   };
 
   return (
-    <div>
-      <div className='max-w-screen-lg mx-auto bg-white shadow-2xl px-4 md:px-0'>
+    <div className='bg-[#FEFAEF] '>
+      <div className='max-w-screen-2xl mx-auto bg-white shadow-2xl px-4 md:px-0 md:mt-10 rounded-xl'>
         <div className='font-semibold p-2 border-b-2 border-gray-200 cursor-pointer md:block hidden' onClick={() => router.back()} >
-          {'<-'}goback
+          {'<-'} goback
         </div>
         <div className='max-w-screen-sm mx-auto md:pt-6 min-h-screen pt-4'>
+          <div className='flex justify-center py-4'>
+            <Image width={120} height={120} src={'/images/Ginger Partners_Logo with tagline.png'} alt="profile pic" className="rounded-xl " />
+          </div>
+
           <ProgressBar currentStep={currentStep} totalSteps={steps.length} steps={steps} />
 
           <div className='flex flex-col'>
             {
               currentStep === 0 &&
               <>
-                <h2 className='self-center font-bold text-2xl'>{steps[currentStep]}</h2>
 
                 {error &&
-                  <div className='bg-red-500 p-4 text-white font-semibold rounded-md w-1/2 my-3'>
+                  <div className='bg-red-500 p-4 text-white font-semibold rounded-md w-1/2 my-3 flex justify-between'>
                     Missing fields!
+                    <span onClick={() => setError(false)} className='cursor-pointer'>X</span>
                   </div>
                 }
 
-                <div className=" w-full mt-4 space-y-6 ">
-                  <span className='text-red-600 font-bold '>*</span> Indicates a required field
-                  <div className="space-y-6">
+                <div className=" w-full mt-4 ">
+                  {/* <span className='text-red-600 font-bold '>*</span> Indicates a required field */}
+                  <div className="space-y-12">
                     <Input
                       name='Company Name'
                       id='company_name'
@@ -222,7 +227,6 @@ const Page = () => {
             {
               currentStep === 1 &&
               <>
-                <h2 className='self-center font-bold text-2xl'>{steps[currentStep]}</h2>
 
                 {error &&
                   <div className='bg-red-500 p-4 text-white font-semibold rounded-md w-1/2 my-3'>
@@ -246,25 +250,31 @@ const Page = () => {
             {
               currentStep === 2 &&
               <>
-                <h2 className='self-center font-bold text-2xl'>{steps[currentStep]}</h2>
+
                 form 3
               </>
             }
             {
               currentStep === 3 &&
               <>
-                <h2 className='self-center font-bold text-2xl'>{steps[currentStep]}</h2>
                 form 4
 
               </>
             }
           </div>
         </div>
-        <div className='flex justify-end border-t-2 border-gray-200 bg-white w-full py-6 px-2 gap-5 sticky bottom-0'>
-          <button onClick={() => prevStep()} className={`${currentStep === 0 && 'hidden'} font-semibold p-2 border-2 border-gray-200`}>
+
+        <div className='flex justify-end border-t-2 border-gray-200 bg-white w-full py-6 gap-5 sticky bottom-0 md:pr-12 flex-col md:flex-row'>
+          <button
+            onClick={() => prevStep()}
+            className={`${currentStep === 0 && 'hidden'} font-semibold p-2 border-2 text-[#542C06] border-[#B06500] rounded-lg py-2 px-8 uppercase`}
+          >
             Go Back
           </button>
-          <button onClick={() => handleNextStepClick(currentStep)} className={`${currentStep === 3 && 'hidden'} font-semibold p-2 border-2 border-gray-200`}>
+          <button
+            onClick={() => handleNextStepClick(currentStep)}
+            className={`${currentStep === 3 && 'hidden'} font-semibold py-2 px-8 uppercase bg-[#B06500] text-white rounded-lg border-[#B06500]`}
+          >
             Save and Continue
           </button>
           <button onClick={() => nextStep()} className={`${currentStep === 3 ? 'font-semibold p-2 border-2 border-gray-200' : 'hidden'}`}>
