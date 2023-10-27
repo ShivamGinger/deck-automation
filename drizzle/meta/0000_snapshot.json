@@ -1,45 +1,523 @@
 {
+  "id": "00000000-0000-0000-0000-000000000000",
+  "prevId": "",
   "version": "5",
   "dialect": "mysql",
-  "id": "ef96d7f8-4cab-4834-8749-5ee94d45cccc",
-  "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
-    "users": {
-      "name": "users",
+    "candidates": {
+      "name": "candidates",
       "columns": {
         "id": {
+          "autoincrement": true,
           "name": "id",
           "type": "bigint",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": true
+          "notNull": true
         },
-        "full_name": {
-          "name": "full_name",
-          "type": "varchar(256)",
+        "name": {
+          "autoincrement": false,
+          "name": "name",
+          "type": "varchar(255)",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "notNull": true
+        },
+        "key_points": {
+          "autoincrement": false,
+          "name": "key_points",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "profile_pic": {
+          "autoincrement": false,
+          "name": "profile_pic",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "social": {
+          "autoincrement": false,
+          "name": "social",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "company_id": {
+          "autoincrement": false,
+          "name": "company_id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "role_id": {
+          "autoincrement": false,
+          "name": "role_id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "default": "CURRENT_TIMESTAMP",
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
         }
       },
-      "indexes": {
-        "name_idx": {
-          "name": "name_idx",
-          "columns": [
-            "full_name"
-          ],
-          "isUnique": false
-        }
-      },
-      "foreignKeys": {},
       "compositePrimaryKeys": {
-        "users_id": {
-          "name": "users_id",
+        "candidates_id": {
+          "name": "candidates_id",
           "columns": [
             "id"
           ]
         }
       },
+      "indexes": {
+        "company_id_idx": {
+          "name": "company_id_idx",
+          "columns": [
+            "company_id"
+          ],
+          "isUnique": false
+        },
+        "role_id_idx": {
+          "name": "role_id_idx",
+          "columns": [
+            "role_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {}
+    },
+    "companies": {
+      "name": "companies",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "autoincrement": false,
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "companies_id": {
+          "name": "companies_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "uniqueConstraints": {
+        "name": {
+          "name": "name",
+          "columns": [
+            "name"
+          ]
+        }
+      }
+    },
+    "parameter_scores": {
+      "name": "parameter_scores",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "candidate_id": {
+          "autoincrement": false,
+          "name": "candidate_id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "parameter_id": {
+          "autoincrement": false,
+          "name": "parameter_id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "score": {
+          "autoincrement": false,
+          "name": "score",
+          "type": "tinyint",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "parameter_scores_id": {
+          "name": "parameter_scores_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "candidate_id_idx": {
+          "name": "candidate_id_idx",
+          "columns": [
+            "candidate_id"
+          ],
+          "isUnique": false
+        },
+        "parameter_id_idx": {
+          "name": "parameter_id_idx",
+          "columns": [
+            "parameter_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {}
+    },
+    "parameter_weightages": {
+      "name": "parameter_weightages",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "p_weightage": {
+          "autoincrement": false,
+          "name": "p_weightage",
+          "type": "tinyint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "parameter_id": {
+          "autoincrement": false,
+          "name": "parameter_id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "company_id": {
+          "autoincrement": false,
+          "name": "company_id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "role_id": {
+          "autoincrement": false,
+          "name": "role_id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "parameter_weightages_id": {
+          "name": "parameter_weightages_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "parameter_id_idx": {
+          "name": "parameter_id_idx",
+          "columns": [
+            "parameter_id"
+          ],
+          "isUnique": false
+        },
+        "company_id_idx": {
+          "name": "company_id_idx",
+          "columns": [
+            "company_id"
+          ],
+          "isUnique": false
+        },
+        "role_id_idx": {
+          "name": "role_id_idx",
+          "columns": [
+            "role_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {}
+    },
+    "parameters": {
+      "name": "parameters",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "parameter": {
+          "autoincrement": false,
+          "name": "parameter",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "quotient_id": {
+          "autoincrement": false,
+          "name": "quotient_id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "parameters_id": {
+          "name": "parameters_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "quotient_id_idx": {
+          "name": "quotient_id_idx",
+          "columns": [
+            "quotient_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {}
+    },
+    "quotient_scores": {
+      "name": "quotient_scores",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "candidate_id": {
+          "autoincrement": false,
+          "name": "candidate_id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "quotient_id": {
+          "autoincrement": false,
+          "name": "quotient_id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "total_score": {
+          "autoincrement": false,
+          "name": "total_score",
+          "type": "decimal(4,2)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "quotient_scores_id": {
+          "name": "quotient_scores_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "candidate_id_idx": {
+          "name": "candidate_id_idx",
+          "columns": [
+            "candidate_id"
+          ],
+          "isUnique": false
+        },
+        "quotient_id_idx": {
+          "name": "quotient_id_idx",
+          "columns": [
+            "quotient_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {}
+    },
+    "quotient_weightages": {
+      "name": "quotient_weightages",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "q_weightage": {
+          "autoincrement": false,
+          "name": "q_weightage",
+          "type": "tinyint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "quotient_id": {
+          "autoincrement": false,
+          "name": "quotient_id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "company_id": {
+          "autoincrement": false,
+          "name": "company_id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "role_id": {
+          "autoincrement": false,
+          "name": "role_id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "quotient_weightages_id": {
+          "name": "quotient_weightages_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "quotient_id_idx": {
+          "name": "quotient_id_idx",
+          "columns": [
+            "quotient_id"
+          ],
+          "isUnique": false
+        },
+        "company_id_idx": {
+          "name": "company_id_idx",
+          "columns": [
+            "company_id"
+          ],
+          "isUnique": false
+        },
+        "role_id_idx": {
+          "name": "role_id_idx",
+          "columns": [
+            "role_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {}
+    },
+    "quotients": {
+      "name": "quotients",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "quotient": {
+          "autoincrement": false,
+          "name": "quotient",
+          "type": "varchar(150)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "quotients_id": {
+          "name": "quotients_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "uniqueConstraints": {
+        "quotient": {
+          "name": "quotient",
+          "columns": [
+            "quotient"
+          ]
+        }
+      }
+    },
+    "roles": {
+      "name": "roles",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "autoincrement": false,
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "company_id": {
+          "autoincrement": false,
+          "name": "company_id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "roles_id": {
+          "name": "roles_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "company_id_idx": {
+          "name": "company_id_idx",
+          "columns": [
+            "company_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
       "uniqueConstraints": {}
     }
   },
