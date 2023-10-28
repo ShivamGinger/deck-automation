@@ -8,6 +8,20 @@
       "when": 1698411214865,
       "tag": "0000_deep_lilith",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1698516106067,
+      "tag": "0001_curved_barracuda",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1698516495697,
+      "tag": "0002_rapid_imperial_guard",
+      "breakpoints": true
     }
   ]
 }

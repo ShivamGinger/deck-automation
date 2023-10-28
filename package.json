@@ -9,7 +9,8 @@
     "lint": "next lint",
     "migrations:generate": "drizzle-kit generate:mysql",
     "migrations:push": "drizzle-kit push:mysql",
-    "introspect": "drizzle-kit introspect:mysql"
+    "introspect": "drizzle-kit introspect:mysql",
+    "studio": "drizzle-kit studio --host 127.0.0.1 --port 6969"
   },
   "dependencies": {
     "@planetscale/database": "^1.11.0",
@@ -19,11 +20,13 @@
     "clsx": "^2.0.0",
     "drizzle-orm": "^0.28.6",
     "jsonwebtoken": "^9.0.2",
+    "mysql2": "^3.6.2",
     "next": "13.5.4",
     "puppeteer": "^21.4.0",
     "react": "^18",
     "react-chartjs-2": "^5.2.0",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@types/node": "20.8.7",
