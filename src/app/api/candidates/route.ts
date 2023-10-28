@@ -6,7 +6,8 @@ import getAllCandidates from "@/lib/getAllCandidates";
 
 import { db } from "@/db";
 import { candidates } from "@/db/schema";
-import { createCandidateSchema } from "../schemas/createCandidateSchema";
+
+import { createCandidateSchema } from "@/utils/bodyValidationSchemas";
 
 export async function GET(request: NextRequest) {
 
