@@ -2,7 +2,7 @@ import { ZodError } from "zod";
 
 import { NextRequest, NextResponse } from "next/server";
 
-import getAllCandidates from "@/lib/getAllCandidates";
+import getAllCandidates from "@/lib/candidates";
 
 import { db } from "@/db";
 import { candidates } from "@/db/schema";
