@@ -1,8 +1,8 @@
 import { db } from '@/db';
-import { companies } from '@/db/schema';
+import { Companies } from '@/db/schema';
 
-export default async function getAllCompanies(): Promise<companies[]> {
-    const result: companies[] = await db.query.companies.findMany();
+export default async function getAllCompanies(): Promise<Companies[]> {
+    const result: Companies[] = await db.query.companies.findMany();
   
     return result;
 }

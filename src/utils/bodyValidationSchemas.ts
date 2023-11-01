@@ -10,3 +10,8 @@ export const createCandidateSchema = z.object({
   companyId: z.number(),
   roleId: z.number()
 });
+
+export const userRegistrationSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(6)
+});

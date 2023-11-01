@@ -1,4 +1,4 @@
-import { sql } from "drizzle-orm";
+import { InferSelectModel } from "drizzle-orm";
 import {
 	bigint,
 	decimal,
@@ -12,7 +12,6 @@ import {
 	unique,
 	varchar
 } from "drizzle-orm/mysql-core";
-
 
 export const candidates = mysqlTable("candidates", {
 	id: bigint("id", { mode: "number" }).autoincrement().notNull(),
@@ -32,8 +31,6 @@ export const candidates = mysqlTable("candidates", {
 		}
 	});
 
-export type candidates = typeof candidates.$inferSelect;
-
 export const companies = mysqlTable("companies", {
 	id: bigint("id", { mode: "number" }).autoincrement().notNull(),
 	name: varchar("name", { length: 255 }).notNull(),
@@ -46,7 +43,6 @@ export const companies = mysqlTable("companies", {
 		}
 	});
 
-export type companies = typeof companies.$inferSelect;
 
 export const parameterScores = mysqlTable("parameter_scores", {
 	id: bigint("id", { mode: "number" }).autoincrement().notNull(),
@@ -62,8 +58,6 @@ export const parameterScores = mysqlTable("parameter_scores", {
 			parameterScoresId: primaryKey(table.id),
 		}
 	});
-
-export type parameterScores = typeof parameterScores.$inferSelect;
 
 export const parameterWeightages = mysqlTable("parameter_weightages", {
 	id: bigint("id", { mode: "number" }).autoincrement().notNull(),
@@ -97,8 +91,6 @@ export const parameters = mysqlTable("parameters", {
 		}
 	});
 
-export type parameters = typeof parameters.$inferSelect;
-
 export const quotientScores = mysqlTable("quotient_scores", {
 	id: bigint("id", { mode: "number" }).autoincrement().notNull(),
 	candidateId: bigint("candidate_id", { mode: "number" }).notNull(),
@@ -113,8 +105,6 @@ export const quotientScores = mysqlTable("quotient_scores", {
 			quotientScoresId: primaryKey(table.id),
 		}
 	});
-
-export type quotientScores = typeof quotientScores.$inferSelect;
 
 export const quotientWeightages = mysqlTable("quotient_weightages", {
 	id: bigint("id", { mode: "number" }).autoincrement().notNull(),
@@ -133,8 +123,6 @@ export const quotientWeightages = mysqlTable("quotient_weightages", {
 		}
 	});
 
-export type quotientWeightages = typeof quotientWeightages.$inferSelect;
-
 export const quotients = mysqlTable("quotients", {
 	id: bigint("id", { mode: "number" }).autoincrement().notNull(),
 	quotient: varchar("quotient", { length: 150 }).notNull(),
@@ -146,8 +134,6 @@ export const quotients = mysqlTable("quotients", {
 			quotient: unique("quotient").on(table.quotient),
 		}
 	});
-
-export type quotients = typeof quotients.$inferSelect;
 
 export const roles = mysqlTable("roles", {
 	id: bigint("id", { mode: "number" }).autoincrement().notNull(),
@@ -162,4 +148,26 @@ export const roles = mysqlTable("roles", {
 		}
 	});
 
-export type roles = typeof roles.$inferSelect;
+export const users = mysqlTable("users", {
+	id: bigint("id", { mode: "number" }).autoincrement().notNull(),
+	email: varchar("email", { length: 255 }).notNull(),
+	password: varchar("password", { length: 255 }).notNull(),
+	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
+},
+	(table) => {
+		return {
+			usersId: primaryKey(table.id),
+			usersEmailUnique: unique("users_email_unique").on(table.email),
+			userEmailIdx: index('user_email_idx').on(table.email)
+		}
+	});
+
+export type Candidates = InferSelectModel<typeof candidates>;
+export type Companies = InferSelectModel<typeof companies>;
+export type ParameterScores = InferSelectModel<typeof parameterScores>;
+export type Parameters = InferSelectModel<typeof parameters>;
+export type QuotientScores = InferSelectModel<typeof quotientScores>;
+export type QuotientWeightages = InferSelectModel<typeof quotientWeightages>;
+export type Quotients = InferSelectModel<typeof quotients>;
+export type Role = InferSelectModel<typeof roles>;
+export type User = InferSelectModel<typeof users>;

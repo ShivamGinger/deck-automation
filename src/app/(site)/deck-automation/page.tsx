@@ -9,6 +9,7 @@ import Input from './Components/Input';
 import ProgressBar from './Components/ProgressBar';
 
 import { endpoints } from '@/utils/endpoints';
+import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 
 interface CandidateInfo {
@@ -26,6 +27,8 @@ const steps = [
 ];
 
 const Page = () => {
+  const session = useSession();
+
   const router = useRouter();
 
   const [currentStep, setCurrentStep] = useState(0);
@@ -36,6 +39,10 @@ const Page = () => {
 
   const [candidateInfo, setCandidateInfo] = useState<CandidateInfo[]>();
   const [inputCount, setInputCount] = useState(0);
+
+  if (session.status === "unauthenticated") {
+    router.replace('/');
+  }
 
   const handleAddCandidate = () => {
     setError(false);
@@ -96,6 +103,7 @@ const Page = () => {
                 id={`full_name_${i}`}
                 placeholder={candidateInfo && candidateInfo[i - 1]?.name}
                 required={true}
+                type='text'
                 moveLabel={!!candidateInfo && candidateInfo[i - 1]?.name != ''}
                 onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(i, e.target.value, 'name')}
               />
@@ -104,6 +112,7 @@ const Page = () => {
                 id={`social_network_url_${i}`}
                 placeholder={candidateInfo && candidateInfo[i - 1]?.social}
                 required={true}
+                type='text'
                 moveLabel={!!candidateInfo && candidateInfo[i - 1]?.social != ''}
                 onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(i, e.target.value, 'social')}
               />
@@ -207,6 +216,7 @@ const Page = () => {
                       id='company_name'
                       placeholder={companyName}
                       required={true}
+                      type='text'
                       moveLabel={companyName != ''}
                       onChange={(e: ChangeEvent<HTMLInputElement>) => setCompanyName(e.target.value)}
                     />
@@ -216,6 +226,7 @@ const Page = () => {
                       id='role'
                       placeholder={role}
                       required={true}
+                      type='text'
                       moveLabel={role != ''}
                       onChange={(e: ChangeEvent<HTMLInputElement>) => setRole(e.target.value)}
                     />
