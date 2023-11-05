@@ -10,6 +10,12 @@ const page = () => {
       <Link href={'/html2pdf'} className='font-semibold p-2 border-2 border-gray-200'>
         html2pdf
       </Link>
+      <Link href={'/listing'} className='font-semibold p-2 border-2 border-gray-200'>
+        All candidates
+      </Link>
+      <Link href={'/companies'} className='font-semibold p-2 border-2 border-gray-200'>
+        Companies
+      </Link>
     </>
   )
 }

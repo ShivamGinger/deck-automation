@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.table-headings {
+  @apply p-3 text-sm font-semibold tracking-wide text-center whitespace-nowrap text-[#894D12] border border-[#542C06] rounded-lg
+}
+
+.table-row-data {
+  @apply p-3 text-sm font-medium whitespace-nowrap text-[#542C06] border border-[#542C06] text-center rounded-lg
+}

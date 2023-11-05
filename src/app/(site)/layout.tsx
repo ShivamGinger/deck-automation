@@ -20,7 +20,7 @@ export default async function RootLayout({ children, }: { children: React.ReactN
         <SessionProvider session={session}>
           <Header />
           {children}
-          {/* <Footer /> */}
+          <Footer />
         </SessionProvider>
       </body>
     </html>
