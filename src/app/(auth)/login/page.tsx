@@ -1,12 +1,17 @@
 'use client';
 
+import Input from '@/app/(site)/Components/Input';
 import { signIn, useSession } from 'next-auth/react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { ChangeEvent, useEffect, useState } from 'react';
-import Input from '../deck-automation/Components/Input';
+import EyeHide from '../register/Components/EyeHide';
+import EyeShow from '../register/Components/EyeShow';
 
 const Login = () => {
+  const [showPassword, setShowPassword] = useState(false);
+
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -16,11 +21,9 @@ const Login = () => {
 
   const session = useSession();
 
-  console.log(session);
-
   useEffect(() => {
     if (session.status === "authenticated") {
-      router.replace('/deck-automation');
+      router.replace('/');
     }
   }, [session, router]);
 
@@ -51,7 +54,8 @@ const Login = () => {
     <section className='bg-[#FEFAEF] '>
       <div className='max-w-screen-2xl mx-auto bg-white shadow-2xl px-4 md:px-0 md:mt-10 rounded-xl '>
         <div className='flex justify-center py-12 flex-col items-center gap-12'>
-          <h1 className='text-xl font-bold uppercase'>Login page</h1>
+          <Image width={150} height={150} src={'/images/Ginger Partners_Logo with tagline.png'} alt="profile pic" className="rounded-xl " priority />
+          <h1 className='text-xl font-bold uppercase'>Login</h1>
           {responseError &&
             <>
               <div className="bg-red-500 p-4 rounded-md md:w-80 w-full flex flex-row justify-between ">
@@ -64,7 +68,7 @@ const Login = () => {
               </div>
             </>
           }
-          <div className="space-y-8 ">
+          <form className="space-y-8 relative">
             <Input
               name='Email'
               id='email'
@@ -78,12 +82,15 @@ const Login = () => {
             <Input
               name='Password'
               id='password'
-              type='password'
+              type={`${showPassword ? 'text' : 'password'}`}
               placeholder={password}
               required={true}
               moveLabel={password != ''}
               onChange={(e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
             />
+            <span className='absolute top-12 right-2 cursor-pointer' onClick={() => setShowPassword(!showPassword)}>
+              {showPassword ? <EyeShow /> : <EyeHide />}
+            </span>
             <button
               type='submit'
               className={` ${!email || !password ? "cursor-not-allowed opacity-50" : ""} font-semibold py-2 px-8 uppercase bg-[#B06500] text-white rounded-lg border-[#B06500] w-full`}
@@ -92,7 +99,7 @@ const Login = () => {
             >
               Login
             </button>
-          </div>
+          </form>
           <div className='flex gap-2'>
             <p>Dont have an account?</p>
             <Link href={'/register'} className='underline text-blue-500'>Click Here</Link>

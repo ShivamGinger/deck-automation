@@ -9,3 +9,51 @@
 .table-row-data {
   @apply p-3 text-sm font-medium whitespace-nowrap text-[#542C06] border border-[#542C06] text-center rounded-lg
 }
+
+.custom-brown-btn {
+  @apply font-semibold py-2 px-8 uppercase bg-[#B06500] text-white rounded-lg border-[#B06500] border-2
+}
+
+.custom-brown-btn-bg-transparent {
+  @apply font-semibold border-2 text-[#542C06] border-[#B06500] rounded-lg py-2 px-8 uppercase
+}
+
+.custom-brown-btn-pagination {
+  @apply font-semibold py-2 px-2 uppercase bg-[#B06500] text-white rounded-lg border-[#B06500]
+}
+
+.custom-brown-btn-pagination-bg-transparent {
+  @apply font-semibold border-2 text-[#542C06] border-[#B06500] rounded-lg py-2 px-2 uppercase
+}
+
+.yet-to-share {
+  @apply bg-[#35714E] text-[#D9EBC1] font-semibold tracking-wider
+}
+
+.joined {
+  @apply bg-[#E2D0EF] text-[#5E4088] font-semibold tracking-wider
+}
+
+.negotiation {
+  @apply bg-[#C6E0F4] text-[#2154A2] font-semibold tracking-wider
+}
+
+.in-process {
+  @apply bg-[#D9EBC1] text-[#35714E] font-semibold tracking-wider
+}
+
+.on-hold {
+  @apply bg-[#E8EAED] text-[#000] font-semibold tracking-wider
+}
+
+.feedback-pending {
+  @apply bg-[#FBE5A8] text-[#453924] font-semibold tracking-wider
+}
+
+.dropped-out {
+  @apply bg-[#9D1414] text-[#fff] font-semibold tracking-wider
+}
+
+.rejected {
+  @apply bg-[#E50000] text-[#fff] font-semibold tracking-wider
+}

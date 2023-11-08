@@ -85,7 +85,7 @@ const Page = () => {
       <div className="flex h-screen">
         <div className="flex flex-col z-20 bg-white pt-12 px-8 ">
           <div className="">
-            <Image width={120} height={120} src={'/images/Ginger Partners_Logo with tagline.png'} alt="profile pic" className="rounded-xl " />
+            <Image width={120} height={120} src={'/images/Ginger Partners_Logo with tagline.png'} alt="profile pic" className="rounded-xl " priority/>
           </div>
 
           <div className="cadidate info flex flex-col gap-y-2  py-4 ">

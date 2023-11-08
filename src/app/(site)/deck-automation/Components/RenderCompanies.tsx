@@ -4,12 +4,12 @@ import React, { useState } from 'react';
 
 import Link from 'next/link';
 
+import { ITEMS_PER_PAGE } from '@/utils/constants';
+import Image from 'next/image';
 import ReactPaginate from 'react-paginate';
 
 const RenderCompanies = ({ companies }: { companies: { id: number, name: string }[] }) => {
   const [currentPage, setCurrentPage] = useState(0);
-
-  const ITEMS_PER_PAGE = 10;
 
   const handlePageChange = (selectedPage: { selected: number }) => {
     setCurrentPage(selectedPage.selected);
@@ -26,33 +26,46 @@ const RenderCompanies = ({ companies }: { companies: { id: number, name: string 
   return (
     <>
       <div className='flex flex-col'>
-        <div className="rounded-lg shadow overflow-x-auto bg-white flex flex-col">
+        <div className="rounded-lg shadow overflow-x-auto bg-white">
+          <div className='p-4 flex flex-row justify-between'>
+            <h2 className='font-bold uppercase text-2xl text-[#542C06]'>List of Companies</h2>
+            <div className='p-2'>
+              search ...
+            </div>
+          </div>
           <table className="w-full border-separate border-spacing-4 px-6 pt-2">
             <thead className="">
               <tr className='gap-x-4'>
                 <th className="table-headings">S.No.</th>
                 <th className="table-headings">Company Name</th>
-                <th className="table-headings"></th>
+                <th className="table-headings">Roles Count</th>
               </tr>
             </thead>
             <tbody className="">
               {currentData?.map((detail, index) => (
-                <tr className={`${index % 2 === 0 ? 'bg-white' : 'bg-[#F7CCA5] rounded-lg'}`} key={index}>
-                  <td className="table-row-data">
+                <tr className={`${index % 2 === 0 ? 'bg-white' : ''}`} key={index}>
+                  <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
                     {index + 1}
                   </td>
-                  <td className="table-row-data">
+                  <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
                     {detail.name}
                   </td>
-                  <td className="table-row-data">
-                    Add Roles <Link href={`/companies/${detail.id}`}>+</Link>
+
+                  <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
+
+                  </td>
+
+                  <td className="">
+                    <Link href={`/deck-automation/${detail.id}`}>
+                      <Image width={20} height={20} src={'/images/edit.png'} alt="edit-icon" className="cursor-pointer" />
+                    </Link>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
-          <div className='self-end px-6 py-2'>
-            Add Company? <Link href={'/companies/addCompany'} className='underline text-blue-500'>Click here</Link>
+          <div className='p-4'>
+            Add Company? <Link href={'/deck-automation/addCompany'} className='underline text-blue-500'>Click here</Link>
           </div>
         </div>
       </div>
@@ -72,14 +85,14 @@ const RenderCompanies = ({ companies }: { companies: { id: number, name: string 
           breakLabel={'...'}
           pageCount={totalPages}
           marginPagesDisplayed={2}
-          pageRangeDisplayed={5}
+          pageRangeDisplayed={2}
           onPageChange={handlePageChange}
-          containerClassName={'pagination flex mt-8'}
-          pageClassName={'px-4 py-2'}
-          pageLinkClassName={'border border-gray-300 rounded'}
-          activeClassName={'bg-gray-300'}
-          previousClassName={`px-4 py-2 border border-gray-300 rounded-l ${currentPage === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
-          nextClassName={`px-4 py-2 border border-gray-300 rounded-r ${currentPage === totalPages - 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
+          containerClassName={'flex mt-8 gap-2'}
+          activeClassName={'custom-brown-btn-pagination'}
+          pageClassName={'font-semibold border-2 text-[#542C06] border-[#B06500] rounded-lg py-2 px-2 uppercase'}
+          pageLinkClassName={''}
+          previousClassName={`${currentPage === 0 ? 'opacity-50 cursor-not-allowed' : ''} custom-brown-btn-pagination-bg-transparent`}
+          nextClassName={`${currentPage === totalPages - 1 ? 'opacity-50 cursor-not-allowed' : ''} custom-brown-btn-pagination-bg-transparent`}
         />
       </div>
     </>
