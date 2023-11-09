@@ -7,7 +7,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 
 type AuthUser = NextUser & DBUser;
 
-export const authOptions: any = {
+const authOptions: any = {
   providers: [
     CredentialsProvider({
       id: "credentials",
