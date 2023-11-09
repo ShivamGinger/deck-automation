@@ -26,7 +26,7 @@ export const candidates = mysqlTable("candidates", {
 	social: text("social"),
 	companyId: bigint("company_id", { mode: "number" }),
 	roleId: bigint("role_id", { mode: "number" }),
-	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
+	createdAt: timestamp("created_at", { mode: 'string' }).default(sql`CURRENT_TIMESTAMP`),
 	email: varchar("email", { length: 50 }).notNull(),
 	currPos: varchar("curr_pos", { length: 200 }),
 	currLoc: varchar("curr_loc", { length: 100 }),
@@ -48,7 +48,7 @@ export const candidates = mysqlTable("candidates", {
 export const companies = mysqlTable("companies", {
 	id: bigint("id", { mode: "number" }).autoincrement().notNull(),
 	name: varchar("name", { length: 255 }).notNull(),
-	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
+	createdAt: timestamp("created_at", { mode: 'string' }).default(sql`CURRENT_TIMESTAMP`),
 },
 (table) => {
 	return {
@@ -62,7 +62,7 @@ export const parameterScores = mysqlTable("parameter_scores", {
 	candidateId: bigint("candidate_id", { mode: "number" }).notNull(),
 	parameterId: bigint("parameter_id", { mode: "number" }).notNull(),
 	score: tinyint("score").notNull(),
-	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
+	createdAt: timestamp("created_at", { mode: 'string' }).default(sql`CURRENT_TIMESTAMP`),
 },
 (table) => {
 	return {
@@ -78,7 +78,7 @@ export const parameterWeightages = mysqlTable("parameter_weightages", {
 	parameterId: bigint("parameter_id", { mode: "number" }).notNull(),
 	companyId: bigint("company_id", { mode: "number" }).notNull(),
 	roleId: bigint("role_id", { mode: "number" }).notNull(),
-	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
+	createdAt: timestamp("created_at", { mode: 'string' }).default(sql`CURRENT_TIMESTAMP`),
 },
 (table) => {
 	return {
@@ -93,7 +93,7 @@ export const parameters = mysqlTable("parameters", {
 	id: bigint("id", { mode: "number" }).autoincrement().notNull(),
 	parameter: text("parameter").notNull(),
 	quotientId: bigint("quotient_id", { mode: "number" }).notNull(),
-	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
+	createdAt: timestamp("created_at", { mode: 'string' }).default(sql`CURRENT_TIMESTAMP`),
 },
 (table) => {
 	return {
@@ -107,7 +107,7 @@ export const quotientScores = mysqlTable("quotient_scores", {
 	candidateId: bigint("candidate_id", { mode: "number" }).notNull(),
 	quotientId: bigint("quotient_id", { mode: "number" }).notNull(),
 	totalScore: decimal("total_score", { precision: 4, scale: 2 }).notNull(),
-	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
+	createdAt: timestamp("created_at", { mode: 'string' }).default(sql`CURRENT_TIMESTAMP`),
 },
 (table) => {
 	return {
@@ -123,7 +123,7 @@ export const quotientWeightages = mysqlTable("quotient_weightages", {
 	quotientId: bigint("quotient_id", { mode: "number" }).notNull(),
 	companyId: bigint("company_id", { mode: "number" }).notNull(),
 	roleId: bigint("role_id", { mode: "number" }).notNull(),
-	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
+	createdAt: timestamp("created_at", { mode: 'string' }).default(sql`CURRENT_TIMESTAMP`),
 },
 (table) => {
 	return {
@@ -137,7 +137,7 @@ export const quotientWeightages = mysqlTable("quotient_weightages", {
 export const quotients = mysqlTable("quotients", {
 	id: bigint("id", { mode: "number" }).autoincrement().notNull(),
 	quotient: varchar("quotient", { length: 150 }).notNull(),
-	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
+	createdAt: timestamp("created_at", { mode: 'string' }).default(sql`CURRENT_TIMESTAMP`),
 },
 (table) => {
 	return {
@@ -150,7 +150,7 @@ export const roles = mysqlTable("roles", {
 	id: bigint("id", { mode: "number" }).autoincrement().notNull(),
 	name: varchar("name", { length: 255 }).notNull(),
 	companyId: bigint("company_id", { mode: "number" }).notNull(),
-	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
+	createdAt: timestamp("created_at", { mode: 'string' }).default(sql`CURRENT_TIMESTAMP`),
 },
 (table) => {
 	return {
@@ -179,7 +179,7 @@ export const users = mysqlTable("users", {
 	id: bigint("id", { mode: "number" }).autoincrement().notNull(),
 	email: varchar("email", { length: 255 }).notNull(),
 	password: varchar("password", { length: 255 }).notNull(),
-	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
+	createdAt: timestamp("created_at", { mode: 'string' }).default(sql`CURRENT_TIMESTAMP`),
 },
 (table) => {
 	return {
@@ -194,6 +194,7 @@ export type CandidatesStatus = InferSelectModel<typeof candidateStatus>;
 export type StatusHistory = InferSelectModel<typeof statusHistory>;
 export type Companies = InferSelectModel<typeof companies>;
 export type ParameterScores = InferSelectModel<typeof parameterScores>;
+export type ParameterWeightages = InferSelectModel<typeof parameterWeightages>;
 export type Parameters = InferSelectModel<typeof parameters>;
 export type QuotientScores = InferSelectModel<typeof quotientScores>;
 export type QuotientWeightages = InferSelectModel<typeof quotientWeightages>;

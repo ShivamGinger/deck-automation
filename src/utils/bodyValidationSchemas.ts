@@ -17,7 +17,7 @@ export const userRegistrationSchema = z.object({
 });
 
 export const createCompanySchema = z.object({
-  name: z.string().regex(/^[A-Za-z\s]+$/),
+  name: z.string(),
 });
 
 export const createRoleSchema = z.object({
