@@ -15,10 +15,10 @@ export default async function RootLayout({ children, }: { children: React.ReactN
 
   return (
     <html lang="en">
-      <body className='bg-gray-100 flex h-screen'>
+      <body className='bg-gray-100 flex h-screen overflow-hidden'>
         <SessionProvider session={session}>
           <Sidebar />
-          <div className='bg-[#FEFAEF] w-screen'>
+          <div className='bg-[#FEFAEF] w-screen overflow-y-auto' id='side-body'>
             {children}
           </div>
         </SessionProvider>

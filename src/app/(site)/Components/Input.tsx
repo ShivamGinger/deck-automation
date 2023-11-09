@@ -14,7 +14,7 @@ const Input: FC<InputProps> = ({ id, name, required, moveLabel, type, ...props }
 
   return (
     <>
-      <div className="w-72">
+      <div className="w-72 mt-8">
         <div className="relative h-10 w-full min-w-[200px] ">
           <input
             type={type}

@@ -1,43 +1,134 @@
 "use client";
 
 import Input from '@/app/(site)/Components/Input';
+import ProfilePic from '@/app/(site)/Components/ProfilePic';
+import Select from '@/app/(site)/Components/Select';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
+import ExpAchiv from './Components/ExpAchiv';
+import KeyPoints from './Components/KeyPoints';
 
-interface CandidateInfo {
+import { useParams } from 'next/navigation';
+
+interface CandidateDescription {
   name: string,
-  info: string[],
-  photo: string,
+  description: string,
+  photo: string
+};
+
+interface CandidatePersonalDetails {
+  gender: 'M' | 'F',
+  exp: string,
+  curr_ctc: string
+}
+
+interface CandidateContactInfo {
+  phone_no: string,
+  email: string,
   social: string,
 }
+
+interface CandidateInfo extends CandidateDescription, CandidatePersonalDetails, CandidateContactInfo {
+  key_points: string[],
+  exp_achi: string[],
+}
+
+function validateCandidates(candidateInfo: CandidateInfo[]) {
+  for (const candidate of candidateInfo) {
+    const { name, description, photo, gender, exp, curr_ctc, phone_no, email, social, key_points, exp_achi } = candidate;
+
+    if (
+      !name ||
+      !description ||
+      // !photo ||
+      !gender ||
+      !exp ||
+      !curr_ctc ||
+      !phone_no ||
+      !email ||
+      !social ||
+      (Array.isArray(key_points) && key_points.length >= 1 && key_points.some(element => element === '')) ||
+      (Array.isArray(exp_achi) && exp_achi.length >= 1 && exp_achi.some(element => element === ''))
+    ) {
+      return false; // Invalid candidate
+    }
+  }
+  return true; // All candidates are valid
+};
 
 const Page = () => {
   const router = useRouter();
 
-  const [candidateInfo, setCandidateInfo] = useState<CandidateInfo[]>();
-  const [inputCount, setInputCount] = useState(0);
+  const { roleID, companyID } = useParams();
+
+  const [candidateInfo, setCandidateInfo] = useState<CandidateInfo[]>([]);
+  const [candidateInputCount, setCandidateInputCount] = useState(0);
 
   const [error, setError] = useState(false);
   const [errorDeatils, setErrorDetails] = useState<string | null>('');
 
+  console.log(candidateInfo);
+
+  useEffect(() => {
+    if (error) {
+      const container = document.getElementById('side-body');
+
+      if (container) {
+        container.scrollTo({
+          top: 0,
+          behavior: 'smooth',
+        });
+      }
+
+    }
+  }, [error]);
+
   const handleAddCandidate = () => {
     setError(false);
 
-    setInputCount(prevCount => prevCount + 1);
+    if (!validateCandidates(candidateInfo)) {
+      setErrorDetails('Fill details of Exsisting Candidate before adding new!');
+      setError(true);
+      return;
+    }
 
-    setCandidateInfo(prevCandidateInfo => [...(prevCandidateInfo || []), { name: '', info: [''], photo: '', social: '' }]);
+    if (candidateInputCount === 10) {
+      setErrorDetails("Can't add more Candidates!");
+      setError(true);
+      return;
+    };
+
+    setCandidateInputCount(prevCount => prevCount + 1);
+
+    setCandidateInfo(prevCandidateInfo => [
+      ...(prevCandidateInfo || []),
+      {
+        name: '',
+        description: '',
+        photo: '',
+        gender: 'M',
+        exp: '',
+        curr_ctc: '',
+        phone_no: '',
+        email: '',
+        social: '',
+        exp_achi: [''],
+        key_points: [''],
+      }
+    ]);
   };
 
   const handleDeleteCandidate = (index: number) => {
-    setInputCount(prevCount => Math.max(0, prevCount - 1));
+    setError(false);
+    setCandidateInputCount(prevCount => Math.max(0, prevCount - 1));
 
     setCandidateInfo(prevCandidateInfo =>
       prevCandidateInfo?.filter((_, i) => i !== index - 1)
     );
   };
 
-  const handleInputChange = (index: number, value: string, field: string) => {
+  const handleInputChange = (index: number, value: string | string[], field: string) => {
     if (!candidateInfo) {
       // Initialize the candidateInfo array if it's undefined
       setCandidateInfo([]);
@@ -51,13 +142,13 @@ const Page = () => {
 
   const renderCandidateInputs = () => {
     const inputs = [];
-    for (let i = 1; i <= inputCount; i++) {
+    for (let candidateNo = 1; candidateNo <= candidateInputCount; candidateNo++) {
       inputs.push(
-        <div key={`candidate_info_${i}`}>
-          <div className='space-y-3 flex flex-col '>
+        <div key={`candidate_info_${candidateNo}`}>
+          <div className='flex flex-col '>
             <div className='flex flex-row justify-between '>
-              <h2 className='font-bold pb-4'>Candidate Information {i}</h2>
-              <button onClick={() => handleDeleteCandidate(i)} className='font-semibold opacity-70 flex '>
+              <h2 className='font-bold'>Candidate Information {candidateNo}</h2>
+              <button onClick={() => handleDeleteCandidate(candidateNo)} className='font-semibold opacity-70 flex '>
                 <span className='opacity-50'>
                   <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
                     width="30" height="30" viewBox="0 0 256.000000 256.000000"
@@ -74,51 +165,129 @@ const Page = () => {
                 <span className='pt-0.5 hover:underline'>Delete</span>
               </button>
             </div>
-            <div className="space-y-6 pb-4" >
+            <div className="pb-4" >
               <Input
                 name='Full Name'
-                id={`full_name_${i}`}
-                placeholder={candidateInfo && candidateInfo[i - 1]?.name}
-                required={true}
+                id={`full_name_${candidateNo}`}
+                placeholder={candidateInfo[candidateNo - 1]?.name}
+                required
                 type='text'
-                moveLabel={!!candidateInfo && candidateInfo[i - 1]?.name != ''}
-                onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(i, e.target.value, 'name')}
+                moveLabel={!!candidateInfo && candidateInfo[candidateNo - 1]?.name != ''}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(candidateNo, e.target.value, 'name')}
               />
               <Input
-                name='Social Network URL'
-                id={`social_network_url_${i}`}
-                placeholder={candidateInfo && candidateInfo[i - 1]?.social}
-                required={true}
+                name='Small Description'
+                id={`description_${candidateNo}`}
+                placeholder={candidateInfo[candidateNo - 1]?.description}
+                required
                 type='text'
-                moveLabel={!!candidateInfo && candidateInfo[i - 1]?.social != ''}
-                onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(i, e.target.value, 'social')}
+                moveLabel={!!candidateInfo && candidateInfo[candidateNo - 1]?.description != ''}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(candidateNo, e.target.value, 'description')}
               />
+
+              {/* <div className='mt-6 flex flex-col w-72'>
+                <div className='flex flex-row justify-between'>
+                  <label htmlFor={`profile_pic_upload_${candidateNo}`} className='font-semibold pb-2'>Upload Profile Pic</label>
+                  <div className='pr-2'>
+                    tick
+                  </div>
+                </div>
+                <input type="file" accept='image/*' id={`profile_pic_upload_${candidateNo}`} />
+              </div> */}
+              {/* <ProfilePic /> */}
+
+              <Select
+                title='Gender'
+                id={`gender_${candidateNo}`}
+                options={[{ value: 'M', text: 'Male' }, { value: 'F', text: 'Female' }]}
+                onChange={(e: ChangeEvent<HTMLSelectElement>) => handleInputChange(candidateNo, e.target.value, 'gender')}
+                required
+              />
+
+              <Input
+                name='Experience'
+                id={`exp_${candidateNo}`}
+                placeholder={candidateInfo[candidateNo - 1]?.exp}
+                required
+                type='text'
+                moveLabel={!!candidateInfo && candidateInfo[candidateNo - 1]?.exp != ''}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(candidateNo, e.target.value, 'exp')}
+              />
+
+              <Input
+                name='Current CTC'
+                id={`curr_ctc_${candidateNo}`}
+                placeholder={candidateInfo[candidateNo - 1]?.curr_ctc}
+                required
+                type='text'
+                moveLabel={!!candidateInfo && candidateInfo[candidateNo - 1]?.curr_ctc != ''}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(candidateNo, e.target.value, 'curr_ctc')}
+              />
+
+              <Input
+                name='Phone Number'
+                id={`phn_no_${candidateNo}`}
+                placeholder={candidateInfo[candidateNo - 1]?.phone_no}
+                required
+                type='text'
+                moveLabel={!!candidateInfo && candidateInfo[candidateNo - 1]?.phone_no != ''}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(candidateNo, e.target.value, 'phone_no')}
+              />
+
+              <Input
+                name='Email Address'
+                id={`email_${candidateNo}`}
+                placeholder={candidateInfo[candidateNo - 1]?.email}
+                required
+                type='email'
+                moveLabel={!!candidateInfo && candidateInfo[candidateNo - 1]?.email != ''}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(candidateNo, e.target.value, 'email')}
+              />
+
+              <Input
+                name='Social Network URL'
+                id={`social_network_url_${candidateNo}`}
+                placeholder={candidateInfo[candidateNo - 1]?.social}
+                required
+                type='text'
+                moveLabel={!!candidateInfo && candidateInfo[candidateNo - 1]?.social != ''}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(candidateNo, e.target.value, 'social')}
+              />
+
+              <KeyPoints
+                handleInputChange={handleInputChange}
+                candidateNo={candidateNo}
+                error={error}
+                setError={setError}
+                setErrorDetails={setErrorDetails}
+              />
+
+              <ExpAchiv
+                handleInputChange={handleInputChange}
+                candidateNo={candidateNo}
+                error={error}
+                setError={setError}
+                setErrorDetails={setErrorDetails}
+              />
+
             </div>
           </div>
         </div>
       );
-    }
+    };
 
     return inputs;
-  }
+  };
 
   const handleSubmit = async () => {
     setErrorDetails(null);
     setError(false);
 
-    if (!candidateInfo || candidateInfo.length === 0) {
+    if (!candidateInfo || candidateInfo.length === 0 || !validateCandidates(candidateInfo)) {
       setErrorDetails('Missing Data');
       setError(true);
       return;
-    }
-
-    for (const { name, photo, social, info } of candidateInfo) {
-      if (!name || !photo || !social || (Array.isArray(info) && info.length === 1 && info[0] === '')) {
-        setErrorDetails('Missing Data');
-        setError(true);
-        return;
-      }
-    }
+    };
 
     const response = await fetch('/', {
       method: 'post',
@@ -164,7 +333,7 @@ const Page = () => {
         <div className="space-y-12">
           <div className=" w-full mt-4 space-y-6 ">
             <button className={`font-semibold p-2 border-2 border-gray-200 w-1/3}`} onClick={() => handleAddCandidate()}>
-              {!candidateInfo || candidateInfo?.length === 0 ? <>Add Candidate <span className='text-red-600 font-bold'>*</span></> : 'Add Another'}
+              {!candidateInfo || candidateInfo?.length === 0 ? <> Add Candidate <span className='text-red-600 font-bold'>*</span></> : 'Add Another'}
             </button>
             <div className='space-y-3'>
               {renderCandidateInputs()}
