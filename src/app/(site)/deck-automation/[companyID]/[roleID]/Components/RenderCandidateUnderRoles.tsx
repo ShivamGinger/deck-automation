@@ -8,6 +8,7 @@ import { ITEMS_PER_PAGE } from '@/utils/constants';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import ReactPaginate from 'react-paginate';
+import { saveAs } from 'file-saver';
 
 type candidate = {
   id: number,
@@ -34,6 +35,23 @@ const RenderCandidateUnderRoles = ({ candidatesUnderRole }: { candidatesUnderRol
   const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, totalItems);
 
   const currentData = candidatesUnderRole?.slice(startIndex, endIndex);
+
+  const handleDownloadPdf = async () => {
+    const response = await fetch('/api/demo', {
+      method: 'post',
+      body: JSON.stringify({
+        name: ' nice'
+      }),
+    })
+
+    const Buffer = await response.json();
+
+    const bufferData = Buffer.data;
+
+    const blob = new Blob([new Uint8Array(bufferData)], { type: 'application/pdf' });
+
+    saveAs(blob, 'downloadedFile.pdf');
+  };
 
   return (
     <>
@@ -82,7 +100,7 @@ const RenderCandidateUnderRoles = ({ candidatesUnderRole }: { candidatesUnderRol
                     {detail.ctc}
                   </td>
 
-                  <td className="">
+                  <td className="" onClick={handleDownloadPdf}>
                     <Image width={20} height={20} src={'/images/edit.png'} alt="edit-icon" className="cursor-pointer" />
                   </td>
                 </tr>

@@ -64,8 +64,15 @@ export async function POST(request: NextRequest) {
 
   await page.emulateMediaType('screen');
 
+  // const pdf = await page.pdf({
+  //   path: './reports/result.pdf',
+  //   printBackground: true,
+  //   landscape: true,
+  //   height: 1920,
+  //   width: 1070
+  // });
+
   const pdf = await page.pdf({
-    path: './reports/result.pdf',
     printBackground: true,
     landscape: true,
     height: 1920,
@@ -74,6 +81,5 @@ export async function POST(request: NextRequest) {
 
   await browser.close();
 
-  return NextResponse.json('nice');
-
+  return NextResponse.json(pdf);
 }

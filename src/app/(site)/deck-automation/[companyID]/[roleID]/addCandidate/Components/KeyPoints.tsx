@@ -38,7 +38,7 @@ const KeyPoints = (
     setError(false);
 
     if (keyPointsCount === 7) {
-      setErrorDetails("Can't add more Experience & Achivements!");
+      setErrorDetails("Can't add more Key Points!");
       setError(true);
 
       return;

@@ -88,7 +88,7 @@ const Login = () => {
               moveLabel={password != ''}
               onChange={(e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
             />
-            <span className='absolute top-12 right-2 cursor-pointer' onClick={() => setShowPassword(!showPassword)}>
+            <span className='absolute top-20 right-2 cursor-pointer' onClick={() => setShowPassword(!showPassword)}>
               {showPassword ? <EyeShow /> : <EyeHide />}
             </span>
             <button
