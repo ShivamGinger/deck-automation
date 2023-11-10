@@ -57,3 +57,11 @@
 .rejected {
   @apply bg-[#E50000] text-[#fff] font-semibold tracking-wider
 }
+
+.modal-close {
+  @apply overflow-y-auto
+}
+
+.modal-open {
+  @apply overflow-hidden
+}
