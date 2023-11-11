@@ -18,7 +18,7 @@ export default async function RootLayout({ children, }: { children: React.ReactN
       <body className='bg-gray-100 flex h-screen overflow-hidden'>
         <SessionProvider session={session}>
           <Sidebar />
-          <div className='bg-[#FEFAEF] w-screen overflow-y-auto' id='side-body'>
+          <div className='bg-[#FEFAEF] w-screen modal-close' id='side-body'>
             {children}
           </div>
         </SessionProvider>

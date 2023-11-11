@@ -8,9 +8,10 @@ interface InputProps extends React.HTMLAttributes<HTMLInputElement> {
   required: boolean,
   moveLabel: boolean,
   type: string,
+  error?: boolean,
 }
 
-const Input: FC<InputProps> = ({ id, name, required, moveLabel, type, ...props }) => {
+const Input: FC<InputProps> = ({ id, name, required, moveLabel, error, type, ...props }) => {
 
   return (
     <>
@@ -18,9 +19,11 @@ const Input: FC<InputProps> = ({ id, name, required, moveLabel, type, ...props }
         <div className="relative h-10 w-full min-w-[200px] ">
           <input
             type={type}
+            {...(type === 'number' ? { min: 0, max: 100 } : {})}
             value={props.placeholder}
             {...props}
             className={`
+            ${error ? 'border-2 border-red-500 focus:border-red-500 focus:text-red-500 text-red-500 font-bold' : ''}
             peer 
             h-full 
             w-full 
