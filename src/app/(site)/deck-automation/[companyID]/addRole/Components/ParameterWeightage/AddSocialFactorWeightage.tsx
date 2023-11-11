@@ -4,41 +4,16 @@ import React, { ChangeEvent, useEffect, useLayoutEffect, useState } from 'react'
 
 import Image from 'next/image';
 
+import { SF, SFArray, SFBoolean, SFError } from '@/utils/constants';
+
 import Input from './Components/Input';
 import Modal from './Components/Modal';
 import Select from './Components/Select';
 
-const SF = [
-  {
-    id: 1,
-    name: "Strength of Network",
-    value: 0
-  },
-  {
-    id: 2,
-    name: "Ability to attract talent",
-    value: 0
-  }
-]
-
-interface SF {
-  id: number,
-  name: string,
-  value: number,
-}
-
-interface SFError extends SF {
-  error: boolean
-}
-
-interface SFBoolean extends SF {
-  paramNeeded: boolean
-}
-
 const AddSocialFactorWeightage = () => {
 
   // Fetch exsisting SF
-  const SocialFactors = SF;
+  const SocialFactors = SFArray;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -85,7 +60,7 @@ const AddSocialFactorWeightage = () => {
 
   const handleSocialFactorsInputChange = (value: number, elementNo: number) => {
 
-    if (value > 100 || isNaN(value)) {
+    if (value > 100 || isNaN(value) || value <= 0) {
       setSocialFactorsInputError(prevErrors => {
         const index = prevErrors.findIndex(err => err.id === elementNo);
 

@@ -1,3 +1,4 @@
+import { HandleCandidateInputChangeValue } from '@/utils/constants';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 
 const KeyPoints = (
@@ -9,7 +10,7 @@ const KeyPoints = (
     setError,
   }:
     {
-      handleInputChange: (index: number, value: string | string[], field: string) => void,
+      handleInputChange: HandleCandidateInputChangeValue,
       candidateNo: number,
       error: boolean,
       setErrorDetails: (details: string | null) => void,

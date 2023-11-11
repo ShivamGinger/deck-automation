@@ -9,30 +9,9 @@ import React, { ChangeEvent, useEffect, useState } from 'react';
 import ExpAchiv from './Components/ExpAchiv';
 import KeyPoints from './Components/KeyPoints';
 
+import { AQArray, CandidateInfo, EFArray, HandleCandidateInputChangeValue, IF, IFArray, SFArray } from '@/utils/constants';
 import { useParams } from 'next/navigation';
-
-interface CandidateDescription {
-  name: string,
-  description: string,
-  photo: string
-};
-
-interface CandidatePersonalDetails {
-  gender: 'M' | 'F',
-  exp: string,
-  curr_ctc: string
-}
-
-interface CandidateContactInfo {
-  phone_no: string,
-  email: string,
-  social: string,
-}
-
-interface CandidateInfo extends CandidateDescription, CandidatePersonalDetails, CandidateContactInfo {
-  key_points: string[],
-  exp_achi: string[],
-}
+import QuotientParametersWeightage from './Components/QuotientParametersWeightage';
 
 function validateCandidates(candidateInfo: CandidateInfo[]) {
   for (const candidate of candidateInfo) {
@@ -67,6 +46,11 @@ const Page = () => {
 
   const [error, setError] = useState(false);
   const [errorDeatils, setErrorDetails] = useState<string | null>('');
+
+  const AllIntelligenceFactors = IFArray;
+  const AllAdversityQuotient = AQArray;
+  const AllEmotionalFactor = EFArray;
+  const AllSocialFactor = SFArray;
 
   console.log(candidateInfo);
 
@@ -115,6 +99,22 @@ const Page = () => {
         social: '',
         exp_achi: [''],
         key_points: [''],
+        inteli_fact: {
+          id: 1,
+          parameters: AllIntelligenceFactors
+        },
+        emotional_fact: {
+          id: 2,
+          parameters: AllEmotionalFactor
+        },
+        social_fact: {
+          id: 3,
+          parameters: AllSocialFactor
+        },
+        adversity_quotient: {
+          id: 4,
+          parameters: AllAdversityQuotient
+        }
       }
     ]);
   };
@@ -128,7 +128,7 @@ const Page = () => {
     );
   };
 
-  const handleInputChange = (index: number, value: string | string[], field: string) => {
+  const handleInputChange: HandleCandidateInputChangeValue = (index, value, field) => {
     if (!candidateInfo) {
       // Initialize the candidateInfo array if it's undefined
       setCandidateInfo([]);
@@ -270,6 +270,42 @@ const Page = () => {
                 setErrorDetails={setErrorDetails}
               />
 
+              <QuotientParametersWeightage
+                handleInputChange={handleInputChange}
+                candidateNo={candidateNo}
+                AllParameters={AllIntelligenceFactors}
+                factorID={1}
+                factorName='inteli_fact'
+                name="Intelligence Factor"
+              />
+
+              <QuotientParametersWeightage
+                handleInputChange={handleInputChange}
+                candidateNo={candidateNo}
+                AllParameters={AllEmotionalFactor}
+                factorID={2}
+                factorName='emotional_fact'
+                name="Emotional Factor"
+              />
+
+              <QuotientParametersWeightage
+                handleInputChange={handleInputChange}
+                candidateNo={candidateNo}
+                AllParameters={AllSocialFactor}
+                factorID={3}
+                factorName='social_fact'
+                name="Social Factor"
+              />
+
+              <QuotientParametersWeightage
+                handleInputChange={handleInputChange}
+                candidateNo={candidateNo}
+                AllParameters={AllAdversityQuotient}
+                factorID={4}
+                factorName='adversity_quotient'
+                name="Adversity Quotient"
+              />
+
             </div>
           </div>
         </div>
@@ -318,7 +354,7 @@ const Page = () => {
 
   return <section className='bg-[#FEFAEF] '>
     <div className='max-w-screen-2xl mx-auto bg-white shadow-2xl px-4 md:px-0 md:mt-10 rounded-xl '>
-      <div className='p-4 font-bold text-2xl cursor-pointer' onClick={() => router.back()}>
+      <div className='p-4 font-bold text-2xl cursor-pointer' onClick={() => router.replace(`/deck-automation/${companyID}/${roleID}`)}>
         {'<'}
       </div>
       <div className='flex justify-center py-12 flex-col items-center gap-12'>

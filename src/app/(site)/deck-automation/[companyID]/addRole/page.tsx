@@ -5,15 +5,16 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
+import { useParams } from 'next/navigation';
+
 import ProgressBar from './Components/ProgressBar';
 
 import AddQuotientWeightage from './Components/AddQuotientWeightage';
 import AddRole from './Components/AddRole';
+import AddAdversityQuotientWeightage from './Components/ParameterWeightage/AddAdversityQuotientWeightage';
 import AddEmotionalFactorWeightage from './Components/ParameterWeightage/AddEmotionalFactorWeightage';
 import AddIntelligenceFactorWeightage from './Components/ParameterWeightage/AddIntelligenceFactorWeightage';
 import AddSocialFactorWeightage from './Components/ParameterWeightage/AddSocialFactorWeightage';
-import AddAdversityQuotientWeightage from './Components/ParameterWeightage/AddAdversityQuotientWeightage';
-
 
 const steps = [
   'Add Role',
@@ -25,6 +26,7 @@ const steps = [
 ];
 
 const AddRoleDetails = () => {
+  const { companyID } = useParams();
   const router = useRouter();
 
   const [currentStep, setCurrentStep] = useState(0);
@@ -33,7 +35,7 @@ const AddRoleDetails = () => {
     <>
       <section className='bg-[#FEFAEF] '>
         <div className='max-w-screen-2xl mx-auto bg-white shadow-2xl px-4 md:px-0 md:mt-10 rounded-xl '>
-          <div className='p-4 font-bold text-2xl cursor-pointer' onClick={() => router.back()}>
+          <div className='p-4 font-bold text-2xl cursor-pointer' onClick={() => router.replace(`/deck-automation/${companyID}`)}>
             {'<'}
           </div>
           <div className='flex justify-center py-12 flex-col items-center gap-12'>
