@@ -36,6 +36,8 @@ export const candidates = mysqlTable("candidates", {
 	varLpa: decimal("var_lpa", { precision: 5, scale: 2 }),
 	expectedCtc: decimal("expected_ctc", { precision: 5, scale: 2 }),
 	noticePeriod: varchar("notice_period", { length: 255 }),
+	description: varchar("description", { length: 255 }),
+	achievement: json("achievement"),
 },
 (table) => {
 	return {
