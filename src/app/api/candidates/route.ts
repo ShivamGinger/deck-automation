@@ -15,7 +15,7 @@ export async function GET(request: NextRequest) {
     if (candidates.length === 0) {
       return NextResponse.json({ error: 'No candidates found' }, { status: 404 });
     }
-    return NextResponse.json({ data: candidates });
+    return NextResponse.json({ data: candidates }, { status: 200 });
   } catch (error: any) {
       console.error('Error fetching candidate:', error);
       return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
