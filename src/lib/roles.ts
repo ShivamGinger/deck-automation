@@ -37,3 +37,8 @@ export async function getCompanyRoleCandidate(companyid: number, roleid: number)
   return companyRole;
 };
 
+export async function getRoleByName(rname: string): Promise<Role[]> {
+  const roleE: Role[] = await db.select().from(roles).where(eq(roles.name, rname));
+
+  return roleE;
+};

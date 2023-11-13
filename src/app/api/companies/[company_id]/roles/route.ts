@@ -1,7 +1,7 @@
 import { db } from "@/db";
 import { Role, roles } from "@/db/schema";
 import { getCompany } from "@/lib/companies";
-import { getCompanyRoles } from "@/lib/roles";
+import { getCompanyRoles, getRoleByName } from "@/lib/roles";
 import { createRoleSchema } from "@/utils/bodyValidationSchemas";
 import { NextRequest, NextResponse } from "next/server";
 import { ZodError } from "zod";
@@ -27,15 +27,23 @@ export async function POST(request: NextRequest) {
     try {
       const requestData = await request.json();
       const parsedData = createRoleSchema.parse(requestData);
+      
       const companyIdExist = await getCompany(parsedData.companyId);
       if (companyIdExist.length === 0) {
         return NextResponse.json({ error: "Company not found cannot add role" }, { status: 404 });
       };
+      
+      const roleExist = await getRoleByName(parsedData.name);
+      if (roleExist.length !== 0) {
+        return NextResponse.json({ error: "Role already exists" }, { status: 409 });
+      };
+      
       const addrole = await db.insert(roles).values({
         name: parsedData.name,
         companyId: parsedData.companyId
       });
       return NextResponse.json({ message: "Role added successfully", data: parsedData }, { status: 201});
+      
     } catch (error: any) {
       if (error instanceof ZodError) {
         const errorDetails = error.issues.map((issue) => ({
