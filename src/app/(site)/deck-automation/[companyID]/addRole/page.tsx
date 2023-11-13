@@ -7,30 +7,11 @@ import { useRouter } from 'next/navigation';
 
 import { useParams } from 'next/navigation';
 
-import ProgressBar from './Components/ProgressBar';
-
-import AddQuotientWeightage from './Components/AddQuotientWeightage';
 import AddRole from './Components/AddRole';
-import AddAdversityQuotientWeightage from './Components/ParameterWeightage/AddAdversityQuotientWeightage';
-import AddEmotionalFactorWeightage from './Components/ParameterWeightage/AddEmotionalFactorWeightage';
-import AddIntelligenceFactorWeightage from './Components/ParameterWeightage/AddIntelligenceFactorWeightage';
-import AddSocialFactorWeightage from './Components/ParameterWeightage/AddSocialFactorWeightage';
-
-const steps = [
-  'Add Role',
-  'Quotient Weightage',
-  'Intelligence Factor Weightage',
-  'Emotional Factor Weightage',
-  'Social Factor Weightage',
-  'Adversity Quotient Weightage',
-];
 
 const AddRoleDetails = () => {
   const { companyID } = useParams();
   const router = useRouter();
-
-  const [currentStep, setCurrentStep] = useState(0);
-
   return (
     <>
       <section className='bg-[#FEFAEF] '>
@@ -40,39 +21,10 @@ const AddRoleDetails = () => {
           </div>
           <div className='flex justify-center py-12 flex-col items-center gap-12'>
             <Image width={150} height={150} src={'/images/Ginger Partners_Logo with tagline.png'} alt="profile pic" className="rounded-xl " priority />
-            {/* <h1 className='text-xl font-bold uppercase'>Add Role</h1> */}
+            <h1 className='text-xl font-bold uppercase'>Add Role</h1>
 
-            <div className='w-2/5 relative'>
-              <ProgressBar currentStep={currentStep} totalSteps={steps.length} steps={steps} />
+            <AddRole />
 
-            </div>
-
-            <div>
-              {currentStep === 0 &&
-                <AddRole setCurrentStep={setCurrentStep} />
-              }
-
-              {currentStep === 1 &&
-                <AddQuotientWeightage setCurrentStep={setCurrentStep} />
-              }
-
-              {currentStep === 2 &&
-                <AddIntelligenceFactorWeightage />
-              }
-
-              {currentStep === 3 &&
-                <AddEmotionalFactorWeightage />
-              }
-
-              {currentStep === 4 &&
-                <AddSocialFactorWeightage />
-              }
-
-              {currentStep === 5 &&
-                <AddAdversityQuotientWeightage />
-              }
-
-            </div>
           </div>
         </div>
       </section>

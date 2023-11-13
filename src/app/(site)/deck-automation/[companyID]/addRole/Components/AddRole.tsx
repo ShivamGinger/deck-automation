@@ -1,10 +1,11 @@
 "use client";
-import Input from '@/app/(site)/Components/Input'
-import { useParams } from 'next/navigation';
-import React, { ChangeEvent, Dispatch, SetStateAction, useState } from 'react'
+import Input from '@/app/(site)/Components/Input';
+import { useParams, useRouter } from 'next/navigation';
+import React, { ChangeEvent, Dispatch, SetStateAction, useState } from 'react';
 
-const AddRole = ({ setCurrentStep }: { setCurrentStep: Dispatch<SetStateAction<number>> }) => {
+const AddRole = () => {
   const { companyID } = useParams();
+  const router = useRouter();
 
   const [role, setRole] = useState('');
 
@@ -18,34 +19,28 @@ const AddRole = ({ setCurrentStep }: { setCurrentStep: Dispatch<SetStateAction<n
     if (!role) {
       return;
     }
-    // const response = await fetch('/api/', {
-    //   method: 'post',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify({
 
-    //   }),
-    //   credentials: 'include',
-    // }
-    // );
+    const response = await fetch(`/api/companies/${companyID}/roles`, {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: role,
+        companyId: Array.isArray(companyID) ? parseInt(companyID[0]) : parseInt(companyID)
+      }),
+      credentials: 'include',
+    }
+    );
 
-    // if (response.status === 409) {
-    //   const errorData = await response.json();
+    if (response.ok) {
+      router.replace(`/deck-automation/${companyID}`);
 
-    //   setError(true);
-    //   setErrorDetails(errorData.error);
-    // } else if (response.status == 400) {
-    //   const errorData = await response.json();
-
-    //   setError(true);
-    //   setErrorDetails(errorData.details[0].message);
-    // } else if (response.status === 200) {
-
-    //   setCurrentStep(prevCount => prevCount + 1);
-    // };
-    setCurrentStep(prevCount => prevCount + 1);
-
+    } else {
+      const data = await response.json();
+      setError(true);
+      setErrorDetails(data.error);
+    }
   };
   return <>
     {error &&
@@ -67,7 +62,8 @@ const AddRole = ({ setCurrentStep }: { setCurrentStep: Dispatch<SetStateAction<n
 
       <button
         onClick={handleSubmit}
-        className={`${!role && 'cursor-not-allowed opacity-50'} font-semibold py-2 px-8 uppercase bg-[#B06500] text-white rounded-lg border-[#B06500]`}
+        disabled={!role || error}
+        className={`${!role || error ? 'cursor-not-allowed opacity-50' : ''} font-semibold py-2 px-8 uppercase bg-[#B06500] text-white rounded-lg border-[#B06500]`}
       >
         Submit
       </button>

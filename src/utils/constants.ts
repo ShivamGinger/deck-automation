@@ -23,7 +23,7 @@ interface CandidateDescription {
 interface CandidatePersonalDetails {
   gender: 'M' | 'F',
   exp: string,
-  curr_ctc: string
+  exp_ctc: string
 }
 
 interface CandidateContactInfo {

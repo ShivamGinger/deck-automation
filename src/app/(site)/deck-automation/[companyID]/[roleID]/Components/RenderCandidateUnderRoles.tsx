@@ -1,28 +1,35 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 
 import Link from 'next/link';
 
 import { ITEMS_PER_PAGE } from '@/utils/constants';
+import { getCompanyName, getRoleName } from '@/utils/helperFunctions';
+import { saveAs } from 'file-saver';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import ReactPaginate from 'react-paginate';
-import { saveAs } from 'file-saver';
 
 type candidate = {
   id: number,
-  name: string,
+  cname: string,
   email: string,
-  GPscore: number,
+  totalScore: number,
   Experience: number,
-  ctc: number
+  ctc: number,
+  achievement: string,
+  description: string,
+  profilePic: string
 }
 
 const RenderCandidateUnderRoles = ({ candidatesUnderRole }: { candidatesUnderRole: candidate[] | undefined }) => {
   const { roleID, companyID } = useParams();
 
   const [currentPage, setCurrentPage] = useState(0);
+
+  const [companyName, setCompanyName] = useState();
+  const [roleName, setRoleName] = useState();
 
   const handlePageChange = (selectedPage: { selected: number }) => {
     setCurrentPage(selectedPage.selected);
@@ -36,21 +43,50 @@ const RenderCandidateUnderRoles = ({ candidatesUnderRole }: { candidatesUnderRol
 
   const currentData = candidatesUnderRole?.slice(startIndex, endIndex);
 
-  const handleDownloadPdf = async () => {
-    const response = await fetch('/api/demo', {
-      method: 'post',
-      body: JSON.stringify({
-        name: ' nice'
-      }),
-    })
+  useLayoutEffect(() => {
+    const getData = async () => {
+      const cID = Array.isArray(companyID) ? companyID[0] : companyID;
 
-    const Buffer = await response.json();
+      const name = await getCompanyName(cID);
 
-    const bufferData = Buffer.data;
+      setCompanyName(name);
+    }
+    getData();
+  }, [companyID]);
 
-    const blob = new Blob([new Uint8Array(bufferData)], { type: 'application/pdf' });
+  useLayoutEffect(() => {
+    const getData = async () => {
+      const cID = Array.isArray(companyID) ? companyID[0] : companyID;
+      const rID = Array.isArray(roleID) ? roleID[0] : roleID;
 
-    saveAs(blob, 'downloadedFile.pdf');
+      const roleName = await getRoleName(cID, rID);
+
+      setRoleName(roleName);
+    }
+    getData();
+  }, [companyID, roleID]);
+
+
+  const handleDownloadPdf = async (roleID: string | string[], companyID: string | string[], candidateID: number) => {
+    try {
+      const response = await fetch('/api/demo', {
+        method: 'post',
+        body: JSON.stringify({
+          name: ' nice'
+        }),
+      })
+
+      const Buffer = await response.json();
+
+      const bufferData = Buffer.data;
+
+      const blob = new Blob([new Uint8Array(bufferData)], { type: 'application/pdf' });
+
+      saveAs(blob, 'downloadedFile.pdf');
+
+    } catch (err) {
+      console.log(err);
+    };
   };
 
   return (
@@ -58,10 +94,10 @@ const RenderCandidateUnderRoles = ({ candidatesUnderRole }: { candidatesUnderRol
       <div className='flex flex-col'>
         <div className="rounded-lg shadow overflow-x-auto bg-white">
           <div className='p-4 flex flex-row justify-between'>
-            <h2 className='font-bold uppercase text-2xl text-[#542C06]'>List of Candidates Under ({roleID} - role) for ({companyID} - company)</h2>
-            <div className='p-2'>
+            <h2 className='font-bold uppercase text-2xl text-[#542C06]'>List of Candidates Under &apos;{roleName}&apos; for &apos;{companyName}&apos;</h2>
+            {/* <div className='p-2'>
               search ...
-            </div>
+            </div> */}
           </div>
           <table className="w-full border-separate border-spacing-4 px-6 pt-2">
             <thead className="">
@@ -81,7 +117,7 @@ const RenderCandidateUnderRoles = ({ candidatesUnderRole }: { candidatesUnderRol
                     {index + 1}
                   </td>
                   <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
-                    {detail.name}
+                    {detail.cname}
                   </td>
 
                   <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
@@ -89,7 +125,7 @@ const RenderCandidateUnderRoles = ({ candidatesUnderRole }: { candidatesUnderRol
                   </td>
 
                   <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
-                    {detail.GPscore}
+                    {detail.totalScore}
                   </td>
 
                   <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
@@ -100,8 +136,8 @@ const RenderCandidateUnderRoles = ({ candidatesUnderRole }: { candidatesUnderRol
                     {detail.ctc}
                   </td>
 
-                  <td className="" onClick={handleDownloadPdf}>
-                    <Image width={20} height={20} src={'/images/edit.png'} alt="edit-icon" className="cursor-pointer" />
+                  <td className="" onClick={() => handleDownloadPdf(roleID, companyID, detail.id)}>
+                    <Image width={20} height={20} src={'/images/download.png'} alt="edit-icon" className="cursor-pointer" />
                   </td>
                 </tr>
               ))}

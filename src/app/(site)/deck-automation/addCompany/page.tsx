@@ -39,7 +39,8 @@ const AddCompany = () => {
 
       setError(true);
       setErrorDetails(errorData.details[0].message);
-    } else if (response.status === 200) {
+    } else if (response.status === 201) {
+            
       router.replace('/deck-automation');
       router.refresh();
     };
@@ -49,7 +50,7 @@ const AddCompany = () => {
     <>
       <section className='bg-[#FEFAEF] '>
         <div className='max-w-screen-2xl mx-auto bg-white shadow-2xl px-4 md:px-0 md:mt-10 rounded-xl '>
-          <div className='p-4 font-bold text-2xl cursor-pointer' onClick={() => router.back()}>
+          <div className='p-4 font-bold text-2xl cursor-pointer' onClick={() => router.replace('/deck-automation')}>
             {'<'}
           </div>
           <div className='flex justify-center py-12 flex-col items-center gap-12'>
@@ -61,7 +62,7 @@ const AddCompany = () => {
                 <span onClick={() => setError(false)} className='cursor-pointer'>X</span>
               </div>
             }
-            <form className="space-y-12">
+            <div className="space-y-12">
               <Input
                 name='Company Name'
                 id='company_name'
@@ -71,7 +72,7 @@ const AddCompany = () => {
                 moveLabel={companyName != ''}
                 onChange={(e: ChangeEvent<HTMLInputElement>) => setCompanyName(e.target.value)}
               />
-            </form>
+            </div>
             <button
               onClick={handleSubmit}
               className={`${!companyName && 'cursor-not-allowed opacity-50'} font-semibold py-2 px-8 uppercase bg-[#B06500] text-white rounded-lg border-[#B06500]`}

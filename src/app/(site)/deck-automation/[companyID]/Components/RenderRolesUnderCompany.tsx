@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 
 import Link from 'next/link';
 
 import { ITEMS_PER_PAGE } from '@/utils/constants';
+import { getCompanyName } from '@/utils/helperFunctions';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import ReactPaginate from 'react-paginate';
@@ -12,7 +13,20 @@ import ReactPaginate from 'react-paginate';
 const RenderRolesUnderCompany = ({ rolesUnderCompany }: { rolesUnderCompany: { id: number, name: string }[] | undefined }) => {
   const { companyID } = useParams();
 
+  const [companyName, setCompanyName] = useState();
+
   const [currentPage, setCurrentPage] = useState(0);
+
+  useLayoutEffect(() => {
+    const getData = async () => {
+      const cID = Array.isArray(companyID) ? companyID[0] : companyID;
+
+      const name = await getCompanyName(cID);
+
+      setCompanyName(name);
+    }
+    getData();
+  }, [companyID]);
 
   const handlePageChange = (selectedPage: { selected: number }) => {
     setCurrentPage(selectedPage.selected);
@@ -31,17 +45,16 @@ const RenderRolesUnderCompany = ({ rolesUnderCompany }: { rolesUnderCompany: { i
       <div className='flex flex-col'>
         <div className="rounded-lg shadow overflow-x-auto bg-white">
           <div className='p-4 flex flex-row justify-between'>
-            <h2 className='font-bold uppercase text-2xl text-[#542C06]'>List of Roles Under ({companyID} - name)</h2>
-            <div className='p-2'>
+            <h2 className='font-bold uppercase text-2xl text-[#542C06]'>List of Roles Under {companyName}</h2>
+            {/* <div className='p-2'>
               search ...
-            </div>
+            </div> */}
           </div>
           <table className="w-full border-separate border-spacing-4 px-6 pt-2">
             <thead className="">
               <tr className='gap-x-4'>
                 <th className="table-headings">S.No.</th>
                 <th className="table-headings">Role Name</th>
-                <th className="table-headings">Candidate Count</th>
               </tr>
             </thead>
             <tbody className="">
@@ -53,14 +66,10 @@ const RenderRolesUnderCompany = ({ rolesUnderCompany }: { rolesUnderCompany: { i
                   <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
                     {detail.name}
                   </td>
-
-                  <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
-
-                  </td>
-
+                  
                   <td className="">
                     <Link href={`/deck-automation/${companyID}/${detail.id}`}>
-                      <Image width={20} height={20} src={'/images/edit.png'} alt="edit-icon" className="cursor-pointer" />
+                      <Image width={20} height={20} src={'/images/plus.png'} alt="edit-icon" className="cursor-pointer" />
                     </Link>
                   </td>
                 </tr>

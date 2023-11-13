@@ -8,6 +8,8 @@ const KeyPoints = (
     error,
     setErrorDetails,
     setError,
+    count,
+    placeholderData
   }:
     {
       handleInputChange: HandleCandidateInputChangeValue,
@@ -15,11 +17,23 @@ const KeyPoints = (
       error: boolean,
       setErrorDetails: (details: string | null) => void,
       setError: (error: boolean) => void,
+      count: number,
+      placeholderData: string[]
     }
 ) => {
-  const [keyPointsCount, setKeyPointsCount] = useState(1);
+  const [keyPointsCount, setKeyPointsCount] = useState(count);
+
+  const [placeholder, setPlaceholderData] = useState(placeholderData);
 
   const [keyPoints, setKeyPoints] = useState<string[]>(['']);
+
+  useEffect(() => {
+    setKeyPointsCount(count);
+  }, [count]);
+
+  useEffect(() => {
+    setPlaceholderData(placeholderData);
+  }, [placeholderData]);
 
   useEffect(() => {
     if (error) {
@@ -47,6 +61,8 @@ const KeyPoints = (
 
     setKeyPointsCount(prevCount => prevCount + 1);
     const updatedKeyPoints = [...keyPoints, ''];
+
+    handleInputChange(candidateNo, updatedKeyPoints, 'key_points');
 
     setKeyPoints(updatedKeyPoints);
   };
@@ -84,37 +100,34 @@ const KeyPoints = (
     handleInputChange(candidateNo, updatedKeyPoints, 'key_points');
   };
 
-  const renderKeyPoints = () => {
-    const elements = [];
+  const elements = [];
 
-    for (let i = 1; i <= keyPointsCount; i++) {
-      elements.push(
-        <div key={i}>
-          <input
-            type="text"
-            name=""
-            id=""
-            className={`
-                  mt-2
-                  h-full 
-                  w-full 
-                  rounded-[7px]
-                  bg-transparent           
-                  px-3 
-                  py-2.5 
-                  font-sans 
-                  text-base 
-                  border
-                  border-black
-                  `}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => handleKeyPointsChange(i, e.target.value)}
-          />
-        </div>
-      )
-    }
-
-    return elements;
-  };
+  for (let i = 1; i <= keyPointsCount; i++) {
+    elements.push(
+      <div key={i}>
+        <input
+          type="text"
+          name=""
+          id=""
+          placeholder={placeholder[i - 1]}
+          className={`
+                    mt-2
+                    h-full 
+                    w-full 
+                    rounded-[7px]
+                    bg-transparent           
+                    px-3 
+                    py-2.5 
+                    font-sans 
+                    text-base 
+                    border
+                    border-black
+                    `}
+          onChange={(e: ChangeEvent<HTMLInputElement>) => handleKeyPointsChange(i, e.target.value)}
+        />
+      </div>
+    )
+  }
 
   return <>
     <div className='mt-4 w-72 flex flex-col'>
@@ -128,7 +141,8 @@ const KeyPoints = (
         </span>
       </label>
 
-      {renderKeyPoints()}
+      {elements}
+      {/* {renderKeyPoints()} */}
     </div>
   </>
 

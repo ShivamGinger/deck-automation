@@ -10,7 +10,7 @@ import Input from './Components/Input';
 import Modal from './Components/Modal';
 import Select from './Components/Select';
 
-const AddSocialFactorWeightage = () => {
+const AddSocialFactorWeightage = ({ setCurrentStep }: { setCurrentStep: React.Dispatch<React.SetStateAction<number>> }) => {
 
   // Fetch exsisting SF
   const SocialFactors = SFArray;

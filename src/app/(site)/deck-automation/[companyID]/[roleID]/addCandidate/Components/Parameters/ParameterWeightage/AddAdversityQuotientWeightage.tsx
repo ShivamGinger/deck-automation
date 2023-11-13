@@ -4,65 +4,64 @@ import React, { ChangeEvent, useEffect, useLayoutEffect, useState } from 'react'
 
 import Image from 'next/image';
 
-import { IF, IFArray, IFBoolean, IFError } from '@/utils/constants';
+import { AQ, AQArray, AQBoolean, AQError } from '@/utils/constants';
 
 import Input from './Components/Input';
 import Modal from './Components/Modal';
 import Select from './Components/Select';
 
+const AddAdversityQuotientWeightage = ({ setCurrentStep }: { setCurrentStep: React.Dispatch<React.SetStateAction<number>> }) => {
 
-const AddIntelligenceFactorWeightage = () => {
-
-  // Fetch exsisting IF
-  const IntelligenceFactors = IFArray;
+  // Fetch exsisting AQ
+  const AdversityQuotient = AQArray;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const [intelligenceFactors, setIntelligenceFactors] = useState<IF[] | []>([]);
+  const [adversityQuotient, setAdversityQuotient] = useState<AQ[] | []>([]);
 
-  const [intelligenceFactorsBoolean, setIntelligenceFactorsBoolean] = useState<IFBoolean[]>([]);
+  const [adversityQuotientBoolean, setAdversityQuotientBoolean] = useState<AQBoolean[]>([]);
 
-  const [intelligenceFactorsInputError, setIntelligenceFactorsInputError] = useState<IFError[]>([]);
+  const [adversityQuotientInputError, setAdversityQuotientInputError] = useState<AQError[]>([]);
 
   useLayoutEffect(() => {
-    setIntelligenceFactorsInputError(IntelligenceFactors.map(factor => ({ ...factor, error: false })));
+    setAdversityQuotientInputError(AdversityQuotient.map(factor => ({ ...factor, error: false })));
 
-    setIntelligenceFactorsBoolean(IntelligenceFactors.map(factor => ({ ...factor, paramNeeded: false })));
+    setAdversityQuotientBoolean(AdversityQuotient.map(factor => ({ ...factor, paramNeeded: false })));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleIntelligenceFactorsNeededChange = (value: boolean, elementNo: number) => {
+  const handleAdversityQuotientNeededChange = (value: boolean, elementNo: number) => {
 
-    setIntelligenceFactorsBoolean(prevIF => {
-      const index = prevIF.findIndex(factor => factor.id === elementNo);
+    setAdversityQuotientBoolean(prevAQ => {
+      const index = prevAQ.findIndex(factor => factor.id === elementNo);
       if (index !== -1) {
 
         const updatedFactors = [
-          ...prevIF.slice(0, index),
+          ...prevAQ.slice(0, index),
           {
-            ...prevIF[index],
+            ...prevAQ[index],
             paramNeeded: value
           },
-          ...prevIF.slice(index + 1)
+          ...prevAQ.slice(index + 1)
         ];
 
         return updatedFactors;
       }
 
-      return prevIF;
+      return prevAQ;
     });
 
   };
 
-  const onHandleIntelligenceFactorsNeededSubmit = () => {
-    setIntelligenceFactors(intelligenceFactorsBoolean.filter(factor => factor.paramNeeded === true));
+  const onHandleAdversityQuotientNeededSubmit = () => {
+    setAdversityQuotient(adversityQuotientBoolean.filter(factor => factor.paramNeeded === true));
     setIsModalOpen(false);
   };
 
-  const handleIntelligenceFactorsInputChange = (value: number, elementNo: number) => {
+  const handleAdversityQuotientInputChange = (value: number, elementNo: number) => {
 
     if (value > 100 || isNaN(value) || value <= 0) {
-      setIntelligenceFactorsInputError(prevErrors => {
+      setAdversityQuotientInputError(prevErrors => {
         const index = prevErrors.findIndex(err => err.id === elementNo);
 
         if (index !== -1) {
@@ -81,7 +80,7 @@ const AddIntelligenceFactorWeightage = () => {
         return prevErrors
       });
     } else {
-      setIntelligenceFactorsInputError(prevErrors => {
+      setAdversityQuotientInputError(prevErrors => {
         const index = prevErrors.findIndex(err => err.id === elementNo);
 
         if (index !== -1) {
@@ -101,40 +100,40 @@ const AddIntelligenceFactorWeightage = () => {
       });
     }
 
-    setIntelligenceFactors(prevIF => {
-      const index = prevIF.findIndex(factor => factor.id === elementNo);
+    setAdversityQuotient(prevAQ => {
+      const index = prevAQ.findIndex(factor => factor.id === elementNo);
       if (index !== -1) {
 
         const updatedFactors = [
-          ...prevIF.slice(0, index),
+          ...prevAQ.slice(0, index),
           {
-            ...prevIF[index],
+            ...prevAQ[index],
             value: value
           },
-          ...prevIF.slice(index + 1)
+          ...prevAQ.slice(index + 1)
         ];
 
         return updatedFactors;
       }
 
-      return prevIF;
+      return prevAQ;
     });
   };
 
-  const getValueByIdIntelligenceFactors = (id: number) => {
-    const factor = intelligenceFactors.find(fact => fact.id === id);
+  const getValueByIdAdversityQuotient = (id: number) => {
+    const factor = adversityQuotient.find(fact => fact.id === id);
 
     return factor?.value;
   };
 
-  const checkErrorByIdIntelligenceFactors = (id: number) => {
-    const factor = intelligenceFactorsInputError.find(fact => fact.id === id);
+  const checkErrorByIdAdversityQuotient = (id: number) => {
+    const factor = adversityQuotientInputError.find(fact => fact.id === id);
 
     return factor ? factor?.error : false;
   };
 
-  const getSelectValueIntelligenceFactorsBoolean = (id: number) => {
-    return intelligenceFactorsBoolean.find(factor => factor.id === id)?.paramNeeded.toString() || 'false';
+  const getSelectValueAdversityQuotientBoolean = (id: number) => {
+    return adversityQuotientBoolean.find(factor => factor.id === id)?.paramNeeded.toString() || 'false';
   };
 
   return <>
@@ -143,32 +142,32 @@ const AddIntelligenceFactorWeightage = () => {
         <Modal
           isModalOpen={isModalOpen}
           handleClose={() => setIsModalOpen(false)}
-          onHandleSubmit={onHandleIntelligenceFactorsNeededSubmit}
+          onHandleSubmit={onHandleAdversityQuotientNeededSubmit}
         >
           <div className='flex flex-col'>
             <h2 className='text-xl font-bold capitalize relative'>
-              <span className='border-b border-gray-500'>Intelligence Factors:</span>
+              <span className='border-b border-gray-500'>Adversity Quotients:</span>
             </h2>
             <div>
-              {intelligenceFactorsBoolean?.map((detail) => (
+              {adversityQuotientBoolean?.map((detail) => (
                 <div key={detail.id} className='flex flex-row justify-between pb-4 gap-4'>
                   <p className='text-[16px] leading-tight font-semibold self-center'>
                     {detail.name}:
                   </p>
                   <Select
                     id={`intelligence_factor_choose${detail.name}`}
-                    value={getSelectValueIntelligenceFactorsBoolean(detail.id)}
+                    value={getSelectValueAdversityQuotientBoolean(detail.id)}
                     options={[
                       {
-                        value: getSelectValueIntelligenceFactorsBoolean(detail.id),
-                        text: getSelectValueIntelligenceFactorsBoolean(detail.id)
+                        value: getSelectValueAdversityQuotientBoolean(detail.id),
+                        text: getSelectValueAdversityQuotientBoolean(detail.id)
                       },
                       {
-                        value: getSelectValueIntelligenceFactorsBoolean(detail.id) === 'true' ? 'false' : 'true',
-                        text: getSelectValueIntelligenceFactorsBoolean(detail.id) === 'true' ? 'false' : 'true'
+                        value: getSelectValueAdversityQuotientBoolean(detail.id) === 'true' ? 'false' : 'true',
+                        text: getSelectValueAdversityQuotientBoolean(detail.id) === 'true' ? 'false' : 'true'
                       }
                     ]}
-                    onChange={(e: ChangeEvent<HTMLSelectElement>) => handleIntelligenceFactorsNeededChange(e.target.value === 'true', detail.id)}
+                    onChange={(e: ChangeEvent<HTMLSelectElement>) => handleAdversityQuotientNeededChange(e.target.value === 'true', detail.id)}
                     required
                   />
                 </div>
@@ -182,7 +181,7 @@ const AddIntelligenceFactorWeightage = () => {
       <div className='flex flex-col justify-between gap-2'>
         <div className='flex gap-2'>
           <h2 className='text-xl font-bold capitalize relative '>
-            <span className='border-b border-gray-500'>Intelligence Factors:</span>
+            <span className='border-b border-gray-500'>Adversity Quotients:</span>
           </h2>
           <div className='pt-1.5' onClick={() => setIsModalOpen(true)}>
             <Image width={20} height={20} src={'/images/edit.png'} alt="edit-icon" className="cursor-pointer" />
@@ -190,18 +189,18 @@ const AddIntelligenceFactorWeightage = () => {
 
         </div>
         <div>
-          {intelligenceFactors?.map((detail) => (
+          {adversityQuotient?.map((detail) => (
             <div key={detail.id} className='flex flex-row justify-between pb-4 gap-4'>
               <p className='text-[16px] leading-tight font-semibold self-center'>
                 {detail.name}:
               </p>
               <Input
                 id={`intelligence_factor_${detail.name}`}
-                placeholder={String(getValueByIdIntelligenceFactors(detail.id))}
+                placeholder={String(getValueByIdAdversityQuotient(detail.id))}
                 required={true}
                 moveLabel={false}
-                onChange={(e: ChangeEvent<HTMLInputElement>) => handleIntelligenceFactorsInputChange(parseInt(e.currentTarget.value), detail.id)}
-                error={checkErrorByIdIntelligenceFactors(detail.id)}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => handleAdversityQuotientInputChange(parseInt(e.currentTarget.value), detail.id)}
+                error={checkErrorByIdAdversityQuotient(detail.id)}
               />
             </div>
           ))}
@@ -223,4 +222,4 @@ const AddIntelligenceFactorWeightage = () => {
   </>
 }
 
-export default AddIntelligenceFactorWeightage
+export default AddAdversityQuotientWeightage
