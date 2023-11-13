@@ -1,9 +1,39 @@
 import { db } from "@/db";
-import { Role } from "@/db/schema";
+import { Role, candidates, companies, quotientScores, roles } from "@/db/schema";
+import { eq } from "drizzle-orm";
 
-export default async function getAllRolesUnderCompany(companyID: string | string[]): Promise<Role[]> {
-  // TODO: Fetch and return all the roles under the company with 'ID = companyID'
-  const result: Role[] = await db.query.roles.findMany();
+export async function getCompanyRoles(companyid: number): Promise<Role[]> {
+  const companyRoles: Role[] = await db.select().from(roles).where(eq(roles.companyId, companyid));
 
-  return result;
+  return companyRoles;
 };
+
+export type roleCandidate = {
+  id: number;
+  rname: string;
+  cname: string;
+  profilePic: string | null;
+  description: string | null;
+  achievement: unknown | null;
+  totalScore: string;
+}
+
+export async function getCompanyRoleCandidate(companyid: number, roleid: number): Promise<roleCandidate[]> {
+  const companyRole: roleCandidate[] = await db.select({
+    id: candidates.id,
+    rname: roles.name,
+    cname: candidates.name,
+    profilePic: candidates.profilePic,
+    description: candidates.description,
+    achievement: candidates.achievement,
+    totalScore: quotientScores.totalScore
+  })
+  .from(candidates)
+  .innerJoin(roles, eq(roles.id, candidates.roleId))
+  .innerJoin(quotientScores, eq(quotientScores.candidateId, candidates.id))
+  .where(eq(roles.companyId, companyid))
+  .where(eq(roles.id, roleid));
+
+  return companyRole;
+};
+
