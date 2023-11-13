@@ -4,46 +4,16 @@ import React, { ChangeEvent, useEffect, useLayoutEffect, useState } from 'react'
 
 import Image from 'next/image';
 
+import { AQ, AQArray, AQBoolean, AQError } from '@/utils/constants';
+
 import Input from './Components/Input';
 import Modal from './Components/Modal';
 import Select from './Components/Select';
 
-const AQ = [
-  {
-    id: 1,
-    name: "Conflict Management",
-    value: 0
-  },
-  {
-    id: 2,
-    name: "Ability to handle stress",
-    value: 0
-  },
-  {
-    id: 3,
-    name: "Ability to overcome challenges",
-    value: 0
-  }
-]
-
-interface AQ {
-  id: number,
-  name: string,
-  value: number,
-}
-
-interface AQError extends AQ {
-  error: boolean
-}
-
-interface AQBoolean extends AQ {
-  paramNeeded: boolean
-}
-
 const AddAdversityQuotientWeightage = () => {
 
   // Fetch exsisting AQ
-  const AdversityQuotient = AQ;
+  const AdversityQuotient = AQArray;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -90,7 +60,7 @@ const AddAdversityQuotientWeightage = () => {
 
   const handleAdversityQuotientInputChange = (value: number, elementNo: number) => {
 
-    if (value > 100 || isNaN(value)) {
+    if (value > 100 || isNaN(value) || value <= 0) {
       setAdversityQuotientInputError(prevErrors => {
         const index = prevErrors.findIndex(err => err.id === elementNo);
 

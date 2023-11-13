@@ -4,76 +4,17 @@ import React, { ChangeEvent, useEffect, useLayoutEffect, useState } from 'react'
 
 import Image from 'next/image';
 
+import { IF, IFArray, IFBoolean, IFError } from '@/utils/constants';
+
 import Input from './Components/Input';
 import Modal from './Components/Modal';
 import Select from './Components/Select';
 
-const IF = [
-  {
-    id: 1,
-    name: "Problem Solving Ability",
-    value: 0
-  },
-  {
-    id: 2,
-    name: "Innovation ability",
-    value: 0
-  },
-  {
-    id: 3,
-    name: "Working Memory (Ability to hold & manipulate information for short periods)",
-    value: 0
-  },
-  {
-    id: 4,
-    name: "Processing Speed",
-    value: 0
-  },
-  {
-    id: 5,
-    name: "Relevant Years of Experience",
-    value: 0
-  },
-  {
-    id: 6,
-    name: "Professional Pedigree: Organizations",
-    value: 0
-  },
-  {
-    id: 7,
-    name: "Academic Pedigree: Education",
-    value: 0
-  },
-  {
-    id: 8,
-    name: "JD Specific(Must have): Research(Publications)",
-    value: 0
-  },
-  {
-    id: 9,
-    name: "JD Specific(Must have): Deep Learning Algorithms",
-    value: 0
-  },
-]
-
-interface IF {
-  id: number,
-  name: string,
-  value: number,
-}
-
-interface IFError extends IF {
-  error: boolean
-}
-
-interface IFBoolean extends IF {
-  paramNeeded: boolean
-}
 
 const AddIntelligenceFactorWeightage = () => {
 
   // Fetch exsisting IF
-  const IntelligenceFactors = IF;
+  const IntelligenceFactors = IFArray;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -120,7 +61,7 @@ const AddIntelligenceFactorWeightage = () => {
 
   const handleIntelligenceFactorsInputChange = (value: number, elementNo: number) => {
 
-    if (value > 100 || isNaN(value)) {
+    if (value > 100 || isNaN(value) || value <= 0) {
       setIntelligenceFactorsInputError(prevErrors => {
         const index = prevErrors.findIndex(err => err.id === elementNo);
 

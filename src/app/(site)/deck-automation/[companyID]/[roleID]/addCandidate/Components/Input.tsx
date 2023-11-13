@@ -17,8 +17,8 @@ const Input: FC<InputProps> = ({ id, required, moveLabel, error, ...props }) => 
         <div className="relative h-10 ">
           <input
             type="number"
-            min={0}
-            max={100}
+            min={1}
+            max={5}
             value={props.placeholder}
             {...props}
             className={`

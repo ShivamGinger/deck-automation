@@ -4,61 +4,16 @@ import React, { ChangeEvent, useEffect, useLayoutEffect, useState } from 'react'
 
 import Image from 'next/image';
 
+import { EF, EFArray, EFBoolean, EFError } from '@/utils/constants';
+
 import Input from './Components/Input';
 import Modal from './Components/Modal';
 import Select from './Components/Select';
 
-const EF = [
-  {
-    id: 1,
-    name: "Self-Awareness (SWOT of self)",
-    value: 0
-  },
-  {
-    id: 2,
-    name: "Motivation (Internal or External)",
-    value: 0
-  },
-  {
-    id: 3,
-    name: "Empathy",
-    value: 0
-  },
-  {
-    id: 4,
-    name: "Communication",
-    value: 0
-  },
-  {
-    id: 5,
-    name: "People Management",
-    value: 0
-  },
-  {
-    id: 6,
-    name: "Collaboration (working across cross-functional teams)",
-    value: 0
-  }
-]
-
-interface EF {
-  id: number,
-  name: string,
-  value: number,
-}
-
-interface EFError extends EF {
-  error: boolean
-}
-
-interface EFBoolean extends EF {
-  paramNeeded: boolean
-}
-
 const AddEmotionalFactorWeightage = () => {
 
   // Fetch exsisting EF
-  const EmotionalFactors = EF;
+  const EmotionalFactors = EFArray;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -105,7 +60,7 @@ const AddEmotionalFactorWeightage = () => {
 
   const handleEmotionalFactorsInputChange = (value: number, elementNo: number) => {
 
-    if (value > 100 || isNaN(value)) {
+    if (value > 100 || isNaN(value) || value <= 0) {
       setEmotionalFactorsInputError(prevErrors => {
         const index = prevErrors.findIndex(err => err.id === elementNo);
 
