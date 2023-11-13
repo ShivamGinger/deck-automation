@@ -9,11 +9,11 @@ export async function GET(request: NextResponse, { params }: { params: { company
         if (companyIdExist.length === 0) {
           return NextResponse.json({ error: "Company not found" }, { status: 404 });
         };
-        const roles: roleCandidate[] = await getCompanyRoleCandidate(params.company_id, params.role_id);
-        if (roles.length === 0) {
-            return NextResponse.json({ error: "No roles found for company" }, { status: 404});
+        const rolesCandidate: roleCandidate[] = await getCompanyRoleCandidate(params.company_id, params.role_id);
+        if (rolesCandidate.length === 0) {
+            return NextResponse.json({ error: "No candidates under this role" }, { status: 404});
         };
-        return NextResponse.json({ data: roles }, { status: 200});
+        return NextResponse.json({ data: rolesCandidate }, { status: 200});
     } catch (error: any) {
         console.error('Error fetching candidate:', error);
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
