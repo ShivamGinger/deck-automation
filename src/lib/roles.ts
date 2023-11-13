@@ -15,7 +15,7 @@ export type roleCandidate = {
   profilePic: string | null;
   description: string | null;
   achievement: unknown | null;
-  totalScore: string;
+  totalScore: string | null;
 }
 
 export async function getCompanyRoleCandidate(companyid: number, roleid: number): Promise<roleCandidate[]> {
@@ -30,7 +30,7 @@ export async function getCompanyRoleCandidate(companyid: number, roleid: number)
   })
   .from(candidates)
   .innerJoin(roles, eq(roles.id, candidates.roleId))
-  .innerJoin(quotientScores, eq(quotientScores.candidateId, candidates.id))
+  .leftJoin(quotientScores, eq(quotientScores.candidateId, candidates.id))
   .where(eq(roles.companyId, companyid))
   .where(eq(roles.id, roleid));
 
