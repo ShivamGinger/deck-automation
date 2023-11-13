@@ -29,6 +29,8 @@ export async function POST(request: NextRequest) {
     const candidate = await db.insert(candidates).values({
       name: parsedData.name,
       email: parsedData.email,
+      roleId: parsedData.roleId,
+      companyId: parsedData.companyId,
       keyPoints: parsedData.keyPoints,
       profilePic: parsedData.profilePic,
       social: parsedData.social,
