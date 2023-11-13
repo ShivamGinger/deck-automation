@@ -7,7 +7,7 @@ import getAllCompanies, { getCompany, getCompanyByName } from "@/lib/companies";
 
 export async function GET(request: NextRequest){
   try {
-    const companiesAll = await getAllCompanies();
+    const companiesAll = await getAllCompanies();    
     if (companiesAll.length === 0) {
       return NextResponse.json({ error: 'No companies found' }, { status: 404 });
     }
