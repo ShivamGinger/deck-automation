@@ -1,6 +1,6 @@
 import { db } from "@/db";
-import { Role, candidates, companies, quotientScores, roles } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { Role, candidates, companies, parameterScores, parameters, quotientScores, roles } from "@/db/schema";
+import { desc, eq, sql } from "drizzle-orm";
 
 export async function getCompanyRoles(companyid: number): Promise<Role[]> {
   const companyRoles: Role[] = await db.select().from(roles).where(eq(roles.companyId, companyid));
@@ -10,27 +10,28 @@ export async function getCompanyRoles(companyid: number): Promise<Role[]> {
 
 export type roleCandidate = {
   id: number;
-  rname: string;
-  cname: string;
+  candidateName: string;
   profilePic: string | null;
-  description: string | null;
-  achievement: unknown | null;
-  totalScore: string | null;
-}
+  keyPoints: unknown | null;
+  totalScore: number | null;
+};
 
 export async function getCompanyRoleCandidate(companyid: number, roleid: number): Promise<roleCandidate[]> {
-  const companyRole: roleCandidate[] = await db.select({
+  const qScoreSum = db.select({ 
+    candidateId: quotientScores.candidateId,
+    totalScore: sql<number>`sum(${quotientScores.totalScore})`.as('totalScore')
+  }).from(quotientScores).groupBy(quotientScores.candidateId).as('qScoreSum');
+    
+    const companyRole: roleCandidate[] = await db.select({
     id: candidates.id,
-    rname: roles.name,
-    cname: candidates.name,
+    candidateName: candidates.name,
     profilePic: candidates.profilePic,
-    description: candidates.description,
-    achievement: candidates.achievement,
-    totalScore: quotientScores.totalScore
+    keyPoints: candidates.keyPoints,
+    totalScore: qScoreSum.totalScore
   })
   .from(candidates)
   .innerJoin(roles, eq(roles.id, candidates.roleId))
-  .leftJoin(quotientScores, eq(quotientScores.candidateId, candidates.id))
+  .leftJoin(qScoreSum, eq(qScoreSum.candidateId, candidates.id))
   .where(eq(roles.companyId, companyid))
   .where(eq(roles.id, roleid));
 
