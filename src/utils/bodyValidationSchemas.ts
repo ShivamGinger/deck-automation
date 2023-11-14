@@ -26,7 +26,7 @@ export const createCandidateSchema = z.object({
 });
 
 export const deleteCandidateSchema = z.object({
-  id: z.number().positive()
+  id: z.number().positive(),
 });
 
 export const createCompanySchema = z.object({
@@ -34,7 +34,7 @@ export const createCompanySchema = z.object({
 });
 
 export const deleteCompanySchema = z.object({
-  id: z.number().positive()
+  id: z.number().positive(),
 });
 
 export const createRoleSchema = z.object({
@@ -43,5 +43,15 @@ export const createRoleSchema = z.object({
 });
 
 export const deleteRoleSchema = z.object({
-  id: z.number().positive()
+  id: z.number().positive(),
 });
+
+export const createQuotientSchema = z.object({
+  quotient: z.string(),
+});
+
+export const createParameterSchema = z.object({
+  parameter: z.string(),
+  quotientId: z.number(),
+});
+
