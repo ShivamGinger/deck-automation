@@ -23,7 +23,7 @@ export async function GET(request: NextRequest, { param }: { param: { quotient_i
 
 export async function POST(request: NextRequest) {
     try{
-        const requestData = request.json();
+        const requestData = await request.json();
         const parsedData = createParameterSchema.safeParse(requestData);
         
         if (!parsedData.success) {
