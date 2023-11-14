@@ -1,21 +1,27 @@
-import { Role } from "@/db/schema";
-import { getCompany } from "@/lib/companies";
-import { getCompanyRoleCandidate, getCompanyRoles, roleCandidate } from "@/lib/roles";
+import { db } from "@/db";
+import { roles } from "@/db/schema";
+import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 
-export async function GET(request: NextResponse, { params }: { params: { company_id: number, role_id: number}}) {
+export async function DELETE(request: Request, { params }: { params: { company_id: number, role_id: number }}){
     try{
-        const companyIdExist = await getCompany(params.company_id);
-        if (companyIdExist.length === 0) {
-          return NextResponse.json({ error: "Company not found" }, { status: 404 });
-        };
-        const rolesCandidate: roleCandidate[] = await getCompanyRoleCandidate(params.company_id, params.role_id);
-        if (rolesCandidate.length === 0) {
-            return NextResponse.json({ error: "No candidates under this role" }, { status: 404});
-        };
-        return NextResponse.json({ data: rolesCandidate }, { status: 200});
+      const rslugId = params.role_id;
+      const cslugId = params.company_id;
+
+      const roleExists = await db
+      .select({ id: roles.id })
+      .from(roles)
+      .where(eq(roles.id, rslugId))
+      .where(eq(roles.companyId, cslugId));
+      
+      if (roleExists.length === 0) {
+      return NextResponse.json({ error: 'Role not found' }, { status: 404 });
+    };
+  
+      const roleDel = await db.delete(roles).where(eq(roles.id, rslugId));      
+      return NextResponse.json({ message: "Role deleted successfully" }, { status: 200 });
     } catch (error: any) {
-        console.error('Error fetching candidate:', error);
+        console.error('Error deleting Role:', error);
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
     };
 };

@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: "Company not found cannot add role" }, { status: 404 });
       };
       
-      const roleExist = await getRoleByName(parsedData.name);
+      const roleExist = await getRoleByName(parsedData.companyId, parsedData.name);
       if (roleExist.length !== 0) {
         return NextResponse.json({ error: "Role already exists" }, { status: 409 });
       };
