@@ -1,5 +1,5 @@
 import { db } from "@/db";
-import { Quotients, parameters, quotients } from "@/db/schema";
+import { Quotients, companies, parameters, quotientWeightages, quotients, roles } from "@/db/schema";
 import { eq, sql } from "drizzle-orm";
 
 export type quotientPCount = {
@@ -26,10 +26,34 @@ export async function getAllQuotients(): Promise<quotientPCount[]> {
 };
 
 export async function getQuotientByName(qname: string): Promise<Quotients[]> {
-    const quotient: Quotients[] = await db.
-    select()
+    const quotient: Quotients[] = await db.select()
     .from(quotients)
     .where(eq(quotients.quotient, qname));
+
+    return quotient;
+};
+
+export type quoWDispSchema = {
+    id: number;
+    qname: string;
+    cname: string;
+    rname: string | null;
+    weightage: number;
+};
+
+export async function getQuotientById(qid: number): Promise<quoWDispSchema[]> {
+    const quotient: quoWDispSchema[] = await db.select({
+        id: quotients.id,
+        qname: quotients.quotient,
+        cname: companies.name,
+        rname: roles.name,
+        weightage: quotientWeightages.qWeightage
+    })
+    .from(quotientWeightages)
+    .innerJoin(quotients, eq(quotients.id, quotientWeightages.quotientId))
+    .innerJoin(companies, eq(companies.id, quotientWeightages.companyId))
+    .innerJoin(roles, eq(roles.id, quotientWeightages.roleId))
+    .where(eq(quotients.id, qid));
 
     return quotient;
 };
