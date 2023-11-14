@@ -156,7 +156,7 @@ const Page = () => {
         <div className="flex flex-col pl-12 pt-12 w-screen " id="details-right-bg">
           <div className="flex flex-row gap-x-8 font-bold text-2xl pb-6" id="candidate-role">
             <h2>Candidate-1</h2>
-            <h2>Minus Zero- Role</h2>
+            <h2>Minus Zero</h2>
           </div>
 
           <div className="pb-6">
