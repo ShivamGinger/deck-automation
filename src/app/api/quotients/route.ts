@@ -22,29 +22,21 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
     try {
         const requestData = await request.json();
-        const parsedData = createQuotientSchema.parse(requestData);
-        
-        const quotientExist = await getQuotientByName(parsedData.quotient);
+        const parsedData = createQuotientSchema.safeParse(requestData);
+        if(!parsedData.success) {
+          return NextResponse.json({ message: 'Validation error', error: parsedData.error }, { status: 400 });
+        };
+
+        const quotientExist = await getQuotientByName(parsedData.data.quotient);
         if (quotientExist.length !== 0) {
           return NextResponse.json({ error: "Quotient already exists" }, { status: 409 });
         };
         
-        const addquotient = await db.insert(quotients).values({
-          quotient: parsedData.quotient
-        });
-        return NextResponse.json({ message: "Quotient added successfully", data: parsedData }, { status: 201});
+        const addquotient = await db.insert(quotients).values(parsedData.data);
+        return NextResponse.json({ status: 201});
         
       } catch (error: any) {
-        if (error instanceof ZodError) {
-          const errorDetails = error.issues.map((issue) => ({
-            field: issue.path.join('.'),
-            message: issue.message,
-          }));
-    
-          return NextResponse.json({ error: 'Validation error', details: errorDetails }, { status: 400 });
-        } else {
           console.error('Error adding quotient:', error);
           return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
-        }
       };
 };
