@@ -15,12 +15,12 @@ export async function getAllQuotients(): Promise<quotientPCount[]> {
     }).from(parameters).groupBy(parameters.quotientId).as('pcount');
     
     const quotientsAll: quotientPCount[] = await db.select({
-        id: parameters.id,
-        name: parameters.parameter,
+        id: quotients.id,
+        name: quotients.quotient,
         count: pcount.count
     })
-    .from(parameters)
-    .leftJoin(pcount, eq(pcount.qid, parameters.id));
+    .from(quotients)
+    .leftJoin(pcount, eq(pcount.qid, quotients.id));
     
     return quotientsAll;
 };

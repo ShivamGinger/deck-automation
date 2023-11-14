@@ -8,7 +8,7 @@ import { ZodError } from "zod";
 export async function GET(request: NextRequest) {
     try{
         const quotients: quotientPCount[] = await getAllQuotients();
-        if (quotients.length == 0){
+        if (quotients.length === 0){
             return NextResponse.json({ error: `Quotients not found.` }, { status: 404 });
         }
     
