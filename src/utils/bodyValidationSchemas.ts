@@ -4,20 +4,25 @@ import { z } from "zod";
 
 export const createCandidateSchema = z.object({
   name: z.string(),
-  phNum: z.string().min(10).max(14),
-  email: z.string().email(),
-  keyPoints: z.record(z.string()).nullable(),
+  keyPoints: z.array(z.string()).nullable(),
   profilePic: z.string().nullable(),
-  social: z.string().nullable(),
   companyId: z.number().nullable(),
   roleId: z.number().nullable(),
+  social: z.string().nullable(),
+  email: z.string().email(),
   currPos: z.string().nullable(),
   currLoc: z.string().nullable(),
   experience: z.string().nullable(),
+  phNum: z.string().min(10).max(14),
   fixedLpa: z.string().nullable(),
   varLpa: z.string().nullable(),
   expectedCtc: z.string().nullable(),
-  noticePeriod: z.string().nullable()
+  noticePeriod: z.string().nullable(),
+  description: z.string().nullable(),
+  achievement: z.array(z.string()).nullable(),
+  gender: z.enum(['male', 'female', 'other']),
+  currCmp: z.string().nullable(),
+  esopRsu: z.number().multipleOf(0.01).nullable(),
 });
 
 export const deleteCandidateSchema = z.object({
