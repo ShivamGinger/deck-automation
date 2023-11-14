@@ -34,19 +34,19 @@ function validateCandidates(candidateInfo: CandidateInfo[]) {
     } = candidate;
 
     if (
-      !name ||
-      !description ||
-      // !photo ||
-      !gender ||
-      !exp ||
-      isNaN(parseFloat(exp_ctc)) ||
-      !phone_no ||
-      !email ||
-      !social ||
-      (Array.isArray(key_points) && key_points.length >= 1 && key_points.some(element => element === '')) ||
-      (Array.isArray(exp_achi) && exp_achi.length >= 1 && exp_achi.some(element => element === '')) ||
-      !validateParameters(inteli_parameters) || !validateParameters(emotional_parameters) ||
-      !validateParameters(social_parameters) || !validateParameters(adversity_parameters)
+      // !name ||
+      // !description ||
+      !photo
+      // !gender ||
+      // !exp ||
+      // isNaN(parseFloat(exp_ctc)) ||
+      // !phone_no ||
+      // !email ||
+      // !social ||
+      // (Array.isArray(key_points) && key_points.length >= 1 && key_points.some(element => element === '')) ||
+      // (Array.isArray(exp_achi) && exp_achi.length >= 1 && exp_achi.some(element => element === '')) ||
+      // !validateParameters(inteli_parameters) || !validateParameters(emotional_parameters) ||
+      // !validateParameters(social_parameters) || !validateParameters(adversity_parameters)
     ) {
       return false; // Invalid candidate
     }
@@ -221,7 +221,14 @@ const AddCandidate = () => {
                 </div>
                 <input type="file" accept='image/*' id={`profile_pic_upload_${candidateNo}`} />
               </div> */}
-              {/* <ProfilePic /> */}
+              <ProfilePic
+                handleInputChange={handleInputChange}
+                candidateNo={candidateNo}
+                prevFileUploaded={candidateInfo[candidateNo - 1].photo}
+                candidateName={candidateInfo[candidateNo - 1].name}
+                setErrorDetails={setErrorDetails}
+                setError={setError}
+              />
 
               <Select
                 title='Gender'
