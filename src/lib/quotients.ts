@@ -1,6 +1,6 @@
 import { db } from "@/db";
 import { Quotients, companies, parameters, quotientWeightages, quotients, roles } from "@/db/schema";
-import { eq, sql } from "drizzle-orm";
+import { eq, sql, and } from "drizzle-orm";
 
 export type quotientPCount = {
     id: number;
@@ -33,19 +33,50 @@ export async function getQuotientByName(qname: string): Promise<Quotients[]> {
     return quotient;
 };
 
-export type quoWDispSchema = {
+export type quoDispSchema = {
     id: number;
     qname: string;
+    cid: number;
     cname: string;
+};
+
+export async function getQuotientCmp(qid: number): Promise<quoDispSchema[]> {
+    // const cmpGroup = await db.select({
+    //     id: companies.id,
+    //     qwid: quotientWeightages.id,
+    // }).from(quotientWeightages).groupBy()
+    // .from(quotientWeightages)
+    const quotientcmp: quoDispSchema[] = await db.select({
+        id: quotients.id,
+        qname: quotients.quotient,
+        cid: companies.id,
+        cname: companies.name,
+    })
+    .from(quotientWeightages)
+    .innerJoin(quotients, eq(quotients.id, quotientWeightages.quotientId))
+    .innerJoin(companies, eq(companies.id, quotientWeightages.companyId))
+    .where(eq(quotients.id, qid))
+
+    return quotientcmp;
+};
+
+export type quoCmpDispSchema = {
+    id: number;
+    qname: string;
+    cid: number;
+    cname: string;
+    rid: number;
     rname: string | null;
     weightage: number;
 };
 
-export async function getQuotientById(qid: number): Promise<quoWDispSchema[]> {
-    const quotient: quoWDispSchema[] = await db.select({
+export async function getQuotientCmpRle(qid: number, cmpid: number): Promise<quoCmpDispSchema[]> {
+    const quotientcmp: quoCmpDispSchema[] = await db.select({
         id: quotients.id,
         qname: quotients.quotient,
+        cid: companies.id,
         cname: companies.name,
+        rid: roles.id,
         rname: roles.name,
         weightage: quotientWeightages.qWeightage
     })
@@ -53,7 +84,7 @@ export async function getQuotientById(qid: number): Promise<quoWDispSchema[]> {
     .innerJoin(quotients, eq(quotients.id, quotientWeightages.quotientId))
     .innerJoin(companies, eq(companies.id, quotientWeightages.companyId))
     .innerJoin(roles, eq(roles.id, quotientWeightages.roleId))
-    .where(eq(quotients.id, qid));
+    .where(and(eq(quotients.id, qid), eq(companies.id, cmpid)));
 
-    return quotient;
+    return quotientcmp;
 };

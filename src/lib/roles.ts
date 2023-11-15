@@ -1,6 +1,6 @@
 import { db } from "@/db";
 import { Role, candidates, companies, parameterScores, parameters, quotientScores, roles } from "@/db/schema";
-import { desc, eq, sql } from "drizzle-orm";
+import { and, desc, eq, sql } from "drizzle-orm";
 
 export async function getCompanyRoles(companyid: number): Promise<Role[]> {
   const companyRoles: Role[] = await db.select().from(roles).where(eq(roles.companyId, companyid));
@@ -30,16 +30,14 @@ export async function getCompanyRoleCandidate(companyid: number, roleid: number)
     totalScore: qScoreSum.totalScore
   })
   .from(candidates)
-  .innerJoin(roles, eq(roles.id, candidates.roleId))
   .leftJoin(qScoreSum, eq(qScoreSum.candidateId, candidates.id))
-  .where(eq(roles.companyId, companyid))
-  .where(eq(roles.id, roleid));
+  .where(and(eq(candidates.companyId, companyid), eq(candidates.roleId, roleid)));
 
   return companyRole;
 };
 
 export async function getRoleByName(cid: number, rname: string): Promise<Role[]> {
-  const roleE: Role[] = await db.select().from(roles).where(eq(roles.name, rname)).where(eq(roles.companyId, cid));
+  const roleE: Role[] = await db.select().from(roles).where(and(eq(roles.companyId, cid), eq(roles.name, rname)));
 
   return roleE;
 };
