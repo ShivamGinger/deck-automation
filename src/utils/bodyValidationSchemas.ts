@@ -25,6 +25,13 @@ export const createCandidateSchema = z.object({
       gender: z.enum(['male', 'female', 'other']),
       currCmp: z.string().nullable(),
       esopRsu: z.number().multipleOf(0.01).nullable(),
+      shareCandidateStatus: z.boolean(),
+      candidateStatus: z.object({
+        profileShrDate: z.string().nullable(),
+        status: z.enum(['yet_to_share', 'joined', 'negotiation', 'on_hold', 'feedback_pending', 'dropped_out', 'rejected', 'in_process']).nullable(),
+        roundDone: z.number().nullable(),
+        reasonReject: z.string().nullable(),
+    }).nullable()
     })
   )
 });
