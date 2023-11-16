@@ -3,7 +3,7 @@ import { InferSelectModel, sql } from "drizzle-orm"
 
 
 export const candidateStatus = mysqlTable("candidate_status", {
-	id: bigint("id", { mode: "number" }).notNull(),
+	id: bigint("id", { mode: "number" }).autoincrement().notNull(),
 	candidateId: bigint("candidate_id", { mode: "number" }).notNull(),
 	profileShrDate: date("profile_shr_date", { mode: 'date' }),
 	status: mysqlEnum("status", ['yet_to_share','joined','negotiation','on_hold','feedback_pending','dropped_out','rejected','in_process']).notNull(),
@@ -165,7 +165,7 @@ export const roles = mysqlTable("roles", {
 });
 
 export const statusHistory = mysqlTable("status_history", {
-	id: bigint("id", { mode: "number" }).notNull(),
+	id: bigint("id", { mode: "number" }).autoincrement().notNull(),
 	candidateId: bigint("candidate_id", { mode: "number" }).notNull(),
 	profileShrDate: date("profile_shr_date", { mode: 'date' }),
 	status: mysqlEnum("status", ['yet_to_share','joined','negotiation','on_hold','feedback_pending','dropped_out','rejected','in_process']).notNull(),
