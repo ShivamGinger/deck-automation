@@ -35,6 +35,9 @@ const Sidebar = () => {
           <Link href={'/deck-automation'} className={`${path.split('/')[1] === 'deck-automation' ? 'custom-brown-btn' : 'custom-brown-btn-bg-transparent hover:bg-[#B06500] hover:text-white hover:border-[#B06500] transition ease-in-out'} text-center`}>
             Deck Automation
           </Link>
+          <Link href={'/quotients'} className={`${path.split('/')[1] === 'quotients' ? 'custom-brown-btn' : 'custom-brown-btn-bg-transparent hover:bg-[#B06500] hover:text-white hover:border-[#B06500] transition ease-in-out'} text-center`}>
+            All Quotients
+          </Link>
         </div>
       </div>
       <div className='p-2' onClick={() => signOut()}>

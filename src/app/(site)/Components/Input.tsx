@@ -58,7 +58,7 @@ const Input: FC<InputProps> = ({ id, name, required, moveLabel, error, type, ...
             peer-focus:leading-tight 
             font-semibold
           `}>
-            {name}&ensp;{required && <span className='text-red-600 font-bold'>*</span>}
+            <span className={`${error ? 'text-red-500 font-bold' : ''}`}>{name}</span>&ensp;{required && <span className='text-red-600 font-bold'>*</span>}
           </label>
         </div>
       </div>
