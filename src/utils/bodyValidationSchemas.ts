@@ -59,8 +59,6 @@ export const deleteRoleSchema = z.object({
 
 //
 export const createQuotientWeiSchema = z.object({
-  companyId: z.number(),
-  roleId: z.number(),
   quotientW: z.array(
     z.object(
       {
