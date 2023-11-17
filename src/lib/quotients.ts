@@ -60,7 +60,7 @@ export type quotientPCount = {
 export async function getQuotientAll(): Promise<quotientPCount[]> {
     const pcount = db.select({
         qid: parameters.quotientId,
-        count: sql<number>`count(${parameters.id})`.as('count'),
+        count: sql`count(${parameters.id})`.mapWith(parameters.id).as('count'),
     }).from(parameters).groupBy(parameters.quotientId).as('pcount');
     
     const quotientsAll: quotientPCount[] = await db.select({

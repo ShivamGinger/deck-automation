@@ -3,6 +3,7 @@ import { Role, roles } from "@/db/schema";
 import { getCompany } from "@/lib/companies";
 import { getCompanyRoles, getRoleByName } from "@/lib/roles";
 import { createRoleSchema } from "@/utils/bodyValidationSchemas";
+import { eq, sql } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 import { ZodError } from "zod";
 
@@ -42,7 +43,9 @@ export async function POST(request: NextRequest) {
         name: parsedData.name,
         companyId: parsedData.companyId
       });
-      return NextResponse.json({ message: "Role added successfully", data: parsedData }, { status: 201});
+      const roleId: any = await db.execute(sql`SELECT LAST_INSERT_ID()`);
+      const crtRole = await db.select().from(roles).where(eq(roles.id, roleId.rows[0]["LAST_INSERT_ID()"]))
+      return NextResponse.json({ message: "Role added successfully", data: crtRole }, { status: 201});
       
     } catch (error: any) {
       if (error instanceof ZodError) {

@@ -56,6 +56,30 @@ export async function getCompanyRoleCandidate(companyid: number, roleid: number)
   return companyRole;
 };
 
+export type role = {
+  id: number;
+  name: string;
+  companyId: number;
+  companyName: string;
+};
+
+export async function getRole(cid: number, rid: number): Promise<role[]> {
+  const role: role[] = await db.select(
+    {
+      id: roles.id,
+      name: roles.name,
+      companyId: companies.id,
+      companyName: companies.name,
+      createdAt: roles.createdAt
+    }
+  )
+  .from(roles)
+  .innerJoin(companies, eq(companies.id, roles.companyId))
+  .where(and(eq(roles.companyId, cid), eq(roles.id, rid)));
+
+  return role;
+};
+
 export async function getRoleByName(cid: number, rname: string): Promise<Role[]> {
   const roleE: Role[] = await db.select().from(roles).where(and(eq(roles.companyId, cid), eq(roles.name, rname)));
 

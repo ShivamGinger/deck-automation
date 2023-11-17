@@ -23,8 +23,8 @@ export default async function getAllCompanies(): Promise<crc[]> {
     return companiesAll;
 };
 
-export async function getCompany(id: number): Promise<Companies[]> {
-    const company: Companies[] = await db.select().from(companies).where(eq(companies.id, id));
+export async function getCompany(cid: number): Promise<Companies[]> {
+    const company: Companies[] = await db.select().from(companies).where(eq(companies.id, cid));
     
     return company;
 };

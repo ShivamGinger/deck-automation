@@ -1,1 +1,1 @@
-//TODO: Implement DELETE, possibly PUT endpoint here
+//TODO: Implement GET, DELETE, possibly PUT endpoint here

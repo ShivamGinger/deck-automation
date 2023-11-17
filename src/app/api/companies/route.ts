@@ -2,8 +2,7 @@ import { db } from "@/db";
 import { companies } from "@/db/schema";
 import { createCompanySchema } from "@/utils/bodyValidationSchemas";
 import { NextRequest, NextResponse } from "next/server";
-import { ZodError } from "zod";
-import getAllCompanies, { getCompany, getCompanyByName } from "@/lib/companies";
+import getAllCompanies, { getCompanyByName } from "@/lib/companies";
 
 export async function GET(request: NextRequest){
   try {
@@ -21,26 +20,21 @@ export async function GET(request: NextRequest){
 export async function POST(request: NextRequest) {
   try {
     const requestData = await request.json();
-    const parsedData = createCompanySchema.parse(requestData);
-    const companyNameExist = await getCompanyByName(parsedData.name);
+    const parsedData = createCompanySchema.safeParse(requestData);
+    
+    if (!parsedData.success) {
+      return NextResponse.json({ message: "Validation Error", error: `${parsedData.error}` }, { status: 400 });
+    };
+    
+    const companyNameExist = await getCompanyByName(parsedData.data.name);
     if (companyNameExist.length !== 0) {
       return NextResponse.json({ error: "Company Already Exsists" }, { status: 409 });
     }
-    const addCompany = await db.insert(companies).values({
-      name: parsedData.name
-    });
-    return NextResponse.json({ message: "Company added successfully", data: parsedData }, { status: 201});
-  } catch (error: any) {
-    if (error instanceof ZodError) {
-      const errorDetails = error.issues.map((issue) => ({
-        field: issue.path.join('.'),
-        message: issue.message,
-      }));
+    const addCompany = await db.insert(companies).values(parsedData.data);
+    return NextResponse.json({ status: 201});
 
-      return NextResponse.json({ error: 'Validation error', details: errorDetails }, { status: 400 });
-    } else {
+  } catch (error: any) {
       console.error('Error adding company:', error);
       return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
-    }
   };
 };
