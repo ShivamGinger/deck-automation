@@ -29,39 +29,12 @@ const CandidateListing = () => {
   useLayoutEffect(() => {
     const getData = async () => {
       try {
-        const response = await fetch(`/api/candidates?status=true`, {
+        const response = await fetch(`/api/candidates`, {
           method: 'GET'
         });
 
         if (response.ok) {
           const data = await response.json();
-          // name: "mai hu"
-          // email: "huhula@gmail.com"
-          // phNum: "1438232472"
-          // gender: null
-          // currPos: null
-          // currCmp: null
-          // currLoc: null
-          // experience: null
-          // fixedLpa: null
-          // varLpa: null
-          // expectedCtc: null
-          // esopRsu: null
-          // noticePeriod: null
-          // social: null
-          // description: null
-
-          // keyPoints: null
-          // profilePic: null
-          // achievement: null
-
-          // company: null
-          // companyId: null
-          // createdAt: "2023-11-10 21:52:15"
-          // id: 1
-          // role: null
-          // roleId: null
-          console.log(data.data);
           setCandidates(data.data);
         } else {
           const data = await response.json();
