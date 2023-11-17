@@ -74,6 +74,18 @@ export const createQuotientSchema = z.object({
   quotient: z.string(),
 });
 
+export const createParameterWeiSchema = z.object({
+  parameterW: z.array(
+    z.object(
+      {
+        parameterId: z.number(),
+        parameter: z.string(),
+        weightage: z.number()
+      }
+    )
+  )
+});
+
 export const createParameterSchema = z.object({
   parameter: z.string(),
 });
