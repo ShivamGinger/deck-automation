@@ -2,6 +2,7 @@ import { Candidates } from "@/db/schema";
 import { getCandidate } from "@/lib/candidates";
 import { NextRequest, NextResponse } from "next/server";
 
+//TODO: Implement DELETE method
 export async function GET(request: NextRequest, { params }: { params: { candidate_id: number} } ) {
     try{
         const candidate: Candidates[] = await getCandidate(params.candidate_id);
