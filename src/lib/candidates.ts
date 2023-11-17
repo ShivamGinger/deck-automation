@@ -29,6 +29,10 @@ export default async function getAllCandidatesWStatus(): Promise<Candidates[]> {
     gender: candidates.gender,
     currCmp: candidates.currCmp,
     esopRsu: candidates.esopRsu,
+    profileShrDate: candidateStatus.profileShrDate,
+    status: candidateStatus.status,
+    roundDone: candidateStatus.roundDone,
+    reasonReject: candidateStatus.reasonReject,
     createdAt: candidates.createdAt
   })
   .from(candidates)
@@ -65,6 +69,10 @@ export async function getCandidate(id: number): Promise<Candidates[]> {
     gender: candidates.gender,
     currCmp: candidates.currCmp,
     esopRsu: candidates.esopRsu,
+    profileShrDate: candidateStatus.profileShrDate,
+    status: candidateStatus.status,
+    roundDone: candidateStatus.roundDone,
+    reasonReject: candidateStatus.reasonReject,
     createdAt: candidates.createdAt
   })
   .from(candidates)
