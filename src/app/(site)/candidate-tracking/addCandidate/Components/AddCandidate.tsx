@@ -332,16 +332,6 @@ const AddCandidate = () => {
                 onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(candidateNo, e.target.value, 'esopRsu')}
               />
 
-              <Input
-                name='Social Network URL'
-                id={`social_network_url_${candidateNo}`}
-                placeholder={candidateInfo[candidateNo - 1]?.social}
-                required={false}
-                type='text'
-                moveLabel={candidateInfo[candidateNo - 1]?.social != ''}
-                onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(candidateNo, e.target.value, 'social')}
-              />
-
               <KeyPoints
                 placeholderData={candidateInfo[candidateNo - 1].keyPoints}
                 count={candidateInfo[candidateNo - 1].keyPoints.length}

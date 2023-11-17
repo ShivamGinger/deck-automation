@@ -20,7 +20,8 @@ const status = [
 
 interface Candidate extends CandidateInformation {
   company: string,
-  role: string
+  role: string,
+  status: 'yet_to_share' | 'joined' | 'negotiation' | 'in_process' | 'on_hold' | 'feedback_pending' | 'dropped_out' | 'rejected'
 }
 
 const AllCandidateListing = ({ candidates }: { candidates: Candidate[] }) => {
@@ -83,7 +84,7 @@ const AllCandidateListing = ({ candidates }: { candidates: Candidate[] }) => {
                         {detail.name}
                       </td>
 
-                      <Status candidateStatus={status[1]} />
+                      <Status candidateStatus={detail.status} />
 
                       <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
                         {detail.email}
@@ -122,12 +123,11 @@ const AllCandidateListing = ({ candidates }: { candidates: Candidate[] }) => {
                         {detail.noticePeriod}
                       </td>
                       <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
-                        {detail.social}
+                        <Link href={detail.social} target='_blank' rel='noopener noreferrer'>{detail.name}</Link>
                       </td>
                       <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
                         {detail.description}
                       </td>
-
 
                       <td className=" ">
                         <Image width={20} height={20} src={'/images/edit.png'} alt="edit-icon" className="cursor-pointer" />
