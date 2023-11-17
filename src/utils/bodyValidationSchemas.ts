@@ -72,8 +72,11 @@ export const createQuotientWeiSchema = z.object({
   )
 });
 
+export const createQuotientSchema = z.object({
+  quotient: z.string(),
+});
+
 export const createParameterSchema = z.object({
   parameter: z.string(),
-  quotientId: z.number(),
 });
 

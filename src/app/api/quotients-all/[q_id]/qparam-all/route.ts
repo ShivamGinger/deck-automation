@@ -29,25 +29,29 @@ export async function GET(request: NextRequest, { params }: { params: { q_id: nu
       };
 };
 
-export async function POST(request: NextRequest) {
+export async function POST(request: NextRequest, { params }: {params: { q_id: number }} ) {
     try{
         const requestData = await request.json();
         const parsedData = createParameterSchema.safeParse(requestData);
+        const qSlug = params.q_id;
         
         if (!parsedData.success) {
             return NextResponse.json({ message: "Validation Error", error: `${parsedData.error}` }, { status: 400 });
         };
-        const checkQuo = await getQuotientById(parsedData.data.quotientId);
+        const checkQuo = await getQuotientById(qSlug);
         if (checkQuo.length === 0) {
             return NextResponse.json({ error: "Cannot create parameter, quotient does not exist" }, { status: 404 });
         };
 
-        const paramExist = await getParameters(parsedData.data.quotientId, parsedData.data.parameter);
+        const paramExist = await getParameters(qSlug, parsedData.data.parameter);
         if (paramExist.length !== 0) {
             return NextResponse.json({ error: "Parameter Already Exists" }, { status: 409 });
         };
 
-        const crtParam = await db.insert(parameters).values(parsedData.data);
+        const crtParam = await db.insert(parameters).values({
+            parameter: parsedData.data.parameter,
+            quotientId: qSlug
+        });
 
         return NextResponse.json({ status: 201 });
     
