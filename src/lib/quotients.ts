@@ -42,6 +42,14 @@ export async function getQuotientByName(qname: string): Promise<Quotients[]> {
     return quotient;
 };
 
+export async function getQuotientById(qid: number): Promise<Quotients[]> {
+    const quotient: Quotients[] = await db.select()
+    .from(quotients)
+    .where(eq(quotients.id, qid));
+
+    return quotient;
+};
+
 export type quotientPCount = {
     id: number;
     qname: string;
