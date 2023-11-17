@@ -9,7 +9,7 @@ export type quotientw = {
     rid: number;
     rname: string;
     qid: number;
-    qname: never;
+    qname: string;
     quoweightage: number;
 
 };
@@ -29,6 +29,7 @@ export async function getAllCmpQuotientsW(cmpId: number, rleId: number): Promise
     .from(quotientWeightages)
     .innerJoin(companies, eq(companies.id, quotientWeightages.companyId))
     .innerJoin(roles, eq(roles.id, quotientWeightages.roleId))
+    .innerJoin(quotients, eq(quotients.id, quotientWeightages.quotientId))
     .where(and(eq(quotientWeightages.companyId, cmpId), eq(quotientWeightages.roleId, rleId)));
 
     return allQuo;
