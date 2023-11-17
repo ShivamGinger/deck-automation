@@ -22,6 +22,10 @@ export type roleCandidate = {
   id: number;
   candidateName: string;
   profilePic: string | null;
+  rid: number;
+  rname: string | null; //not actually nullable in DB
+  cid: number;
+  cname: string;
   keyPoints: unknown | null;
   totalScore: number | null;
 };
@@ -36,10 +40,16 @@ export async function getCompanyRoleCandidate(companyid: number, roleid: number)
     id: candidates.id,
     candidateName: candidates.name,
     profilePic: candidates.profilePic,
+    rid: roles.id,
+    rname: roles.name,
+    cid: companies.id,
+    cname: companies.name,
     keyPoints: candidates.keyPoints,
     totalScore: qScoreSum.totalScore
   })
   .from(candidates)
+  .innerJoin(companies, eq(companies.id, candidates.companyId))
+  .innerJoin(roles, eq(roles.id, candidates.roleId))
   .leftJoin(qScoreSum, eq(qScoreSum.candidateId, candidates.id))
   .where(and(eq(candidates.companyId, companyid), eq(candidates.roleId, roleid)));
 
