@@ -1,10 +1,27 @@
 import { db } from '@/db';
 
-import { Candidates, candidateStatus, candidates, companies, roles } from '@/db/schema';
+import { Candidates, CandidatesStatus, candidateStatus, candidates, companies, roles } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 
-export default async function getAllCandidatesWStatus(): Promise<Candidates[]> {
+export async function getAllCandStat(): Promise<CandidatesStatus[]> {
+  const result: CandidatesStatus[] = await db.select({
+    id: candidateStatus.id,
+    candidateId: candidates.id,
+    name: candidates.name,
+    email: candidates.email,
+    phNum: candidates.phNum,
+    profileShrDate: candidateStatus.profileShrDate,
+    status: candidateStatus.status,
+    roundDone: candidateStatus.roundDone,
+    reasonReject: candidateStatus.reasonReject
+  })
+  .from(candidateStatus)
+  .innerJoin(candidates, eq(candidates.id, candidateStatus.candidateId));
 
+  return result;
+};
+
+export default async function getAllCandidatesWStatus(): Promise<Candidates[]> {
   const result: Candidates[] = await db.select({
     id: candidates.id,
     name: candidates.name,

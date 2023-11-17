@@ -23,7 +23,7 @@ export type roleCandidate = {
   candidateName: string;
   profilePic: string | null;
   rid: number;
-  rname: string | null; //not actually nullable in DB
+  rname: string;
   cid: number;
   cname: string;
   keyPoints: unknown | null;

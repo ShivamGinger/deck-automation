@@ -7,7 +7,7 @@ export type quotientw = {
     cid: number;
     cname: string;
     rid: number;
-    rname: string | null;
+    rname: string;
     qid: number;
     qname: never;
     quoweightage: number;
@@ -79,7 +79,7 @@ export type quoCmpDispSchema = {
     cid: number;
     cname: string;
     rid: number;
-    rname: string | null;
+    rname: string;
     weightage: number;
 };
 

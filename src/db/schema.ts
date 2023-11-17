@@ -5,7 +5,7 @@ import { InferSelectModel, sql } from "drizzle-orm"
 export const candidateStatus = mysqlTable("candidate_status", {
 	id: bigint("id", { mode: "number" }).autoincrement().notNull(),
 	candidateId: bigint("candidate_id", { mode: "number" }).notNull(),
-	profileShrDate: date("profile_shr_date", { mode: 'date' }),
+	profileShrDate: date("profile_shr_date", { mode: 'string' }),
 	status: mysqlEnum("status", ['yet_to_share','joined','negotiation','on_hold','feedback_pending','dropped_out','rejected','in_process']).notNull(),
 	roundDone: tinyint("round_done"),
 	reasonReject: varchar("reason_reject", { length: 255 }),
@@ -153,7 +153,7 @@ export const quotients = mysqlTable("quotients", {
 
 export const roles = mysqlTable("roles", {
 	id: bigint("id", { mode: "number" }).autoincrement().notNull(),
-	name: varchar("name", { length: 255 }),
+	name: varchar("name", { length: 255 }).notNull(),
 	companyId: bigint("company_id", { mode: "number" }).notNull(),
 	createdAt: timestamp("created_at", { mode: 'string' }).default(sql`CURRENT_TIMESTAMP`),
 },
@@ -167,7 +167,7 @@ export const roles = mysqlTable("roles", {
 export const statusHistory = mysqlTable("status_history", {
 	id: bigint("id", { mode: "number" }).autoincrement().notNull(),
 	candidateId: bigint("candidate_id", { mode: "number" }).notNull(),
-	profileShrDate: date("profile_shr_date", { mode: 'date' }),
+	profileShrDate: date("profile_shr_date", { mode: 'string' }),
 	status: mysqlEnum("status", ['yet_to_share','joined','negotiation','on_hold','feedback_pending','dropped_out','rejected','in_process']).notNull(),
 	roundDone: tinyint("round_done"),
 	reasonReject: varchar("reason_reject", { length: 255 }),
