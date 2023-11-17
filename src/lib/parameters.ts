@@ -3,15 +3,10 @@ import { companies, parameters, Parameters, parameterWeightages, quotients, role
 import { eq, and } from "drizzle-orm";
 
 export type qParams = {
-    qid: number;
-    qname: string;
-    pid: number;
-    pname: string;
-};
-
-export type paramExistType = {
-    pid: number;
-    qid: number;
+    quotientId: number;
+    quotient: string;
+    parameterId: number;
+    parameter: string;
 };
 
 export type parameterw = {
@@ -29,10 +24,10 @@ export type parameterw = {
 
 export async function getAllQuotientParams(qSlug: number): Promise<qParams[]> {
     const quoParam: qParams[] = await db.select({
-        qid: parameters.quotientId,
-        qname: quotients.quotient,
-        pid: parameters.id,
-        pname: parameters.parameter
+        quotientId: parameters.quotientId,
+        quotient: quotients.quotient,
+        parameterId: parameters.id,
+        parameter: parameters.parameter
     })
     .from(parameters)
     .innerJoin(quotients, eq(quotients.id, parameters.quotientId))
@@ -49,12 +44,16 @@ export async function getParameters(qid: number, pid: string): Promise<Parameter
     return paramExist;
 };
 
-export async function getParameterById(qid: number, pid: number): Promise<paramExistType[]> {
-    const paramExist: paramExistType[] = await db.select({
-        pid: parameters.id,
-        qid: quotients.id
+export async function getParameterById(qid: number, pid: number): Promise<qParams[]> {
+    const paramExist: qParams[] = await db.select({
+        quotientId: quotients.id,
+        quotient: quotients.quotient,
+        parameterId: parameters.id,
+        parameter: parameters.parameter,
+        createdAt: parameters.createdAt
     })
     .from(parameters)
+    .innerJoin(quotients, eq(quotients.id, parameters.quotientId))
     .where(and(eq(parameters.id, pid), eq(parameters.quotientId, qid)));
 
     return paramExist;
@@ -68,8 +67,7 @@ export async function getAllCmpQuoParameterW(cmpId: number, rleId: number, quoId
         quotientId: parameters.quotientId
     })
     .from(parameters)
-    .innerJoin(quotients, eq(quotients.id, parameters.quotientId))
-    .where(eq(quotients.id, quoId)).as('quoParam');
+    .where(eq(parameters.quotientId, quoId)).as('quoParam');
 
     const quoParamWei: parameterw[] = await db.select({
         id: parameterWeightages.id,
@@ -84,11 +82,11 @@ export async function getAllCmpQuoParameterW(cmpId: number, rleId: number, quoId
         pweightage: parameterWeightages.pWeightage
     })
     .from(parameterWeightages)
+    .innerJoin(companies, eq(companies.id, parameterWeightages.companyId))
+    .innerJoin(roles, eq(roles.id, parameterWeightages.roleId))
     .innerJoin(quoParam, eq(quoParam.id, parameterWeightages.parameterId))
     .innerJoin(quotients, eq(quotients.id, quoParam.quotientId))
-    .innerJoin(companies, eq(companies.id, cmpId))
-    .innerJoin(roles, eq(roles.id, rleId))
-    // .where(eq(parameters.quotientId, qSlug));
+    .where(and(eq(companies.id, cmpId), eq(roles.id, rleId)));
 
     return quoParamWei;
 };
