@@ -2,27 +2,36 @@ import { db } from "@/db";
 import { Quotients, companies, parameters, quotientWeightages, quotients, roles } from "@/db/schema";
 import { eq, sql, and } from "drizzle-orm";
 
-export type quotientPCount = {
+export type quotientw = {
     id: number;
-    name: string;
-    count: number;
+    cid: number;
+    cname: string;
+    rid: number;
+    rname: string | null;
+    qid: number;
+    qname: never;
+    quoweightage: number;
+
 };
 
-export async function getAllQuotients(): Promise<quotientPCount[]> {
-    const pcount = db.select({
-        qid: parameters.quotientId,
-        count: sql<number>`count(${parameters.id})`.as('count'),
-    }).from(parameters).groupBy(parameters.quotientId).as('pcount');
-    
-    const quotientsAll: quotientPCount[] = await db.select({
-        id: quotients.id,
-        name: quotients.quotient,
-        count: pcount.count
+export async function getAllCmpQuotientsW(cmpId: number, rleId: number): Promise<quotientw[]> {
+    const allQuo: quotientw[] = await db
+    .select({
+        id: quotientWeightages.id,
+        cid: quotientWeightages.companyId,
+        cname: companies.name,
+        rid: quotientWeightages.roleId,
+        rname: roles.name,
+        qid: quotientWeightages.quotientId,
+        qname: quotients.quotient,
+        quoweightage: quotientWeightages.qWeightage
     })
-    .from(quotients)
-    .leftJoin(pcount, eq(pcount.qid, quotients.id));
-    
-    return quotientsAll;
+    .from(quotientWeightages)
+    .innerJoin(companies, eq(companies.id, quotientWeightages.companyId))
+    .innerJoin(roles, eq(roles.id, quotientWeightages.roleId))
+    .where(and(eq(quotientWeightages.companyId, cmpId), eq(quotientWeightages.roleId, rleId)));
+
+    return allQuo;
 };
 
 export async function getQuotientByName(qname: string): Promise<Quotients[]> {
@@ -33,31 +42,27 @@ export async function getQuotientByName(qname: string): Promise<Quotients[]> {
     return quotient;
 };
 
-export type quoDispSchema = {
+export type quotientPCount = {
     id: number;
     qname: string;
-    cid: number;
-    cname: string;
+    count: number;
 };
 
-export async function getQuotientCmp(qid: number): Promise<quoDispSchema[]> {
-    // const cmpGroup = await db.select({
-    //     id: companies.id,
-    //     qwid: quotientWeightages.id,
-    // }).from(quotientWeightages).groupBy()
-    // .from(quotientWeightages)
-    const quotientcmp: quoDispSchema[] = await db.select({
+export async function getQuotientAll(): Promise<quotientPCount[]> {
+    const pcount = db.select({
+        qid: parameters.quotientId,
+        count: sql<number>`count(${parameters.id})`.as('count'),
+    }).from(parameters).groupBy(parameters.quotientId).as('pcount');
+    
+    const quotientsAll: quotientPCount[] = await db.select({
         id: quotients.id,
         qname: quotients.quotient,
-        cid: companies.id,
-        cname: companies.name,
+        count: pcount.count
     })
-    .from(quotientWeightages)
-    .innerJoin(quotients, eq(quotients.id, quotientWeightages.quotientId))
-    .innerJoin(companies, eq(companies.id, quotientWeightages.companyId))
-    .where(eq(quotients.id, qid))
-
-    return quotientcmp;
+    .from(quotients)
+    .leftJoin(pcount, eq(pcount.qid, quotients.id));
+    
+    return quotientsAll;
 };
 
 export type quoCmpDispSchema = {
