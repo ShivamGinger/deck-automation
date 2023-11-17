@@ -57,8 +57,19 @@ export const deleteRoleSchema = z.object({
   id: z.number().positive(),
 });
 
-export const createQuotientSchema = z.object({
-  quotient: z.string(),
+//
+export const createQuotientWeiSchema = z.object({
+  companyId: z.number(),
+  roleId: z.number(),
+  quotientW: z.array(
+    z.object(
+      {
+        quotientId: z.array(z.number()),
+        quotient: z.array(z.string()),
+        weightage: z.array(z.number())
+      }
+    )
+  )
 });
 
 export const createParameterSchema = z.object({
