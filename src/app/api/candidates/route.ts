@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import getAllCandidates from "@/lib/candidates";
+import getAllCandidatesWStatus from "@/lib/candidates";
 
 import { db } from "@/db";
 import { candidateStatus, candidates, roles } from "@/db/schema";
@@ -10,7 +10,7 @@ import { sql, eq } from "drizzle-orm";
 
 export async function GET(request: NextRequest) {
   try {
-    const candidates = await getAllCandidates();
+    const candidates = await getAllCandidatesWStatus();
     if (candidates.length === 0) {
       return NextResponse.json({ error: 'No candidates found' }, { status: 404 });
     }
