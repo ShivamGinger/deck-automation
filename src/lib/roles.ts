@@ -3,7 +3,17 @@ import { Role, candidates, companies, parameterScores, parameters, quotientScore
 import { and, desc, eq, sql } from "drizzle-orm";
 
 export async function getCompanyRoles(companyid: number): Promise<Role[]> {
-  const companyRoles: Role[] = await db.select().from(roles).where(eq(roles.companyId, companyid));
+  const companyRoles: Role[] = await db
+  .select({
+    id: roles.id,
+    name: roles.name,
+    companyId: roles.companyId,
+    cname: companies.name,
+    createdAt: roles.createdAt
+  })
+  .from(roles)
+  .innerJoin(companies, eq(companies.id, roles.companyId))
+  .where(eq(roles.companyId, companyid));
 
   return companyRoles;
 };
