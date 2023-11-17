@@ -1,9 +1,9 @@
 import { db } from '@/db';
 
-import { Candidates, candidates, companies, roles } from '@/db/schema';
+import { Candidates, candidateStatus, candidates, companies, roles } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 
-export default async function getAllCandidates(): Promise<Candidates[]> {
+export default async function getAllCandidatesWStatus(): Promise<Candidates[]> {
 
   const result: Candidates[] = await db.select({
     id: candidates.id,
@@ -34,6 +34,7 @@ export default async function getAllCandidates(): Promise<Candidates[]> {
   .from(candidates)
   .leftJoin(companies, eq(candidates.companyId, companies.id))
   .leftJoin(roles, eq(candidates.roleId, roles.id))
+  .leftJoin(candidateStatus, eq(candidateStatus.candidateId, candidates.id));
 
   return result;
 };
@@ -69,6 +70,7 @@ export async function getCandidate(id: number): Promise<Candidates[]> {
   .from(candidates)
   .leftJoin(companies, eq(candidates.companyId, companies.id))
   .leftJoin(roles, eq(candidates.roleId, roles.id))
+  .leftJoin(candidateStatus, eq(candidateStatus.candidateId, candidates.id))
   .where(eq(candidates.id, id));
 
   return result;
