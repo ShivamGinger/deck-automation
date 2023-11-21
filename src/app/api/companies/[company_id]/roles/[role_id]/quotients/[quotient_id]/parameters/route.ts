@@ -1,6 +1,6 @@
 import { db } from "@/db";
 import { parameterWeightages } from "@/db/schema";
-import { getAllCmpQuoParameterW, parameterw } from "@/lib/parameters";
+import { getAllCmpQuoParameterW, getCmpQuoParameterW, parameterw } from "@/lib/parameters";
 import { createParameterWeiSchema } from "@/utils/bodyValidationSchemas";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -27,6 +27,10 @@ export async function POST(request: NextRequest, { params }: { params : { compan
 
         for( const data of parsedData.data.parameterW) {
             await db.transaction(async (txn) => {
+                const quoWeightageExists = await getCmpQuoParameterW(cSlug, rSlug, qSlug, data.parameterId);
+                if (quoWeightageExists) {
+                    return NextResponse.json({ error: "Parameter weightage already exists" }, { status: 409 });
+                };
                 await txn.insert(parameterWeightages).values({
                     parameterId: data.parameterId,
                     companyId: cSlug,

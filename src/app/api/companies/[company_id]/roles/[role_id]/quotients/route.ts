@@ -1,6 +1,6 @@
 import { db } from "@/db";
 import { Quotients, quotientWeightages, quotients } from "@/db/schema";
-import { getAllCmpQuotientsW, getQuotientByName, quotientw } from "@/lib/quotients";
+import { getAllCmpQuotientsW, getCmpQuotient, getQuotientByName, quotientw } from "@/lib/quotients";
 import { createQuotientWeiSchema } from "@/utils/bodyValidationSchemas";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -26,6 +26,10 @@ export async function POST(request: NextRequest, { params }: { params : { compan
 
         for( const data of parsedData.data.quotientW) {
             await db.transaction(async (txn) => {
+                const quoWeightageExists = await getCmpQuotient(cSlug, rSlug, data.quotientId);
+                if (quoWeightageExists) {
+                    return NextResponse.json({ error: "Quotient weightage already exists" }, { status: 409 });
+                };
                 await txn.insert(quotientWeightages).values({
                     companyId: cSlug,
                     roleId: rSlug,
