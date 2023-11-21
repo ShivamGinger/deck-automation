@@ -1,106 +1,47 @@
 "use client";
 
+import React, { useLayoutEffect } from 'react';
+
+import { useParams, useRouter } from 'next/navigation';
+
 import Loading from '@/app/(site)/Components/Loading';
-import { ITEMS_PER_PAGE } from '@/utils/constants';
-import { getCompanyName } from '@/utils/helperFunctions';
-import Link from 'next/link';
-import { useParams } from 'next/navigation';
-import React, { useLayoutEffect, useState } from 'react';
-import ReactPaginate from 'react-paginate';
-import RenderCandidateUnderRoles from './Components/RenderCandidateUnderRoles';
 
-const userUnderAdmin = [
-  {
-    Candidate_Name: "XYZ",
-    Candidate_Email: "abc@gmail.com",
-    Company: "",
-    Role: "",
-    Status: ""
-  },
-  {
-    Candidate_Name: "XYZ",
-    Candidate_Email: "abc@gmail.com",
-    Company: "",
-    Role: "",
-    Status: ""
-  },
-];
-
-const candidates = [
-  {
-    id: 1,
-    name: 'candidate 1',
-    email: '1@gmail.cpom,',
-    GPscore: 4.3,
-    Experience: 3,
-    ctc: 1
-  },
-  {
-    id: 1,
-    name: 'camdodate 2',
-    email: '2@gmail.com',
-    GPscore: 4.3,
-    Experience: 3,
-    ctc: 1
-  },
-]
-
-const Company = () => {
+const DisplayQuotientsUnderRoles = () => {
   const { roleID, companyID } = useParams();
 
-  const [loading, setLoading] = useState(true);
-
-  const [candidateUnderRole, setCandidateUnderRole] = useState<[]>();
-
-  const [responseDetails, setResponseDetails] = useState<string | null>(null);
+  const router = useRouter();
 
   useLayoutEffect(() => {
     const getData = async () => {
       try {
-        const response = await fetch(`/api/companies/${companyID}/roles/${roleID}`);
+        const response = await fetch(`/api/companies/${companyID}/roles/${roleID}/quotients`, {
+          method: 'GET'
+        });
 
         if (response.ok) {
           const data = await response.json();
-          console.log(data.data);
           
-          setCandidateUnderRole(data.data);
-        } else {
-          const data = await response.json();
-          setResponseDetails(data.error);
+          if (data.data.length === 0) {
+            router.replace(`/deck-automation/${companyID}/${roleID}/quotients/addQuotients`);
+
+          } else {
+            router.replace(`/deck-automation/${companyID}/${roleID}/candidates`);
+          }
         }
       } catch (err) {
         console.log(err);
-      } finally {
-        setLoading(false);
       }
-    }
+    };
     getData();
-  }, [companyID, roleID]);
+  }, [companyID, roleID, router]);
 
   return (
     <section className='mt-12'>
-      <section className='mt-12'>
-        <div className='max-w-screen-2xl mx-auto flex flex-col'>
-          {
-            loading ?
-              <Loading /> :
-              <>
-                {responseDetails ?
-                  <>
-                    {responseDetails}
-                    <div className='overflow-x-auto bg-white p-2'>
-                      Add Candidates? <Link href={`/deck-automation/${companyID}/${roleID}/addCandidate`} className='underline text-blue-500'>Click here</Link>
-                    </div>
-                  </>
-                  :
-                  <RenderCandidateUnderRoles candidatesUnderRole={candidateUnderRole} />
-                }
-              </>
-          }
-        </div>
-      </section>
+      <div className='max-w-screen-2xl mx-auto flex flex-col'>
+        <Loading />
+      </div>
     </section>
   )
 }
 
-export default Company
+export default DisplayQuotientsUnderRoles

@@ -1,6 +1,9 @@
-import { HandleCandidateInputChangeValue } from '@/utils/constants';
+
+import React, { ChangeEvent, Dispatch, SetStateAction, useLayoutEffect, useState } from 'react';
+
 import Image from 'next/image';
-import React, { ChangeEvent, Dispatch, SetStateAction, useEffect, useLayoutEffect, useState } from 'react';
+
+import { HandleCandidateInputChangeValue } from '@/utils/types';
 
 const ProfilePic = (
   {
@@ -45,7 +48,7 @@ const ProfilePic = (
 
           setFileUploaded(true);
 
-          handleInputChange(candidateNo, data.imageUrl, 'photo');
+          handleInputChange(candidateNo, data.imageUrl, 'profile_pic');
         } else {
           const data = await response.json();
           setError(true);
@@ -67,7 +70,7 @@ const ProfilePic = (
   const handleProfilePicRemove = () => {
     setFileUploaded(false);
 
-    handleInputChange(candidateNo, '', 'photo');
+    handleInputChange(candidateNo, '', 'profile_pic');
   };
 
   return (
@@ -81,18 +84,19 @@ const ProfilePic = (
                 <Image width={30} height={30} src={'/images/cross.png'} alt="edit-icon" className="opacity-80 " />
               </div>
             </div>
-            {fileUploaded && prevFileUploaded
-              &&
-              <Image
-                src={prevFileUploaded}
-                width={0}
-                height={0}
-                priority
-                className="object-cover rounded-md h-32"
-                style={{ width: "100%" }}
-                alt={`Profile Pic for ${candidateNo}`}
-                sizes="(max-width: 600px) 100vw, 600px"
-              />
+            {fileUploaded && prevFileUploaded &&
+              <>
+                <Image
+                  src={prevFileUploaded}
+                  width={0}
+                  height={0}
+                  priority
+                  className="object-cover rounded-md h-32"
+                  style={{ width: "100%" }}
+                  alt={`Profile Pic for ${candidateNo}`}
+                  sizes="(max-width: 600px) 100vw, 600px"
+                />
+              </>
             }
           </div>
         </> :

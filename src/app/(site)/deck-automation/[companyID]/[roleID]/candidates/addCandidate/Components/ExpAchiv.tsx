@@ -1,4 +1,6 @@
-import { HandleCandidateInputChangeValue } from '@/utils/constants';
+"use client";
+
+import { HandleCandidateInputChangeValue } from '@/utils/types';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 
 const ExpAchiv = (
@@ -7,19 +9,33 @@ const ExpAchiv = (
     candidateNo,
     error,
     setErrorDetails,
-    setError
+    setError,
+    count,
+    placeholderData
   }:
     {
       handleInputChange: HandleCandidateInputChangeValue,
       candidateNo: number,
       error: boolean,
       setErrorDetails: (details: string | null) => void,
-      setError: (error: boolean) => void
+      setError: (error: boolean) => void,
+      count: number,
+      placeholderData: string[]
     }
 ) => {
   const [expAchivCount, setExpAchivCount] = useState(1);
 
+  const [placeholder, setPlaceholderData] = useState(placeholderData);
+
   const [expAchiv, setExpAchiv] = useState<string[]>(['']);
+
+  useEffect(() => {
+    setExpAchivCount(count);
+  }, [count]);
+
+  useEffect(() => {
+    setPlaceholderData(placeholderData);
+  }, [placeholderData]);
 
   useEffect(() => {
     if (error) {
@@ -59,7 +75,7 @@ const ExpAchiv = (
 
       setExpAchiv(updatedExpiAchiv);
 
-      handleInputChange(candidateNo, updatedExpiAchiv, 'exp_achi');
+      handleInputChange(candidateNo, updatedExpiAchiv, 'achievement');
     }
   };
 
@@ -79,20 +95,20 @@ const ExpAchiv = (
 
     setExpAchiv(updatedKeyPoints);
 
-    handleInputChange(candidateNo, updatedKeyPoints, 'key_points');
+    handleInputChange(candidateNo, updatedKeyPoints, 'achievement');
   };
 
-  const renderExpiAchiv = () => {
-    const elements = [];
+  const elements = [];
 
-    for (let i = 1; i <= expAchivCount; i++) {
-      elements.push(
-        <div key={i}>
-          <input
-            type="text"
-            name=""
-            id=""
-            className={`
+  for (let i = 1; i <= expAchivCount; i++) {
+    elements.push(
+      <div key={i}>
+        <input
+          type="text"
+          name=""
+          id=""
+          placeholder={placeholder[i - 1]}
+          className={`
                   mt-2
                   h-full 
                   w-full 
@@ -105,14 +121,12 @@ const ExpAchiv = (
                   border
                   border-black
                   `}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => handleExpiAchivChange(i, e.target.value)}
-          />
-        </div>
-      )
-    }
+          onChange={(e: ChangeEvent<HTMLInputElement>) => handleExpiAchivChange(i, e.target.value)}
+        />
+      </div>
+    )
+  }
 
-    return elements;
-  };
 
   return <>
     <div className='mt-4 w-72 flex flex-col'>
@@ -126,7 +140,7 @@ const ExpAchiv = (
         </span>
       </label>
 
-      {renderExpiAchiv()}
+      {elements}
     </div>
   </>
 }

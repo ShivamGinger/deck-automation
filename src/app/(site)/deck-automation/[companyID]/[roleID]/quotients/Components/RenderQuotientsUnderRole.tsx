@@ -4,21 +4,24 @@ import React, { useState } from 'react';
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 
+import { useRouter } from 'next/navigation';
 import ReactPaginate from 'react-paginate';
 
 import { ITEMS_PER_PAGE } from '@/utils/constants';
-import { RoleDetails } from '@/utils/types';
+import { QuotientFactorsWeightage } from '@/utils/types';
 
-const RenderRolesUnderCompany = ({
-  rolesUnderCompany,
-  companyName
+const RenderQuotientsUnderRole = ({
+  roleName,
+  companyName,
+  quotientsUnderRole
 }: {
-  rolesUnderCompany: RoleDetails[],
-  companyName: string
+  roleName: string,
+  companyName: string,
+  quotientsUnderRole: QuotientFactorsWeightage[]
 }) => {
-  const { companyID } = useParams();
+  const { companyID, roleID } = useParams();
 
   const router = useRouter();
 
@@ -28,23 +31,23 @@ const RenderRolesUnderCompany = ({
     setCurrentPage(selectedPage.selected);
   };
 
-  const totalItems = rolesUnderCompany?.length || 0;
+  const totalItems = quotientsUnderRole?.length || 0;
   const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
 
   const startIndex = currentPage * ITEMS_PER_PAGE;
   const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, totalItems);
 
-  const currentData = rolesUnderCompany?.slice(startIndex, endIndex);
+  const currentData = quotientsUnderRole?.slice(startIndex, endIndex);
 
   return (
     <>
       <div className='flex flex-col'>
         <div className="rounded-lg shadow overflow-x-auto bg-white">
-          <div className='p-4 font-bold text-2xl cursor-pointer' onClick={() => router.replace(`/deck-automation`)}>
+          <div className='p-4 font-bold text-2xl cursor-pointer' onClick={() => router.replace(`/deck-automation/${companyID}/${roleID}`)}>
             {'<'}
           </div>
           <div className='p-4 flex flex-row justify-between'>
-            <h2 className='font-bold uppercase text-2xl text-[#542C06]'>List of Roles Under {companyName}</h2>
+            <h2 className='font-bold uppercase text-2xl text-[#542C06]'>Quotient details for {roleName} Under {companyName}</h2>
             {/* <div className='p-2'>
               search ...
             </div> */}
@@ -53,7 +56,8 @@ const RenderRolesUnderCompany = ({
             <thead className="">
               <tr className='gap-x-4'>
                 <th className="table-headings">S.No.</th>
-                <th className="table-headings">Role Name</th>
+                <th className="table-headings">Quotient Name</th>
+                <th className="table-headings">Quotient Weightage</th>
               </tr>
             </thead>
             <tbody className="">
@@ -63,11 +67,15 @@ const RenderRolesUnderCompany = ({
                     {index + 1}
                   </td>
                   <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
-                    {detail.role_name}
+                    {detail.quotient_name}
+                  </td>
+
+                  <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
+                    {detail.quotient_weightage}
                   </td>
 
                   <td className="">
-                    <Link href={`/deck-automation/${companyID}/${detail.role_id}`}>
+                    <Link href={`/deck-automation/${companyID}/${roleID}/${detail.quotient_weightage_id}`}>
                       <Image width={20} height={20} src={'/images/plus.png'} alt="edit-icon" className="cursor-pointer" />
                     </Link>
                   </td>
@@ -76,7 +84,7 @@ const RenderRolesUnderCompany = ({
             </tbody>
           </table>
           <div className='p-4'>
-            Add Role? <Link href={`/deck-automation/${companyID}/addRole`} className='underline text-blue-500'>Click here</Link>
+            View Candidates? <Link href={`/deck-automation/${companyID}/${roleID}/candidates`} className='underline text-blue-500'>Click here</Link>
           </div>
         </div>
       </div>
@@ -110,4 +118,4 @@ const RenderRolesUnderCompany = ({
   )
 }
 
-export default RenderRolesUnderCompany
+export default RenderQuotientsUnderRole

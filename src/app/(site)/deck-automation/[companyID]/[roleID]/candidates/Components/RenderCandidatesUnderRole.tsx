@@ -4,21 +4,36 @@ import React, { useState } from 'react';
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 
+import { useRouter } from 'next/navigation';
 import ReactPaginate from 'react-paginate';
 
 import { ITEMS_PER_PAGE } from '@/utils/constants';
-import { RoleDetails } from '@/utils/types';
+import CanAddCandidate from './CanAddCandidate';
 
-const RenderRolesUnderCompany = ({
-  rolesUnderCompany,
-  companyName
+const RenderCandidatesUnderRole = ({
+  roleName,
+  companyName,
+  quotientsDetailsUnderRole,
+  candidateDetailsUnderRole
 }: {
-  rolesUnderCompany: RoleDetails[],
-  companyName: string
+  roleName: string,
+  companyName: string,
+  quotientsDetailsUnderRole: {
+    id: number,
+    quoweightage: number,
+    qname: string,
+    qid: number
+  }[],
+  candidateDetailsUnderRole: {
+    id: number,
+    quoweightage: number,
+    qname: string,
+    qid: number
+  }[]
 }) => {
-  const { companyID } = useParams();
+  const { companyID, roleID } = useParams();
 
   const router = useRouter();
 
@@ -28,32 +43,34 @@ const RenderRolesUnderCompany = ({
     setCurrentPage(selectedPage.selected);
   };
 
-  const totalItems = rolesUnderCompany?.length || 0;
+  const totalItems = candidateDetailsUnderRole?.length || 0;
   const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
 
   const startIndex = currentPage * ITEMS_PER_PAGE;
   const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, totalItems);
 
-  const currentData = rolesUnderCompany?.slice(startIndex, endIndex);
+  const currentData = candidateDetailsUnderRole?.slice(startIndex, endIndex);
 
   return (
     <>
       <div className='flex flex-col'>
         <div className="rounded-lg shadow overflow-x-auto bg-white">
-          <div className='p-4 font-bold text-2xl cursor-pointer' onClick={() => router.replace(`/deck-automation`)}>
+          <div className='p-4 font-bold text-2xl cursor-pointer' onClick={() => router.replace(`/deck-automation/${companyID}/${roleID}`)}>
             {'<'}
           </div>
           <div className='p-4 flex flex-row justify-between'>
-            <h2 className='font-bold uppercase text-2xl text-[#542C06]'>List of Roles Under {companyName}</h2>
+            <h2 className='font-bold uppercase text-2xl text-[#542C06]'>List of Candidate for {roleName} Under {companyName}</h2>
             {/* <div className='p-2'>
               search ...
             </div> */}
           </div>
-          <table className="w-full border-separate border-spacing-4 px-6 pt-2">
+          render candidate details
+          {/* <table className="w-full border-separate border-spacing-4 px-6 pt-2">
             <thead className="">
               <tr className='gap-x-4'>
                 <th className="table-headings">S.No.</th>
-                <th className="table-headings">Role Name</th>
+                <th className="table-headings">Quotient Name</th>
+                <th className="table-headings">Quotient Weightage</th>
               </tr>
             </thead>
             <tbody className="">
@@ -63,20 +80,28 @@ const RenderRolesUnderCompany = ({
                     {index + 1}
                   </td>
                   <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
-                    {detail.role_name}
+                    {detail.qname}
+                  </td>
+
+                  <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
+                    {detail.quoweightage}
                   </td>
 
                   <td className="">
-                    <Link href={`/deck-automation/${companyID}/${detail.role_id}`}>
+                    <Link href={`/deck-automation/${companyID}/${roleID}/${detail.qid}`}>
                       <Image width={20} height={20} src={'/images/plus.png'} alt="edit-icon" className="cursor-pointer" />
                     </Link>
                   </td>
                 </tr>
               ))}
             </tbody>
-          </table>
+          </table> */}
+
           <div className='p-4'>
-            Add Role? <Link href={`/deck-automation/${companyID}/addRole`} className='underline text-blue-500'>Click here</Link>
+            Add Candidates? <Link href={`/deck-automation/${companyID}/${roleID}/candidates/addCandidate`} className='underline text-blue-500'>Click here</Link>
+          </div>
+          <div className='p-4 pt-0'>
+            View Quotients? <Link href={`/deck-automation/${companyID}/${roleID}/quotients`} className='underline text-blue-500'>Click here</Link>
           </div>
         </div>
       </div>
@@ -110,4 +135,4 @@ const RenderRolesUnderCompany = ({
   )
 }
 
-export default RenderRolesUnderCompany
+export default RenderCandidatesUnderRole

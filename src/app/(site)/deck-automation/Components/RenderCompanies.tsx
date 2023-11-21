@@ -2,13 +2,19 @@
 
 import React, { useState } from 'react';
 
+import Image from 'next/image';
 import Link from 'next/link';
 
-import { ITEMS_PER_PAGE } from '@/utils/constants';
-import Image from 'next/image';
 import ReactPaginate from 'react-paginate';
 
-const RenderCompanies = ({ companies }: { companies: { id: number, name: string, count: number }[] }) => {
+import { ITEMS_PER_PAGE } from '@/utils/constants';
+import { CompanyDetailsRoleCount } from '@/utils/types';
+
+const RenderCompanies = ({
+  companies
+}: {
+  companies: CompanyDetailsRoleCount[]
+}) => {
   const [currentPage, setCurrentPage] = useState(0);
 
   const handlePageChange = (selectedPage: { selected: number }) => {
@@ -48,15 +54,15 @@ const RenderCompanies = ({ companies }: { companies: { id: number, name: string,
                     {index + 1}
                   </td>
                   <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
-                    {detail.name}
+                    {detail.company_name}
                   </td>
 
                   <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
-                    {detail.count}
+                    {detail.roles_count ? detail.roles_count : 0}
                   </td>
 
                   <td className="">
-                    <Link href={`/deck-automation/${detail.id}`}>
+                    <Link href={`/deck-automation/${detail.company_id}`}>
                       <Image width={20} height={20} src={'/images/plus.png'} alt="edit-icon" className="cursor-pointer" />
                     </Link>
                   </td>

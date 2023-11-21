@@ -9,13 +9,8 @@ import RenderRolesUnderCompany from './Components/RenderRolesUnderCompany';
 
 import { useParams } from 'next/navigation';
 
-import axios from 'axios';
+import { RoleDetails } from '@/utils/types';
 import Loading from '../../Components/Loading';
-
-type role = {
-  id: number,
-  name: string
-}
 
 const RolesUnderCompany = () => {
 
@@ -24,27 +19,27 @@ const RolesUnderCompany = () => {
 
   const [loading, setLoading] = useState(true);
 
-  const [rolesUnderCompany, setRolesUnderCompany] = useState<role[]>();
+  const [rolesUnderCompany, setRolesUnderCompany] = useState<RoleDetails[]>([]);
+  const [companyName, setCompanyName] = useState('');
 
   const [responseDetails, setResponseDetails] = useState<string | null>(null);
 
   useLayoutEffect(() => {
     const getData = async () => {
       try {
-        const response = await fetch(`/api/companies/${companyID}/roles`, { method: 'GET' });
+        const response = await fetch(`/api/companies/${companyID}/roles`, {
+          method: 'GET'
+        });
 
         if (response.ok) {
           const data = await response.json();
 
+          setCompanyName(data.data[0].company_name);
           setRolesUnderCompany(data.data);
         } else {
           const data = await response.json();
 
-          if (data.error === 'Company not found') {
-            router.replace('/deck-automation');
-          } else {
-            setResponseDetails(data.error);
-          }
+          setResponseDetails(data.error);
         }
 
       } catch (err) {
@@ -64,7 +59,7 @@ const RolesUnderCompany = () => {
           loading ?
             <Loading /> :
             <>
-              {responseDetails ?
+              {responseDetails || rolesUnderCompany?.length === 0 ?
                 <>
                   {responseDetails}
                   <div className='overflow-x-auto bg-white p-2'>
@@ -72,7 +67,10 @@ const RolesUnderCompany = () => {
                   </div>
                 </>
                 :
-                <RenderRolesUnderCompany rolesUnderCompany={rolesUnderCompany} />
+                <RenderRolesUnderCompany
+                  rolesUnderCompany={rolesUnderCompany}
+                  companyName={companyName}
+                />
               }
             </>
         }

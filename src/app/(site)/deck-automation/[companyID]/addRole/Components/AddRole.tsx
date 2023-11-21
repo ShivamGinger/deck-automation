@@ -1,7 +1,10 @@
 "use client";
-import Input from '@/app/(site)/Components/Input';
+
+import React, { ChangeEvent, useState } from 'react';
+
 import { useParams, useRouter } from 'next/navigation';
-import React, { ChangeEvent, Dispatch, SetStateAction, useState } from 'react';
+
+import Input from '@/app/(site)/Components/Input';
 
 const AddRole = () => {
   const { companyID } = useParams();
@@ -26,12 +29,10 @@ const AddRole = () => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        name: role,
-        companyId: Array.isArray(companyID) ? parseInt(companyID[0]) : parseInt(companyID)
+        role_name: role
       }),
       credentials: 'include',
-    }
-    );
+    });
 
     if (response.ok) {
       router.replace(`/deck-automation/${companyID}`);

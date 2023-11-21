@@ -1,9 +1,11 @@
 "use client";
 
-import Input from '@/app/(site)/Components/Input';
+import React, { ChangeEvent, useEffect, useState } from 'react';
+
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import React, { ChangeEvent, useState } from 'react';
+
+import Input from '@/app/(site)/Components/Input';
 
 const AddCompany = () => {
   const router = useRouter();
@@ -13,9 +15,29 @@ const AddCompany = () => {
   const [error, setError] = useState(false);
   const [errorDeatils, setErrorDetails] = useState<string | null>('');
 
+  useEffect(() => {
+    if (error) {
+      const container = document.getElementById('side-body');
+
+      if (container) {
+        container.scrollTo({
+          top: 0,
+          behavior: 'smooth',
+        });
+      }
+
+    }
+  }, [error]);
+
   const handleSubmit = async () => {
     setErrorDetails(null);
     setError(false);
+
+    if (!companyName) {
+      setErrorDetails('Missing / Invalid Data!');
+      setError(true);
+      return;
+    }
 
     const response = await fetch('/api/companies', {
       method: 'post',
@@ -23,27 +45,19 @@ const AddCompany = () => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        name: companyName
+        company_name: companyName
       }),
       credentials: 'include',
-    }
-    );
+    });
 
-    if (response.status === 409) {
+    if (response.ok) {
+      router.replace('/deck-automation');
+    } else {
       const errorData = await response.json();
 
       setError(true);
       setErrorDetails(errorData.error);
-    } else if (response.status == 400) {
-      const errorData = await response.json();
-
-      setError(true);
-      setErrorDetails(errorData.details[0].message);
-    } else if (response.status === 201) {
-            
-      router.replace('/deck-automation');
-      router.refresh();
-    };
+    }
   };
 
   return (
@@ -75,7 +89,8 @@ const AddCompany = () => {
             </div>
             <button
               onClick={handleSubmit}
-              className={`${!companyName && 'cursor-not-allowed opacity-50'} font-semibold py-2 px-8 uppercase bg-[#B06500] text-white rounded-lg border-[#B06500]`}
+              disabled={!companyName || error}
+              className={`${!companyName || error ? 'cursor-not-allowed opacity-50' : ''} font-semibold py-2 px-8 uppercase bg-[#B06500] text-white rounded-lg border-[#B06500]`}
             >
               Submit
             </button>

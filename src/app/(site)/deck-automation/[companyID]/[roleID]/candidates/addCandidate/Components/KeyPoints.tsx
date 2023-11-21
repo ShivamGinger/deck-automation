@@ -1,4 +1,6 @@
-import { HandleCandidateInputChangeValue } from '@/utils/constants';
+"use client";
+
+import { HandleCandidateInputChangeValue } from '@/utils/types';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 
 const KeyPoints = (
@@ -62,7 +64,7 @@ const KeyPoints = (
     setKeyPointsCount(prevCount => prevCount + 1);
     const updatedKeyPoints = [...keyPoints, ''];
 
-    handleInputChange(candidateNo, updatedKeyPoints, 'key_points');
+    handleInputChange(candidateNo, updatedKeyPoints, 'keyPoints');
 
     setKeyPoints(updatedKeyPoints);
   };
@@ -76,7 +78,7 @@ const KeyPoints = (
 
       setKeyPoints(updatedKeyPoints);
 
-      handleInputChange(candidateNo, updatedKeyPoints, 'key_points');
+      handleInputChange(candidateNo, updatedKeyPoints, 'keyPoints');
     }
 
   };
