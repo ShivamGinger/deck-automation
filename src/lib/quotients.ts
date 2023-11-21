@@ -56,6 +56,21 @@ export async function getCmpQuotient(cmpId: number, rleId: number, quotientWeiId
     return quotient;
 };
 
+export type quotientExist = {
+    quotient_weightage_id: number;
+};
+
+export async function cmpQuotientExist(cmpId: number, rleId: number, quotientId: number): Promise<quotientExist[]> {
+    const quoExist: quotientExist[] = await db
+    .select({
+        quotient_weightage_id: quotientWeightages.id,
+    })
+    .from(quotientWeightages)
+    .where(and(eq(quotientWeightages.companyId, cmpId), eq(quotientWeightages.roleId, rleId), eq(quotientWeightages.quotientId, quotientId)));
+
+    return quoExist;
+};
+
 export async function getQuotientByName(qname: string): Promise<Quotients[]> {
     const quotient: Quotients[] = await db.select()
     .from(quotients)

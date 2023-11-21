@@ -121,7 +121,21 @@ export async function getCmpQuoParameterW(cmpId: number, rleId: number, quoWeiId
     .innerJoin(roles, eq(roles.id, parameterWeightages.roleId))
     .innerJoin(parameters, eq(parameters.id, parameterWeightages.parameterId))
     .innerJoin(quotients, eq(quotients.id, parameters.quotientId))
-    .where(and(eq(companies.id, cmpId), eq(roles.id, rleId), eq(parameterWeightages.id, parameterWeiId)));
+    .where(and(eq(parameterWeightages.companyId, cmpId), eq(parameterWeightages.roleId, rleId), eq(parameterWeightages.id, parameterWeiId)));
+
+    return quoParamWei;
+};
+
+export type quoParameterExist = {
+    parameter_weightage_id: number;
+};
+
+export async function cmpQuoParameterExist(cmpId: number, rleId: number, parameterId: number): Promise<quoParameterExist[]> {
+    const quoParamWei: quoParameterExist[] = await db.select({
+        parameter_weightage_id: parameterWeightages.id,
+    })
+    .from(parameterWeightages)
+    .where(and(eq(parameterWeightages.companyId, cmpId), eq(parameterWeightages.roleId, rleId), eq(parameterWeightages.parameterId, parameterId)));
 
     return quoParamWei;
 };
