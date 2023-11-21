@@ -3,28 +3,28 @@ import { Quotients, companies, parameters, quotientWeightages, quotients, roles 
 import { eq, sql, and } from "drizzle-orm";
 
 export type quotientw = {
-    id: number;
-    cid: number;
-    cname: string;
-    rid: number;
-    rname: string;
-    qid: number;
-    qname: string;
-    quoweightage: number;
+    quotient_weightage_id: number;
+    company_id: number;
+    company_name: string;
+    role_id: number;
+    role_name: string;
+    quotient_id: number;
+    quotient_name: string;
+    quotient_weightage: number;
 
 };
 
 export async function getAllCmpQuotientsW(cmpId: number, rleId: number): Promise<quotientw[]> {
     const allQuo: quotientw[] = await db
     .select({
-        id: quotientWeightages.id,
-        cid: quotientWeightages.companyId,
-        cname: companies.name,
-        rid: quotientWeightages.roleId,
-        rname: roles.name,
-        qid: quotientWeightages.quotientId,
-        qname: quotients.quotient,
-        quoweightage: quotientWeightages.qWeightage
+        quotient_weightage_id: quotientWeightages.id,
+        company_id: quotientWeightages.companyId,
+        company_name: companies.name,
+        role_id: quotientWeightages.roleId,
+        role_name: roles.name,
+        quotient_id: quotientWeightages.quotientId,
+        quotient_name: quotients.quotient,
+        quotient_weightage: quotientWeightages.qWeightage
     })
     .from(quotientWeightages)
     .innerJoin(companies, eq(companies.id, quotientWeightages.companyId))
@@ -33,6 +33,27 @@ export async function getAllCmpQuotientsW(cmpId: number, rleId: number): Promise
     .where(and(eq(quotientWeightages.companyId, cmpId), eq(quotientWeightages.roleId, rleId)));
 
     return allQuo;
+};
+
+export async function getCmpQuotient(cmpId: number, rleId: number, quotientId: number): Promise<quotientw[]> {
+    const quotient: quotientw[] = await db
+    .select({
+        quotient_weightage_id: quotientWeightages.id,
+        company_id: quotientWeightages.companyId,
+        company_name: companies.name,
+        role_id: quotientWeightages.roleId,
+        role_name: roles.name,
+        quotient_id: quotientWeightages.quotientId,
+        quotient_name: quotients.quotient,
+        quotient_weightage: quotientWeightages.qWeightage
+    })
+    .from(quotientWeightages)
+    .innerJoin(companies, eq(companies.id, quotientWeightages.companyId))
+    .innerJoin(roles, eq(roles.id, quotientWeightages.roleId))
+    .innerJoin(quotients, eq(quotients.id, quotientWeightages.quotientId))
+    .where(and(eq(quotientWeightages.companyId, cmpId), eq(quotientWeightages.roleId, rleId), eq(quotients.id, quotientId)));
+
+    return quotient;
 };
 
 export async function getQuotientByName(qname: string): Promise<Quotients[]> {
