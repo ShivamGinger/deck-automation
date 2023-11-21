@@ -1,6 +1,6 @@
 import { db } from "@/db";
 import { parameterWeightages } from "@/db/schema";
-import { getAllCmpQuoParameterW, getCmpQuoParameterW, parameterw } from "@/lib/parameters";
+import { cmpQuoParameterExist, getAllCmpQuoParameterW, getCmpQuoParameterW, parameterw } from "@/lib/parameters";
 import { createParameterWeiSchema } from "@/utils/bodyValidationSchemas";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -14,12 +14,11 @@ export async function GET(request: NextRequest, { params }: {params: { company_i
       };
 };
 
-export async function POST(request: NextRequest, { params }: { params : { company_id: number, role_id: number, quotientw_id: number }}) {
+export async function POST(request: NextRequest, { params }: { params : { company_id: number, role_id: number }}) {
     try {
         const requestData = await request.json();
         const cSlug = params.company_id;
         const rSlug = params.role_id;
-        const qSlug = params.quotientw_id;
         const parsedData = createParameterWeiSchema.safeParse(requestData);
         if(!parsedData.success) {
           return NextResponse.json({ message: 'Validation error', error: parsedData.error }, { status: 400 });
@@ -27,8 +26,8 @@ export async function POST(request: NextRequest, { params }: { params : { compan
 
         for( const data of parsedData.data.parameterW) {
             await db.transaction(async (txn) => {
-                const quoWeightageExists = await getCmpQuoParameterW(cSlug, rSlug, qSlug, data.parameterId);
-                if (quoWeightageExists) {
+                const quoParamWeightageExists = await cmpQuoParameterExist(cSlug, rSlug, data.parameterId);
+                if (quoParamWeightageExists) {
                     return NextResponse.json({ error: "Parameter weightage already exists" }, { status: 409 });
                 };
                 await txn.insert(parameterWeightages).values({
