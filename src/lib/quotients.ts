@@ -95,31 +95,31 @@ export async function getQuotientAll(): Promise<quotientPCount[]> {
     return quotientsAll;
 };
 
-export type quoCmpDispSchema = {
-    id: number;
-    qname: string;
-    cid: number;
-    cname: string;
-    rid: number;
-    rname: string;
-    weightage: number;
-};
+// export type quoCmpDispSchema = {
+//     quotient_id: number;
+//     quotient_name: string;
+//     company_id: number;
+//     company_name: string;
+//     role_id: number;
+//     role_name: string;
+//     quotient_weightage: number;
+// };
 
-export async function getQuotientCmpRle(qid: number, cmpid: number): Promise<quoCmpDispSchema[]> {
-    const quotientcmp: quoCmpDispSchema[] = await db.select({
-        id: quotients.id,
-        qname: quotients.quotient,
-        cid: companies.id,
-        cname: companies.name,
-        rid: roles.id,
-        rname: roles.name,
-        weightage: quotientWeightages.qWeightage
-    })
-    .from(quotientWeightages)
-    .innerJoin(quotients, eq(quotients.id, quotientWeightages.quotientId))
-    .innerJoin(companies, eq(companies.id, quotientWeightages.companyId))
-    .innerJoin(roles, eq(roles.id, quotientWeightages.roleId))
-    .where(and(eq(quotients.id, qid), eq(companies.id, cmpid)));
+// export async function getQuotientCmpRle(qid: number, cmpid: number): Promise<quoCmpDispSchema[]> {
+//     const quotientcmp: quoCmpDispSchema[] = await db.select({
+//         quotient_id: quotients.id,
+//         qname: quotients.quotient,
+//         cid: companies.id,
+//         cname: companies.name,
+//         rid: roles.id,
+//         rname: roles.name,
+//         weightage: quotientWeightages.qWeightage
+//     })
+//     .from(quotientWeightages)
+//     .innerJoin(quotients, eq(quotients.id, quotientWeightages.quotientId))
+//     .innerJoin(companies, eq(companies.id, quotientWeightages.companyId))
+//     .innerJoin(roles, eq(roles.id, quotientWeightages.roleId))
+//     .where(and(eq(quotients.id, qid), eq(companies.id, cmpid)));
 
-    return quotientcmp;
-};
+//     return quotientcmp;
+// };
