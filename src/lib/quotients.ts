@@ -73,9 +73,9 @@ export async function getQuotientById(qid: number): Promise<Quotients[]> {
 };
 
 export type quotientPCount = {
-    id: number;
-    qname: string;
-    count: number;
+    quotient_id: number;
+    quotient_name: string;
+    parameter_count: number;
 };
 
 export async function getQuotientAll(): Promise<quotientPCount[]> {
@@ -85,9 +85,9 @@ export async function getQuotientAll(): Promise<quotientPCount[]> {
     }).from(parameters).groupBy(parameters.quotientId).as('pcount');
     
     const quotientsAll: quotientPCount[] = await db.select({
-        id: quotients.id,
-        qname: quotients.quotient,
-        count: pcount.count
+        quotient_id: quotients.id,
+        quotient_name: quotients.quotient,
+        parameter_count: pcount.count
     })
     .from(quotients)
     .leftJoin(pcount, eq(pcount.qid, quotients.id));
