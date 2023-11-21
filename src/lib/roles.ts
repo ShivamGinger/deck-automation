@@ -27,13 +27,13 @@ export type roleCandidate = {
   cid: number;
   cname: string;
   keyPoints: unknown | null;
-  totalScore: number | null;
+  gp_score: string | null;
 };
 
 export async function getCompanyRoleCandidate(companyid: number, roleid: number): Promise<roleCandidate[]> {
   const qScoreSum = db.select({ 
     candidateId: quotientScores.candidateId,
-    totalScore: sql<number>`sum(${quotientScores.totalScore})`.as('totalScore')
+    gp_score: sql<number>`sum(${quotientScores.totalScore})`.mapWith(quotientScores.totalScore).as('totalScore')
   }).from(quotientScores).groupBy(quotientScores.candidateId).as('qScoreSum');
     
     const companyRole: roleCandidate[] = await db.select({
@@ -45,7 +45,7 @@ export async function getCompanyRoleCandidate(companyid: number, roleid: number)
     cid: companies.id,
     cname: companies.name,
     keyPoints: candidates.keyPoints,
-    totalScore: qScoreSum.totalScore
+    gp_score: qScoreSum.gp_score
   })
   .from(candidates)
   .innerJoin(companies, eq(companies.id, candidates.companyId))
