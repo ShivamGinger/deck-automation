@@ -24,10 +24,10 @@ export async function POST(request: NextRequest, { params }: { params : { compan
           return NextResponse.json({ message: 'Validation error', error: parsedData.error }, { status: 400 });
         };
 
-        for( const data of parsedData.data.parameterW) {
+        for(const data of parsedData.data.parameterW) {
+            const quoParamWeightageExists = await cmpQuoParameterExist(cSlug, rSlug, data.parameterId);
             await db.transaction(async (txn) => {
-                const quoParamWeightageExists = await cmpQuoParameterExist(cSlug, rSlug, data.parameterId);
-                if (quoParamWeightageExists) {
+                if (quoParamWeightageExists.length !== 0) {
                     return NextResponse.json({ error: "Parameter weightage already exists" }, { status: 409 });
                 };
                 await txn.insert(parameterWeightages).values({
