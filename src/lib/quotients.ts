@@ -35,7 +35,7 @@ export async function getAllCmpQuotientsW(cmpId: number, rleId: number): Promise
     return allQuo;
 };
 
-export async function getCmpQuotient(cmpId: number, rleId: number, quotientId: number): Promise<quotientw[]> {
+export async function getCmpQuotient(cmpId: number, rleId: number, quotientWeiId: number): Promise<quotientw[]> {
     const quotient: quotientw[] = await db
     .select({
         quotient_weightage_id: quotientWeightages.id,
@@ -51,7 +51,7 @@ export async function getCmpQuotient(cmpId: number, rleId: number, quotientId: n
     .innerJoin(companies, eq(companies.id, quotientWeightages.companyId))
     .innerJoin(roles, eq(roles.id, quotientWeightages.roleId))
     .innerJoin(quotients, eq(quotients.id, quotientWeightages.quotientId))
-    .where(and(eq(quotientWeightages.companyId, cmpId), eq(quotientWeightages.roleId, rleId), eq(quotients.id, quotientId)));
+    .where(and(eq(quotientWeightages.companyId, cmpId), eq(quotientWeightages.roleId, rleId), eq(quotientWeightages.id, quotientWeiId)));
 
     return quotient;
 };
