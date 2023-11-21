@@ -91,7 +91,7 @@ export async function getAllCmpQuoParameterW(cmpId: number, rleId: number, quoId
     return quoParamWei;
 };
 
-export async function getCmpQuoParameterW(cmpId: number, rleId: number, quoId: number, parameterId: number): Promise<parameterw[]> {
+export async function getCmpQuoParameterW(cmpId: number, rleId: number, quoId: number, parameterWeiId: number): Promise<parameterw[]> {
     const quoParam = db
     .select({
         id: parameters.id,
@@ -118,7 +118,7 @@ export async function getCmpQuoParameterW(cmpId: number, rleId: number, quoId: n
     .innerJoin(roles, eq(roles.id, parameterWeightages.roleId))
     .innerJoin(quoParam, eq(quoParam.id, parameterWeightages.parameterId))
     .innerJoin(quotients, eq(quotients.id, quoParam.quotientId))
-    .where(and(eq(companies.id, cmpId), eq(roles.id, rleId), eq(parameterWeightages.parameterId, parameterId)));
+    .where(and(eq(companies.id, cmpId), eq(roles.id, rleId), eq(parameterWeightages.parameterId, parameterWeiId)));
 
     return quoParamWei;
 };
