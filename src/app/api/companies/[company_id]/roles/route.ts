@@ -1,7 +1,7 @@
 import { db } from "@/db";
-import { Role, roles } from "@/db/schema";
+import { roles } from "@/db/schema";
 import { getCompany } from "@/lib/companies";
-import { getCompanyRoles, getRoleByName } from "@/lib/roles";
+import { companyRoles, getCompanyRoles, getRoleByName } from "@/lib/roles";
 import { createRoleSchema } from "@/utils/bodyValidationSchemas";
 import { eq, sql } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
@@ -13,7 +13,7 @@ export async function GET(request: NextResponse, { params }: { params: { company
         if (companyIdExist.length === 0) {
           return NextResponse.json({ error: "Company not found" }, { status: 404 });
         };
-        const roles: Role[] = await getCompanyRoles(params.company_id);
+        const roles: companyRoles[] = await getCompanyRoles(params.company_id);
         if (roles.length === 0) {
             return NextResponse.json({ error: "No roles found for company" }, { status: 404});
         };

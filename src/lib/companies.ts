@@ -2,24 +2,24 @@ import { db } from '@/db';
 import { Companies, companies, roles } from '@/db/schema';
 import { eq, sql } from 'drizzle-orm';
 
-export type crc = {
-    id: number;
-    name: string;
-    count: number;
+export type companyRolesCount = {
+    company_id: number;
+    company_name: string;
+    roles_count: number;
 };
 
-export default async function getAllCompanies(): Promise<crc[]> {
+export default async function getAllCompanies(): Promise<companyRolesCount[]> {
     const rcount = db.select({
-        cid: roles.companyId,
-        count: sql<number>`count(${roles.id})`.as('count'),
+        company_id: roles.companyId,
+        roles_count: sql<number>`count(${roles.id})`.as('count'),
     }).from(roles).groupBy(roles.companyId).as('rcount');
-    const companiesAll: crc[] = await db.select({
-        id: companies.id,
-        name: companies.name,
-        count: rcount.count
+    const companiesAll: companyRolesCount[] = await db.select({
+        company_id: companies.id,
+        company_name: companies.name,
+        roles_count: rcount.roles_count
     })
     .from(companies)
-    .leftJoin(rcount, eq(rcount.cid, companies.id));
+    .leftJoin(rcount, eq(rcount.company_id, companies.id));
     return companiesAll;
 };
 
@@ -29,8 +29,8 @@ export async function getCompany(cid: number): Promise<Companies[]> {
     return company;
 };
 
-export async function getCompanyByName(name: string): Promise<Companies[]> {
-    const company: Companies[] = await db.select().from(companies).where(eq(companies.name, name));
+export async function getCompanyByName(cname: string): Promise<Companies[]> {
+    const company: Companies[] = await db.select().from(companies).where(eq(companies.name, cname));
     
     return company;
 };

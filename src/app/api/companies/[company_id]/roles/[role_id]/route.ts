@@ -1,7 +1,7 @@
 import { db } from "@/db";
 import { roles } from "@/db/schema";
 import { getRole } from "@/lib/roles";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest, { params }: { params: { company_id: number, role_id: number }}){
@@ -25,8 +25,7 @@ export async function DELETE(request: Request, { params }: { params: { company_i
       const roleExists = await db
       .select({ id: roles.id })
       .from(roles)
-      .where(eq(roles.id, rslugId))
-      .where(eq(roles.companyId, cslugId));
+      .where(and(eq(roles.id, rslugId), eq(roles.companyId, cslugId)));
       
       if (roleExists.length === 0) {
       return NextResponse.json({ error: 'Role not found' }, { status: 404 });

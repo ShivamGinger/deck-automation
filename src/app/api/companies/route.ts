@@ -2,11 +2,11 @@ import { db } from "@/db";
 import { companies } from "@/db/schema";
 import { createCompanySchema } from "@/utils/bodyValidationSchemas";
 import { NextRequest, NextResponse } from "next/server";
-import getAllCompanies, { getCompanyByName } from "@/lib/companies";
+import getAllCompanies, { companyRolesCount, getCompanyByName } from "@/lib/companies";
 
 export async function GET(request: NextRequest){
   try {
-    const companiesAll = await getAllCompanies();    
+    const companiesAll: companyRolesCount[] = await getAllCompanies();    
     if (companiesAll.length === 0) {
       return NextResponse.json({ error: 'No companies found' }, { status: 404 });
     }

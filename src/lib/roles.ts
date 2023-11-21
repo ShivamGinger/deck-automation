@@ -2,14 +2,22 @@ import { db } from "@/db";
 import { Role, candidates, companies, parameterScores, parameters, quotientScores, roles } from "@/db/schema";
 import { and, desc, eq, sql } from "drizzle-orm";
 
-export async function getCompanyRoles(companyid: number): Promise<Role[]> {
-  const companyRoles: Role[] = await db
+export type companyRoles = {
+  role_id: number;
+  role_name: string;
+  company_id: number;
+  company_name: string;
+  created_at: string | null;
+};
+
+export async function getCompanyRoles(companyid: number): Promise<companyRoles[]> {
+  const companyRoles: companyRoles[] = await db
   .select({
-    id: roles.id,
-    name: roles.name,
-    companyId: roles.companyId,
-    cname: companies.name,
-    createdAt: roles.createdAt
+    role_id: roles.id,
+    role_name: roles.name,
+    company_id: roles.companyId,
+    company_name: companies.name,
+    created_at: roles.createdAt
   })
   .from(roles)
   .innerJoin(companies, eq(companies.id, roles.companyId))
@@ -19,14 +27,14 @@ export async function getCompanyRoles(companyid: number): Promise<Role[]> {
 };
 
 export type roleCandidate = {
-  id: number;
-  candidateName: string;
-  profilePic: string | null;
-  rid: number;
-  rname: string;
-  cid: number;
-  cname: string;
-  keyPoints: unknown | null;
+  candidate_id: number;
+  candidate_name: string;
+  profile_pic: string | null;
+  role_id: number;
+  role_name: string;
+  company_id: number;
+  company_name: string;
+  key_points: unknown | null;
   gp_score: string | null;
 };
 
@@ -37,14 +45,14 @@ export async function getCompanyRoleCandidate(companyid: number, roleid: number)
   }).from(quotientScores).groupBy(quotientScores.candidateId).as('qScoreSum');
     
     const companyRole: roleCandidate[] = await db.select({
-    id: candidates.id,
-    candidateName: candidates.name,
-    profilePic: candidates.profilePic,
-    rid: roles.id,
-    rname: roles.name,
-    cid: companies.id,
-    cname: companies.name,
-    keyPoints: candidates.keyPoints,
+    candidate_id: candidates.id,
+    candidate_name: candidates.name,
+    profile_pic: candidates.profilePic,
+    role_id: roles.id,
+    role_name: roles.name,
+    company_id: companies.id,
+    company_name: companies.name,
+    key_points: candidates.keyPoints,
     gp_score: qScoreSum.gp_score
   })
   .from(candidates)
@@ -56,21 +64,14 @@ export async function getCompanyRoleCandidate(companyid: number, roleid: number)
   return companyRole;
 };
 
-export type role = {
-  id: number;
-  name: string;
-  companyId: number;
-  companyName: string;
-};
-
-export async function getRole(cid: number, rid: number): Promise<role[]> {
-  const role: role[] = await db.select(
+export async function getRole(cid: number, rid: number): Promise<companyRoles[]> {
+  const role: companyRoles[] = await db.select(
     {
-      id: roles.id,
-      name: roles.name,
-      companyId: companies.id,
-      companyName: companies.name,
-      createdAt: roles.createdAt
+      role_id: roles.id,
+      role_name: roles.name,
+      company_id: roles.companyId,
+      company_name: companies.name,
+      created_at: roles.createdAt
     }
   )
   .from(roles)

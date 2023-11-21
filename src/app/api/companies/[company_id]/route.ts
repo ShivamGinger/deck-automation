@@ -1,12 +1,12 @@
 import { db } from "@/db";
-import { companies } from "@/db/schema";
+import { Companies, companies } from "@/db/schema";
 import { getCompany } from "@/lib/companies";
 import { eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest, { params }: { params: { company_id: number }}){
     try {
-      const company = await getCompany(params.company_id);
+      const company: Companies[] = await getCompany(params.company_id);
       if (company.length === 0) {
         return NextResponse.json({ error: 'Company does not exist' }, { status: 404 });
       }
