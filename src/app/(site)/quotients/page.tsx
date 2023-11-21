@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import React, { useLayoutEffect, useState } from 'react';
 
+import { QuotientFactorsCount } from '@/utils/types';
 import Loading from '../Components/Loading';
 import RenderQuotients from './Components/RenderQuotients';
 
@@ -10,7 +11,7 @@ const AllQuotients = () => {
 
   const [loading, setLoading] = useState(true);
 
-  const [quotientWeightageFactors, setQuotientWeightageFactors] = useState([]);
+  const [quotientWeightageFactors, setQuotientWeightageFactors] = useState<QuotientFactorsCount[]>([]);
 
   const [responseDetails, setResponseDetails] = useState<string | null>(null);
 

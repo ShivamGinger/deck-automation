@@ -28,7 +28,7 @@ const AddParameter = () => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        parameter
+        parameter_name: parameter
       }),
       credentials: 'include',
     }

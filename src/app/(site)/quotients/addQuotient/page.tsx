@@ -27,7 +27,7 @@ const AddQuotient = () => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        quotient,
+        quotient_name: quotient,
       }),
       credentials: 'include',
     });

@@ -1,12 +1,20 @@
 'use client';
 
-import { ITEMS_PER_PAGE } from '@/utils/constants';
+import React, { useState } from 'react';
+
 import Image from 'next/image';
 import Link from 'next/link';
-import React, { useState } from 'react';
+
 import ReactPaginate from 'react-paginate';
 
-const RenderQuotients = ({ quotients }: { quotients: { id: number, qname: string, count: number }[] }) => {
+import { ITEMS_PER_PAGE } from '@/utils/constants';
+import { QuotientFactorsCount } from '@/utils/types';
+
+const RenderQuotients = ({
+  quotients
+}: {
+  quotients: QuotientFactorsCount[]
+}) => {
   const [currentPage, setCurrentPage] = useState(0);
 
   const handlePageChange = (selectedPage: { selected: number }) => {
@@ -46,15 +54,15 @@ const RenderQuotients = ({ quotients }: { quotients: { id: number, qname: string
                     {index + 1}
                   </td>
                   <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
-                    {detail.qname}
+                    {detail.quotient_name}
                   </td>
 
                   <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
-                    {detail.count ? detail.count : 0}
+                    {detail.parameter_count ? detail.parameter_count : 0}
                   </td>
 
                   <td className="">
-                    <Link href={`/quotients/${detail.id}`}>
+                    <Link href={`/quotients/${detail.quotient_id}`}>
                       <Image width={20} height={20} src={'/images/plus.png'} alt="edit-icon" className="cursor-pointer" />
                     </Link>
                   </td>

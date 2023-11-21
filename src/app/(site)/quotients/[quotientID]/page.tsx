@@ -1,17 +1,17 @@
 'use client';
 
-import { AQArray, EFArray, IFArray, QuotientFactors, SFArray } from '@/utils/constants';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import React, { useEffect, useLayoutEffect, useState } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 
+import { ParameterFactors } from '@/utils/types';
 import Loading from '../../Components/Loading';
-import Parameters from './Components/Parameters';
+import RenderParameters from './Components/RenderParameters';
 
 const RenderParameter = () => {
   const { quotientID } = useParams();
 
-  const [parameters, setParameters] = useState([]);
+  const [parameters, setParameters] = useState<ParameterFactors[]>([]);
 
   const [quotientName, setQuotientName] = useState('');
 
@@ -28,9 +28,9 @@ const RenderParameter = () => {
 
         if (response.ok) {
           const data = await response.json();
-          
+
           setParameters(data.data);
-          setQuotientName(data.data[0].qname);
+          setQuotientName(data.data[0].quotient_name);
         } else {
           const data = await response.json();
           setResponseDetails(data.error);
@@ -62,7 +62,7 @@ const RenderParameter = () => {
                     </div>
                   </>
                   :
-                  <Parameters
+                  <RenderParameters
                     parameters={parameters}
                     quotientName={quotientName}
                   />

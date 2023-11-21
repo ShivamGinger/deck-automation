@@ -1,11 +1,18 @@
-import { ITEMS_PER_PAGE, QuotientFactors } from '@/utils/constants';
-import Image from 'next/image';
+import { ITEMS_PER_PAGE, } from '@/utils/constants';
+import { ParameterFactors } from '@/utils/types';
+
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import React, { useState } from 'react';
 import ReactPaginate from 'react-paginate';
 
-const Parameters = ({ parameters, quotientName }: { parameters: { pname: string }[], quotientName: string }) => {
+const RenderParameters = ({
+  parameters,
+  quotientName
+}: {
+  parameters: ParameterFactors[],
+  quotientName: string
+}) => {
   const { quotientID } = useParams();
 
   const [currentPage, setCurrentPage] = useState(0);
@@ -45,7 +52,7 @@ const Parameters = ({ parameters, quotientName }: { parameters: { pname: string 
                     {index + 1}
                   </td>
                   <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
-                    {detail.pname}
+                    {detail.quotient_name}
                   </td>
                 </tr>
               ))}
@@ -86,4 +93,4 @@ const Parameters = ({ parameters, quotientName }: { parameters: { pname: string 
   )
 }
 
-export default Parameters
+export default RenderParameters
