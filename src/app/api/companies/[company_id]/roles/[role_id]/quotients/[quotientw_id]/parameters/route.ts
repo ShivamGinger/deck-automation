@@ -4,9 +4,9 @@ import { getAllCmpQuoParameterW, getCmpQuoParameterW, parameterw } from "@/lib/p
 import { createParameterWeiSchema } from "@/utils/bodyValidationSchemas";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(request: NextRequest, { params }: {params: { company_id: number, role_id: number, quotient_id: number}}) {
+export async function GET(request: NextRequest, { params }: {params: { company_id: number, role_id: number, quotientw_id: number}}) {
     try{
-        const parameters: parameterw[] = await getAllCmpQuoParameterW(params.company_id, params.role_id, params.quotient_id);
+        const parameters: parameterw[] = await getAllCmpQuoParameterW(params.company_id, params.role_id, params.quotientw_id);
         return NextResponse.json({ data: parameters }, { status: 200});
     } catch (error: any) {
           console.error('Error fetching parameters:', error);
@@ -14,12 +14,12 @@ export async function GET(request: NextRequest, { params }: {params: { company_i
       };
 };
 
-export async function POST(request: NextRequest, { params }: { params : { company_id: number, role_id: number, quotient_id: number }}) {
+export async function POST(request: NextRequest, { params }: { params : { company_id: number, role_id: number, quotientw_id: number }}) {
     try {
         const requestData = await request.json();
         const cSlug = params.company_id;
         const rSlug = params.role_id;
-        const qSlug = params.quotient_id;
+        const qSlug = params.quotientw_id;
         const parsedData = createParameterWeiSchema.safeParse(requestData);
         if(!parsedData.success) {
           return NextResponse.json({ message: 'Validation error', error: parsedData.error }, { status: 400 });

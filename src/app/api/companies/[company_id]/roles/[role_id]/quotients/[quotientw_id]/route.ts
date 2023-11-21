@@ -6,9 +6,9 @@ import { NextRequest, NextResponse } from "next/server";
 
 //TODO: Implement PUT endpoint here
 
-export async function GET(request: NextRequest, { params }: {params: { company_id: number, role_id: number, quotient_id: number}}) {
+export async function GET(request: NextRequest, { params }: {params: { company_id: number, role_id: number, quotientw_id: number}}) {
     try{
-        const quotient: quotientw[] = await getCmpQuotient(params.company_id, params.role_id, params.quotient_id);
+        const quotient: quotientw[] = await getCmpQuotient(params.company_id, params.role_id, params.quotientw_id);
         return NextResponse.json({ data: quotient }, { status: 200});
     } catch (error: any) {
           console.error('Error fetching quotients:', error);
@@ -16,9 +16,9 @@ export async function GET(request: NextRequest, { params }: {params: { company_i
       };
 };
 
-export async function DELETE(request: NextRequest, { params }: {params: { company_id: number, role_id: number, quotient_id: number}}) {
+export async function DELETE(request: NextRequest, { params }: {params: { company_id: number, role_id: number, quotientw_id: number}}) {
     try{
-        const quotient: quotientw[] = await getCmpQuotient(params.company_id, params.role_id, params.quotient_id);
+        const quotient: quotientw[] = await getCmpQuotient(params.company_id, params.role_id, params.quotientw_id);
         if(quotient.length === 0) {
             return NextResponse.json({ error: 'Weightage for the quotient does not exist' }, { status: 404 });
         };
