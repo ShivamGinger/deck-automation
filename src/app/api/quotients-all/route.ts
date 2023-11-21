@@ -5,7 +5,6 @@ import { createQuotientSchema } from "@/utils/bodyValidationSchemas";
 import { eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 
-//Show weightage of GET-done, DELETE-done
 export async function GET(request: NextRequest) {
     try{
         const quotient: quotientPCount[] = await getQuotientAll();
