@@ -90,3 +90,7 @@ export const createParameterSchema = z.object({
   parameter: z.string(),
 });
 
+export const userRegistrationSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(6)
+});
