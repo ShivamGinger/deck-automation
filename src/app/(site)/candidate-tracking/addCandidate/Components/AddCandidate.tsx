@@ -4,20 +4,19 @@ import React, { ChangeEvent, useEffect, useState } from 'react';
 
 import { useRouter } from 'next/navigation';
 
-import { CandidateTrackingInfo, CandidateTrackingStatus, HandleCandidateInputChangeValue, } from '@/utils/constants';
-
 import ExpAchiv from '@/app/(site)/Components/Candidate/ExpAchiv';
 import KeyPoints from '@/app/(site)/Components/Candidate/KeyPoints';
 import { isValidDateFormat, isValidDecimalNumber, isValidEmail, isValidNumber, validateTrackingCandidates } from '@/app/(site)/Components/Candidate/validationFunctions';
 import Input from '@/app/(site)/Components/Input';
 import ProfilePic from '@/app/(site)/Components/ProfilePic';
 import Select from '@/app/(site)/Components/Select';
+import { AddCandidateTrackingInformation, CandidateTrackingStatus, HandleCandidateInputChangeValue } from '@/utils/types';
 import CustomSelect from './Components/CustomSelect';
 
 const AddCandidate = () => {
   const router = useRouter();
 
-  const [candidateInfo, setCandidateInfo] = useState<CandidateTrackingInfo[]>([]);
+  const [candidateInfo, setCandidateInfo] = useState<AddCandidateTrackingInformation[]>([]);
   const [candidateInputCount, setCandidateInputCount] = useState(0);
 
   const [error, setError] = useState(false);
@@ -38,6 +37,7 @@ const AddCandidate = () => {
   }, [error]);
 
   const handleAddCandidate = () => {
+    setErrorDetails(null);
     setError(false);
 
     if (!validateTrackingCandidates(candidateInfo)) {
@@ -57,30 +57,30 @@ const AddCandidate = () => {
     setCandidateInfo(prevCandidateInfo => [
       ...(prevCandidateInfo),
       {
-        name: '',
+        candidate_name: '',
         keyPoints: [''],
-        profilePic: '',
+        profile_pic: '',
         social: '',
         email: '',
-        currPos: '',
-        currLoc: '',
+        current_position: '',
+        current_location: '',
         experience: '',
-        phNum: '',
-        fixedLpa: '',
-        varLpa: '',
-        expectedCtc: '',
-        noticePeriod: '',
+        phone_number: '',
+        fixed_lpa: '',
+        variable_lpa: '',
+        expected_ctc: '',
+        notice_period: '',
         description: '',
         achievement: [''],
         gender: 'male',
-        currCmp: '',
-        esopRsu: '',
+        current_company: '',
+        esop_rsu: '',
         shareCandidateStatus: false,
         candidateStatus: {
-          profileShrDate: '',
-          status: 'yet_to_share',
-          roundDone: '',
-          reasonReject: ''
+          candidate_profile_share_date: '',
+          candidate_status: 'yet_to_share',
+          candidate_round_completed: '',
+          candidate_reject_reason: ''
         }
       }
     ]);
@@ -99,7 +99,6 @@ const AddCandidate = () => {
     const updatedCandidateInfo = [...candidateInfo];
     updatedCandidateInfo[index - 1] = { ...updatedCandidateInfo[index - 1], [field]: value };
     setCandidateInfo(updatedCandidateInfo);
-
   };
 
   const handleStatuschange = (index: number, value: CandidateTrackingStatus) => {
@@ -108,7 +107,7 @@ const AddCandidate = () => {
       ...updatedCandidateInfo[index - 1],
       candidateStatus: {
         ...updatedCandidateInfo[index - 1].candidateStatus,
-        status: value
+        candidate_status: value
       }
     };
     setCandidateInfo(updatedCandidateInfo);
@@ -120,7 +119,7 @@ const AddCandidate = () => {
       ...updatedCandidateInfo[index - 1],
       candidateStatus: {
         ...updatedCandidateInfo[index - 1].candidateStatus,
-        profileShrDate: value
+        candidate_profile_share_date: value
       }
     };
     setCandidateInfo(updatedCandidateInfo);
@@ -132,7 +131,7 @@ const AddCandidate = () => {
       ...updatedCandidateInfo[index - 1],
       candidateStatus: {
         ...updatedCandidateInfo[index - 1].candidateStatus,
-        roundDone: value
+        candidate_round_completed: value
       }
     };
     setCandidateInfo(updatedCandidateInfo);
@@ -144,7 +143,7 @@ const AddCandidate = () => {
       ...updatedCandidateInfo[index - 1],
       candidateStatus: {
         ...updatedCandidateInfo[index - 1].candidateStatus,
-        reasonReject: value
+        candidate_reject_reason: value
       }
     };
     setCandidateInfo(updatedCandidateInfo);
@@ -183,12 +182,12 @@ const AddCandidate = () => {
               <Input
                 name='Full Name'
                 id={`full_name_${candidateNo}`}
-                placeholder={candidateInfo[candidateNo - 1]?.name}
+                placeholder={candidateInfo[candidateNo - 1]?.candidate_name}
                 required
                 type='text'
-                error={candidateInfo[candidateNo - 1]?.name === ''}
-                moveLabel={candidateInfo[candidateNo - 1]?.name != ''}
-                onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(candidateNo, e.target.value, 'name')}
+                error={candidateInfo[candidateNo - 1]?.candidate_name === ''}
+                moveLabel={candidateInfo[candidateNo - 1]?.candidate_name != ''}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(candidateNo, e.target.value, 'candidate_name')}
               />
               <Input
                 name='Small Description'
@@ -203,8 +202,8 @@ const AddCandidate = () => {
               <ProfilePic
                 handleInputChange={handleInputChange}
                 candidateNo={candidateNo}
-                prevFileUploaded={candidateInfo[candidateNo - 1].profilePic}
-                candidateName={candidateInfo[candidateNo - 1].name}
+                prevFileUploaded={candidateInfo[candidateNo - 1].profile_pic}
+                candidateName={candidateInfo[candidateNo - 1].candidate_name}
                 setErrorDetails={setErrorDetails}
                 setError={setError}
               />
@@ -220,21 +219,21 @@ const AddCandidate = () => {
               <Input
                 name='Current Role'
                 id={`curr_role_${candidateNo}`}
-                placeholder={candidateInfo[candidateNo - 1]?.currPos}
+                placeholder={candidateInfo[candidateNo - 1]?.current_position}
                 required={false}
                 type='text'
-                moveLabel={candidateInfo[candidateNo - 1]?.currPos != ''}
-                onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(candidateNo, e.target.value, 'currPos')}
+                moveLabel={candidateInfo[candidateNo - 1]?.current_position != ''}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(candidateNo, e.target.value, 'current_position')}
               />
 
               <Input
                 name='Current Location'
                 id={`curr_location_${candidateNo}`}
-                placeholder={candidateInfo[candidateNo - 1]?.currLoc}
+                placeholder={candidateInfo[candidateNo - 1]?.current_location}
                 required={false}
                 type='text'
-                moveLabel={candidateInfo[candidateNo - 1]?.currLoc != ''}
-                onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(candidateNo, e.target.value, 'currLoc')}
+                moveLabel={candidateInfo[candidateNo - 1]?.current_location != ''}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(candidateNo, e.target.value, 'current_location')}
               />
 
               <Input
@@ -250,44 +249,44 @@ const AddCandidate = () => {
               <Input
                 name='Expected CTC'
                 id={`exp_ctc_${candidateNo}`}
-                placeholder={candidateInfo[candidateNo - 1]?.expectedCtc}
+                placeholder={candidateInfo[candidateNo - 1]?.expected_ctc}
                 required={false}
                 type='text'
-                moveLabel={candidateInfo[candidateNo - 1]?.expectedCtc != ''}
-                onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(candidateNo, e.target.value, 'expectedCtc')}
+                moveLabel={candidateInfo[candidateNo - 1]?.expected_ctc != ''}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(candidateNo, e.target.value, 'expected_ctc')}
               />
 
               <Input
                 name='Current CTC (eg: 2.65)'
                 id={`exp_ctc_${candidateNo}`}
-                placeholder={candidateInfo[candidateNo - 1]?.fixedLpa}
-                error={String(candidateInfo[candidateNo - 1]?.fixedLpa) != '' && !isValidDecimalNumber(candidateInfo[candidateNo - 1]?.fixedLpa)}
+                placeholder={candidateInfo[candidateNo - 1]?.fixed_lpa}
+                error={String(candidateInfo[candidateNo - 1]?.fixed_lpa) != '' && !isValidDecimalNumber(candidateInfo[candidateNo - 1]?.fixed_lpa)}
                 required={false}
                 type='text'
-                moveLabel={String(candidateInfo[candidateNo - 1]?.fixedLpa) != ''}
-                onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(candidateNo, e.target.value, 'fixedLpa')}
+                moveLabel={String(candidateInfo[candidateNo - 1]?.fixed_lpa) != ''}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(candidateNo, e.target.value, 'fixed_lpa')}
               />
 
               <Input
                 name='Variable CTC (eg: 2.65)'
                 id={`exp_ctc_${candidateNo}`}
-                placeholder={String(candidateInfo[candidateNo - 1]?.varLpa)}
+                placeholder={String(candidateInfo[candidateNo - 1]?.variable_lpa)}
                 required={false}
-                error={String(candidateInfo[candidateNo - 1]?.varLpa) != '' && !isValidDecimalNumber(candidateInfo[candidateNo - 1]?.varLpa)}
+                error={String(candidateInfo[candidateNo - 1]?.variable_lpa) != '' && !isValidDecimalNumber(candidateInfo[candidateNo - 1]?.variable_lpa)}
                 type='text'
-                moveLabel={String(candidateInfo[candidateNo - 1]?.varLpa) != ''}
-                onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(candidateNo, e.target.value, 'varLpa')}
+                moveLabel={String(candidateInfo[candidateNo - 1]?.variable_lpa) != ''}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(candidateNo, e.target.value, 'variable_lpa')}
               />
 
               <Input
                 name='Phone Number'
                 id={`phn_no_${candidateNo}`}
-                placeholder={candidateInfo[candidateNo - 1]?.phNum}
+                placeholder={candidateInfo[candidateNo - 1]?.phone_number}
                 required
-                error={candidateInfo[candidateNo - 1]?.phNum.length < 10 || candidateInfo[candidateNo - 1]?.phNum.length > 15}
+                error={candidateInfo[candidateNo - 1]?.phone_number.length < 10 || candidateInfo[candidateNo - 1]?.phone_number.length > 15}
                 type='text'
-                moveLabel={candidateInfo[candidateNo - 1]?.phNum != ''}
-                onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(candidateNo, e.target.value, 'phNum')}
+                moveLabel={candidateInfo[candidateNo - 1]?.phone_number != ''}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(candidateNo, e.target.value, 'phone_number')}
               />
 
               <Input
@@ -314,22 +313,22 @@ const AddCandidate = () => {
               <Input
                 name='Current Company'
                 id={`curr_cmp_${candidateNo}`}
-                placeholder={candidateInfo[candidateNo - 1]?.currCmp}
+                placeholder={candidateInfo[candidateNo - 1]?.current_company}
                 required={false}
                 type='text'
-                moveLabel={candidateInfo[candidateNo - 1]?.currCmp != ''}
-                onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(candidateNo, e.target.value, 'currCmp')}
+                moveLabel={candidateInfo[candidateNo - 1]?.current_company != ''}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(candidateNo, e.target.value, 'current_company')}
               />
 
               <Input
                 name='ESOP/RSU'
                 id={`esop_rsu_${candidateNo}`}
-                placeholder={candidateInfo[candidateNo - 1]?.esopRsu}
+                placeholder={candidateInfo[candidateNo - 1]?.esop_rsu}
                 required={false}
                 type='text'
-                error={candidateInfo[candidateNo - 1]?.esopRsu != '' && !isValidDecimalNumber(candidateInfo[candidateNo - 1]?.esopRsu)}
-                moveLabel={candidateInfo[candidateNo - 1]?.esopRsu != ''}
-                onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(candidateNo, e.target.value, 'esopRsu')}
+                error={candidateInfo[candidateNo - 1]?.esop_rsu != '' && !isValidDecimalNumber(candidateInfo[candidateNo - 1]?.esop_rsu)}
+                moveLabel={candidateInfo[candidateNo - 1]?.esop_rsu != ''}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(candidateNo, e.target.value, 'esop_rsu')}
               />
 
               <KeyPoints
@@ -351,6 +350,7 @@ const AddCandidate = () => {
                 setError={setError}
                 setErrorDetails={setErrorDetails}
               />
+
               <div>
                 <div className='flex flex-row justify-between pt-4 gap-4'>
                   <p className='text-[16px] leading-tight font-semibold self-center'>
@@ -373,32 +373,32 @@ const AddCandidate = () => {
                   <Input
                     name='Profile Share Date (YYYY/MM/DD)'
                     id={`candidate_profile_${candidateNo}`}
-                    placeholder={candidateInfo[candidateNo - 1]?.candidateStatus?.profileShrDate}
+                    placeholder={candidateInfo[candidateNo - 1]?.candidateStatus?.candidate_profile_share_date}
                     required={false}
                     type='text'
-                    error={candidateInfo[candidateNo - 1]?.candidateStatus?.profileShrDate != '' && !isValidDateFormat(candidateInfo[candidateNo - 1]?.candidateStatus?.profileShrDate)}
-                    moveLabel={candidateInfo[candidateNo - 1]?.candidateStatus?.profileShrDate != ''}
+                    error={candidateInfo[candidateNo - 1]?.candidateStatus?.candidate_profile_share_date != '' && !isValidDateFormat(candidateInfo[candidateNo - 1]?.candidateStatus?.candidate_profile_share_date)}
+                    moveLabel={candidateInfo[candidateNo - 1]?.candidateStatus?.candidate_profile_share_date != ''}
                     onChange={(e: ChangeEvent<HTMLInputElement>) => handleProfileShareDateChange(candidateNo, e.target.value)}
                   />
 
                   <Input
                     name='Reason Rejected'
                     id={`candidate_profile_${candidateNo}`}
-                    placeholder={candidateInfo[candidateNo - 1]?.candidateStatus?.reasonReject}
+                    placeholder={candidateInfo[candidateNo - 1]?.candidateStatus?.candidate_reject_reason}
                     required={false}
                     type='text'
-                    moveLabel={candidateInfo[candidateNo - 1]?.candidateStatus?.reasonReject != ''}
+                    moveLabel={candidateInfo[candidateNo - 1]?.candidateStatus?.candidate_reject_reason != ''}
                     onChange={(e: ChangeEvent<HTMLInputElement>) => handleReasonRejectChange(candidateNo, e.target.value)}
                   />
 
                   <Input
                     name='Round Done (eg: 1)'
                     id={`candidate_profile_${candidateNo}`}
-                    placeholder={candidateInfo[candidateNo - 1]?.candidateStatus?.roundDone}
+                    placeholder={candidateInfo[candidateNo - 1]?.candidateStatus?.candidate_round_completed}
                     required={false}
                     type='text'
-                    error={candidateInfo[candidateNo - 1]?.candidateStatus?.roundDone != '' && !isValidNumber(candidateInfo[candidateNo - 1]?.candidateStatus?.roundDone)}
-                    moveLabel={candidateInfo[candidateNo - 1]?.candidateStatus?.roundDone != ''}
+                    error={candidateInfo[candidateNo - 1]?.candidateStatus?.candidate_round_completed != '' && !isValidNumber(candidateInfo[candidateNo - 1]?.candidateStatus?.candidate_round_completed)}
+                    moveLabel={candidateInfo[candidateNo - 1]?.candidateStatus?.candidate_round_completed != ''}
                     onChange={(e: ChangeEvent<HTMLInputElement>) => handleRoundDoneChange(candidateNo, e.target.value)}
                   />
 
@@ -409,7 +409,7 @@ const AddCandidate = () => {
                     </p>
                     <CustomSelect
                       id={`candidate_status_choose_${candidateNo}`}
-                      value={candidateInfo[candidateNo - 1].candidateStatus?.status}
+                      value={candidateInfo[candidateNo - 1].candidateStatus?.candidate_status}
                       options={[
                         { value: 'yet_to_share', text: 'Yet To Share' },
                         { value: 'joined', text: 'Joined' },
@@ -452,16 +452,16 @@ const AddCandidate = () => {
         body: JSON.stringify({
           candidateInfo: candidateInfo.map(candidate => ({
             ...candidate,
-            esopRsu: candidate.esopRsu ? parseFloat(candidate.esopRsu) : null,
-            fixedLpa: candidate.fixedLpa ? parseFloat(candidate.fixedLpa) : null,
-            varLpa: candidate.varLpa ? parseFloat(candidate.varLpa) : null,
-            companyId: null,
-            roleId: null,
+            esop_rsu: candidate.esop_rsu ? parseFloat(candidate.esop_rsu) : null,
+            fixed_lpa: candidate.fixed_lpa ? parseFloat(candidate.fixed_lpa) : null,
+            variable_lpa: candidate.variable_lpa ? parseFloat(candidate.variable_lpa) : null,
+            company_id: null,
+            role_id: null,
             ...(candidate.shareCandidateStatus ?
               {
                 candidateStatus: {
                   ...candidate.candidateStatus,
-                  roundDone: candidate.candidateStatus.roundDone ? parseInt(candidate.candidateStatus.roundDone) : null
+                  candidate_round_completed: candidate.candidateStatus.candidate_round_completed ? parseInt(candidate.candidateStatus.candidate_round_completed) : null
                 }
               } :
               { shareCandidateStatus: false }

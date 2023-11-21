@@ -1,26 +1,14 @@
 "use client";
 
-import { CandidateInformation } from '@/utils/constants';
 import Link from 'next/link';
 import React, { useLayoutEffect, useState } from 'react';
-import ReactPaginate from 'react-paginate';
-import Loading from '../Components/Loading';
-import AllCandidateListing from './Components/AllCandidateListing';
-import Status from './Components/Status';
 
-const status = [
-  'yet_to_share',
-  'joined',
-  'negotiation',
-  'in_process',
-  'on_hold',
-  'feedback_pending',
-  'dropped_out',
-  'rejected'
-]
+import { CompleteCandidateInformation } from '@/utils/types';
+import Loading from '../Components/Loading';
+import RenderCandidatesForTracking from './Components/RenderCandidatesForTracking';
 
 const CandidateListing = () => {
-  const [candidates, setCandidates] = useState([]);
+  const [candidates, setCandidates] = useState<CompleteCandidateInformation[]>([]);
 
   const [loading, setLoading] = useState(true);
 
@@ -35,6 +23,7 @@ const CandidateListing = () => {
 
         if (response.ok) {
           const data = await response.json();
+
           setCandidates(data.data);
         } else {
           const data = await response.json();
@@ -67,7 +56,7 @@ const CandidateListing = () => {
                     </div>
                   </>
                   :
-                  <AllCandidateListing
+                  <RenderCandidatesForTracking
                     candidates={candidates}
                   />
                 }

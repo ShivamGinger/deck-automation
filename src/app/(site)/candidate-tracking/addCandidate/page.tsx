@@ -1,9 +1,10 @@
 'use client';
 
-import Input from '@/app/(site)/Components/Input';
+import React from 'react';
+
 import Image from 'next/image';
-import { useParams, useRouter } from 'next/navigation';
-import React, { ChangeEvent, useState } from 'react';
+import { useRouter } from 'next/navigation';
+
 import AddCandidate from './Components/AddCandidate';
 
 const AddCandidateTracking = () => {
@@ -21,7 +22,7 @@ const AddCandidateTracking = () => {
 
           <div className="space-y-12 flex flex-col">
             <AddCandidate />
-            
+
           </div>
 
         </div>

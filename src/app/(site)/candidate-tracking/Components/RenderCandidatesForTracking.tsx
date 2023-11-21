@@ -1,30 +1,19 @@
 "use client";
 
-import { CandidateInfo, CandidateInformation, ITEMS_PER_PAGE } from '@/utils/constants';
+import { ITEMS_PER_PAGE } from '@/utils/constants';
+import { CompleteCandidateInformation } from '@/utils/types';
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { useLayoutEffect, useState } from 'react';
 import ReactPaginate from 'react-paginate';
 import Status from './Status';
 
-const status = [
-  'yet_to_share',
-  'joined',
-  'negotiation',
-  'in_process',
-  'on_hold',
-  'feedback_pending',
-  'dropped_out',
-  'rejected'
-]
-
-interface Candidate extends CandidateInformation {
-  company: string,
-  role: string,
-  status: 'yet_to_share' | 'joined' | 'negotiation' | 'in_process' | 'on_hold' | 'feedback_pending' | 'dropped_out' | 'rejected'
-}
-
-const AllCandidateListing = ({ candidates }: { candidates: Candidate[] }) => {
+const RenderCandidatesForTracking = ({
+  candidates
+}:
+  {
+    candidates: CompleteCandidateInformation[]
+  }) => {
   const [currentPage, setCurrentPage] = useState(0);
 
   const handlePageChange = (selectedPage: { selected: number }) => {
@@ -81,49 +70,49 @@ const AllCandidateListing = ({ candidates }: { candidates: Candidate[] }) => {
                         {index + 1}
                       </td>
                       <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
-                        {detail.name}
+                        {detail.candidate_name}
                       </td>
 
-                      <Status candidateStatus={detail.status} />
+                      <Status candidateStatus={detail.candidate_status} />
 
                       <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
                         {detail.email}
                       </td>
                       <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
-                        {detail.phNum}
+                        {detail.phone_number}
                       </td>
                       <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
                         {detail.gender}
                       </td>
                       <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
-                        {detail.currPos}
+                        {detail.current_position}
                       </td>
                       <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
-                        {detail.currCmp}
+                        {detail.current_company}
                       </td>
                       <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
-                        {detail.currLoc}
+                        {detail.current_location}
                       </td>
                       <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
                         {detail.experience}
                       </td>
                       <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
-                        {detail.fixedLpa}
+                        {detail.fixed_lpa}
                       </td>
                       <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
-                        {detail.varLpa}
+                        {detail.variable_lpa}
                       </td>
                       <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
-                        {detail.expectedCtc}
+                        {detail.expected_ctc}
                       </td>
                       <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
-                        {detail.esopRsu}
+                        {detail.esop_rsu}
                       </td>
                       <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
-                        {detail.noticePeriod}
+                        {detail.notice_period}
                       </td>
                       <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
-                        <Link href={detail.social} target='_blank' rel='noopener noreferrer'>{detail.name}</Link>
+                        <Link href={detail.social} target='_blank' rel='noopener noreferrer'>{detail.candidate_name}</Link>
                       </td>
                       <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
                         {detail.description}
@@ -177,4 +166,4 @@ const AllCandidateListing = ({ candidates }: { candidates: Candidate[] }) => {
   )
 }
 
-export default AllCandidateListing
+export default RenderCandidatesForTracking
