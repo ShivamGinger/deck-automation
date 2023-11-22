@@ -52,7 +52,7 @@ const RenderParameters = ({
                     {index + 1}
                   </td>
                   <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
-                    {detail.quotient_name}
+                    {detail.parameter_name}
                   </td>
                 </tr>
               ))}

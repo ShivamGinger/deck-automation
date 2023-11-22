@@ -71,7 +71,7 @@ export const createQuotientWeiSchema = z.object({
 });
 
 export const createQuotientSchema = z.object({
-  quotient: z.string(),
+  quotient_name: z.string(),
 });
 
 export const createParameterWeiSchema = z.object({
@@ -87,7 +87,7 @@ export const createParameterWeiSchema = z.object({
 });
 
 export const createParameterSchema = z.object({
-  parameter: z.string(),
+  parameter_name: z.string(),
 });
 
 export const userRegistrationSchema = z.object({
