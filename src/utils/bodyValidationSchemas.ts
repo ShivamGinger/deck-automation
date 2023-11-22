@@ -41,7 +41,7 @@ export const deleteCandidateSchema = z.object({
 });
 
 export const createCompanySchema = z.object({
-  name: z.string(),
+  company_name: z.string(),
 });
 
 export const deleteCompanySchema = z.object({
@@ -49,8 +49,7 @@ export const deleteCompanySchema = z.object({
 });
 
 export const createRoleSchema = z.object({
-  name: z.string(),
-  companyId: z.number(),
+  role_name: z.string(),
 });
 
 export const deleteRoleSchema = z.object({
