@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
       await db.transaction(async (txn) => {
         await txn.insert(candidates).values({
           name: data.candidate_name,
-          keyPoints: { "keyPoints": data.key_points },
+          keyPoints: data.key_points,
           profilePic: data.profile_pic,
           social: data.social,
           email: data.email,
@@ -47,7 +47,7 @@ export async function POST(request: NextRequest) {
           expectedCtc: data.expected_ctc,
           noticePeriod: data.notice_period,
           description: data.description,
-          achievement: { "achievement": data.achievement },
+          achievement: data.achievement,
           gender: data.gender,
           currCmp: data.current_company,
           esopRsu: data.esop_rsu
