@@ -27,7 +27,7 @@ export async function POST(request: NextRequest, { params }: { params : { compan
         for( const data of parsedData.data.quotientW) {
             const quoWeightageExists = await cmpQuotientExist(cSlug, rSlug, data.quotientId);
             await db.transaction(async (txn) => {
-                if (quoWeightageExists) {
+                if (quoWeightageExists.length !== 0) {
                     return NextResponse.json({ error: "Quotient weightage already exists" }, { status: 409 });
                 };
                 await txn.insert(quotientWeightages).values({
