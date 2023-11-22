@@ -33,7 +33,7 @@ export async function getAllCandStat(): Promise<candidateStatus[]> {
   
   return result;
 };
-export type candidates = {
+export type candidate = {
   candidate_id: number;
   candidate_name: string;
   key_points: unknown | null;
@@ -64,8 +64,8 @@ export type candidates = {
   created_at: string;
 };
 
-export default async function getAllCandidatesWStatus(): Promise<candidates[]> {
-  const result: candidates[] = await db.select({
+export default async function getAllCandidatesWStatus(): Promise<candidate[]> {
+  const result: candidate[] = await db.select({
     candidate_id: candidates.id,
     candidate_name: candidates.name,
     key_points: candidates.keyPoints,
@@ -103,9 +103,9 @@ export default async function getAllCandidatesWStatus(): Promise<candidates[]> {
   return result;
 };
 
-export async function getCandidate(id: number): Promise<candidates[]> {
+export async function getCandidate(id: number): Promise<candidate[]> {
   
-  const result: candidates[] = await db.select({
+  const result: candidate[] = await db.select({
     candidate_id: candidates.id,
     candidate_name: candidates.name,
     key_points: candidates.keyPoints,
