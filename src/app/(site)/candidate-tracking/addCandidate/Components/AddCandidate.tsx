@@ -58,7 +58,7 @@ const AddCandidate = () => {
       ...(prevCandidateInfo),
       {
         candidate_name: '',
-        keyPoints: [''],
+        key_points: [''],
         profile_pic: '',
         social: '',
         email: '',
@@ -342,8 +342,8 @@ const AddCandidate = () => {
               />
 
               <KeyPoints
-                placeholderData={candidateInfo[candidateNo - 1].keyPoints}
-                count={candidateInfo[candidateNo - 1].keyPoints.length}
+                placeholderData={candidateInfo[candidateNo - 1].key_points}
+                count={candidateInfo[candidateNo - 1].key_points.length}
                 handleInputChange={handleInputChange}
                 candidateNo={candidateNo}
                 error={error}
@@ -460,7 +460,7 @@ const AddCandidate = () => {
       const response = await fetch('/api/candidates', {
         method: 'POST',
         body: JSON.stringify({
-          candidateInfo: candidateInfo.map(candidate => ({
+          candidate_information: candidateInfo.map(candidate => ({
             ...candidate,
             esop_rsu: candidate.esop_rsu ? parseFloat(candidate.esop_rsu) : null,
             fixed_lpa: candidate.fixed_lpa ? parseFloat(candidate.fixed_lpa) : null,
