@@ -34,19 +34,11 @@ export type roleCandidate = {
   role_name: string;
   company_id: number;
   company_name: string;
-  key_points: unknown | null;
+  description: string | null;
   gp_score: string | null;
 };
 
 export async function getCompanyRoleCandidate(companyid: number, roleid: number): Promise<roleCandidate[]> {
-  // const qWeightage = db.select({
-  //   quotient_weightage_id: quotientWeightages.id,
-  //   quotient_weightage: quotientWeightages.qWeightage,
-  //   quotient_score: quotientScores.totalScore,
-  //   quotient_total_score: quotientScores.totalScore * quotientWeightages.qWeightage,
-
-  // })
-  
   const qScoreSum = db.select({
     candidateId: quotientScores.candidateId,
     gp_score: sql<number>`sum(${quotientScores.totalScore} * ${quotientWeightages.qWeightage})`.mapWith(quotientScores.totalScore).as('gp_score')
@@ -65,7 +57,7 @@ export async function getCompanyRoleCandidate(companyid: number, roleid: number)
     role_name: roles.name,
     company_id: companies.id,
     company_name: companies.name,
-    key_points: candidates.keyPoints,
+    description: candidates.description,
     gp_score: qScoreSum.gp_score
   })
   .from(candidates)
