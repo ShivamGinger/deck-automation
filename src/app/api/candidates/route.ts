@@ -6,7 +6,7 @@ import { db } from "@/db";
 import { candidateStatus, candidates, roles } from "@/db/schema";
 
 import { createCandidateSchema } from "@/utils/bodyValidationSchemas";
-import { sql, eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 
 export async function GET(request: NextRequest) {
   try {
@@ -16,59 +16,61 @@ export async function GET(request: NextRequest) {
     }
     return NextResponse.json({ data: candidates }, { status: 200 });
   } catch (error: any) {
-      console.error('Error fetching candidate:', error);
-      return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
-    };
+    console.error('Error fetching candidate:', error);
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+  };
 };
 
 export async function POST(request: NextRequest) {
   try {
     const requestData = await request.json();
+
     const parsedData = createCandidateSchema.safeParse(requestData);
     if (!parsedData.success) {
       return NextResponse.json({ message: "Validation Error", error: `${parsedData.error}` }, { status: 400 });
     };
-    for( const data of parsedData.data.candidateInfo) {
+
+    for (const data of parsedData.data.candidateInfo) {
       await db.transaction(async (txn) => {
         await txn.insert(candidates).values({
-          name: data.name,
-          keyPoints: {"keyPoints": data.keyPoints},
-          profilePic: data.profilePic,
+          name: data.candidate_name,
+          keyPoints: { "keyPoints": data.keyPoints },
+          profilePic: data.profile_pic,
           social: data.social,
-          companyId: data.companyId,
-          roleId: data.roleId,
+          companyId: data.company_id,
+          roleId: data.role_id,
           email: data.email,
-          currPos: data.currPos,
-          currLoc: data.currLoc,
+          currPos: data.current_position,
+          currLoc: data.current_location,
           experience: data.experience,
-          phNum: data.phNum,
-          fixedLpa: data.fixedLpa,
-          varLpa: data.varLpa,
-          expectedCtc: data.expectedCtc,
-          noticePeriod: data.noticePeriod,
+          phNum: data.phone_number,
+          fixedLpa: data.fixed_lpa,
+          varLpa: data.variable_lpa,
+          expectedCtc: data.expected_ctc,
+          noticePeriod: data.notice_period,
           description: data.description,
-          achievement: {"achievement": data.achievement},
+          achievement: { "achievement": data.achievement },
           gender: data.gender,
-          currCmp: data.currCmp,
-          esopRsu: data.esopRsu
+          currCmp: data.current_company,
+          esopRsu: data.esop_rsu
         }
         );
         const candId: any = await txn.execute(sql`SELECT LAST_INSERT_ID()`);
-        if (data.shareCandidateStatus){
+        if (data.shareCandidateStatus) {
           const statusData = data.candidateStatus
           await txn.insert(candidateStatus).values({
             candidateId: parseInt(candId.rows[0]["LAST_INSERT_ID()"]),
-            profileShrDate: statusData?.profileShrDate,
-            status: statusData?.status,
-            roundDone: statusData?.roundDone,
-            reasonReject: statusData?.reasonReject
+            profileShrDate: statusData?.candidate_profile_share_date,
+            status: statusData?.candidate_status,
+            roundDone: statusData?.candidate_round_completed,
+            reasonReject: statusData?.candidate_reject_reason
           })
         };
-        
+
       });
     };
     return NextResponse.json({ status: 201 });
-  
+
   } catch (error: any) {
     console.error('Error adding candidates:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });

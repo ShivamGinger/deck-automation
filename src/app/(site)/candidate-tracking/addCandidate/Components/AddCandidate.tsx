@@ -309,6 +309,16 @@ const AddCandidate = () => {
                 moveLabel={candidateInfo[candidateNo - 1]?.social != ''}
                 onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(candidateNo, e.target.value, 'social')}
               />
+              
+              <Input
+                name='Notice Period'
+                id={`notice_period_${candidateNo}`}
+                placeholder={candidateInfo[candidateNo - 1]?.notice_period}
+                required={false}
+                type='text'
+                moveLabel={candidateInfo[candidateNo - 1]?.notice_period != ''}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(candidateNo, e.target.value, 'notice_period')}
+              />
 
               <Input
                 name='Current Company'
@@ -476,6 +486,7 @@ const AddCandidate = () => {
 
       } else {
         const errorData = await response.json();
+        console.log(errorData);
 
         setError(true);
         setErrorDetails(errorData.error);

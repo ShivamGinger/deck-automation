@@ -5,33 +5,33 @@ import { z } from "zod";
 export const createCandidateSchema = z.object({
   candidateInfo: z.array(
     z.object({
-      name: z.string(),
+      candidate_name: z.string(),
       keyPoints: z.array(z.string()).nullable(),
-      profilePic: z.string().nullable(),
-      companyId: z.number().nullable(),
-      roleId: z.number().nullable(),
+      profile_pic: z.string().nullable(),
+      company_id: z.number().nullable(),
+      role_id: z.number().nullable(),
       social: z.string().nullable(),
       email: z.string().email(),
-      currPos: z.string().nullable(),
-      currLoc: z.string().nullable(),
+      current_position: z.string().nullable(),
+      current_location: z.string().nullable(),
       experience: z.string().nullable(),
-      phNum: z.string().min(10).max(14),
-      fixedLpa: z.number().multipleOf(0.01).nullable(),
-      varLpa: z.number().multipleOf(0.01).nullable(),
-      expectedCtc: z.string().nullable(),
-      noticePeriod: z.string().nullable(),
+      phone_number: z.string().min(10).max(14),
+      fixed_lpa: z.number().multipleOf(0.01).nullable(),
+      variable_lpa: z.number().multipleOf(0.01).nullable(),
+      expected_ctc: z.string().nullable(),
+      notice_period: z.string().nullable(),
       description: z.string().nullable(),
       achievement: z.array(z.string()).nullable(),
       gender: z.enum(['male', 'female', 'other']),
-      currCmp: z.string().nullable(),
-      esopRsu: z.number().multipleOf(0.01).nullable(),
+      current_company: z.string().nullable(),
+      esop_rsu: z.number().multipleOf(0.01).nullable(),
       shareCandidateStatus: z.boolean(),
       candidateStatus: z.object({
-        profileShrDate: z.string().nullable(),
-        status: z.enum(['yet_to_share', 'joined', 'negotiation', 'on_hold', 'feedback_pending', 'dropped_out', 'rejected', 'in_process']).nullable(),
-        roundDone: z.number().nullable(),
-        reasonReject: z.string().nullable(),
-    }).nullable()
+        candidate_profile_share_date: z.string().nullable(),
+        candidate_status: z.enum(['yet_to_share', 'joined', 'negotiation', 'on_hold', 'feedback_pending', 'dropped_out', 'rejected', 'in_process']).nullable(),
+        candidate_round_completed: z.number().nullable(),
+        candidate_reject_reason: z.string().nullable(),
+      }).nullable()
     })
   )
 });
