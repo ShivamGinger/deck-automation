@@ -6,7 +6,7 @@ export const createCandidateSchema = z.object({
   candidateInfo: z.array(
     z.object({
       candidate_name: z.string(),
-      keyPoints: z.array(z.string()).nullable(),
+      key_points: z.array(z.string()).nullable(),
       profile_pic: z.string().nullable(),
       company_id: z.number().nullable(),
       role_id: z.number().nullable(),
@@ -25,8 +25,8 @@ export const createCandidateSchema = z.object({
       gender: z.enum(['male', 'female', 'other']),
       current_company: z.string().nullable(),
       esop_rsu: z.number().multipleOf(0.01).nullable(),
-      shareCandidateStatus: z.boolean(),
-      candidateStatus: z.object({
+      share_candidate_status: z.boolean(),
+      candidate_status: z.object({
         candidate_profile_share_date: z.string().nullable(),
         candidate_status: z.enum(['yet_to_share', 'joined', 'negotiation', 'on_hold', 'feedback_pending', 'dropped_out', 'rejected', 'in_process']).nullable(),
         candidate_round_completed: z.number().nullable(),
