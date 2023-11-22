@@ -5,7 +5,7 @@ import getAllCandidatesWStatus from "@/lib/candidates";
 import { db } from "@/db";
 import { candidateStatus, candidates, roles } from "@/db/schema";
 
-import { createCandidateSchema } from "@/utils/bodyValidationSchemas";
+import { createCandidateSchema, createOrphanCandidateSchema } from "@/utils/bodyValidationSchemas";
 import { eq, sql } from "drizzle-orm";
 
 export async function GET(request: NextRequest) {
@@ -25,20 +25,18 @@ export async function POST(request: NextRequest) {
   try {
     const requestData = await request.json();
 
-    const parsedData = createCandidateSchema.safeParse(requestData);
+    const parsedData = createOrphanCandidateSchema.safeParse(requestData);
     if (!parsedData.success) {
       return NextResponse.json({ message: "Validation Error", error: `${parsedData.error}` }, { status: 400 });
     };
 
-    for (const data of parsedData.data.candidateInfo) {
+    for (const data of parsedData.data.candidate_information) {
       await db.transaction(async (txn) => {
         await txn.insert(candidates).values({
           name: data.candidate_name,
-          keyPoints: { "keyPoints": data.keyPoints },
+          keyPoints: { "keyPoints": data.key_points },
           profilePic: data.profile_pic,
           social: data.social,
-          companyId: data.company_id,
-          roleId: data.role_id,
           email: data.email,
           currPos: data.current_position,
           currLoc: data.current_location,
@@ -56,8 +54,8 @@ export async function POST(request: NextRequest) {
         }
         );
         const candId: any = await txn.execute(sql`SELECT LAST_INSERT_ID()`);
-        if (data.shareCandidateStatus) {
-          const statusData = data.candidateStatus
+        if (data.share_candidate_status) {
+          const statusData = data.candidate_status
           await txn.insert(candidateStatus).values({
             candidateId: parseInt(candId.rows[0]["LAST_INSERT_ID()"]),
             profileShrDate: statusData?.candidate_profile_share_date,
