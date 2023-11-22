@@ -1,19 +1,23 @@
 import { db } from "@/db";
 import { Companies, Role, candidateStatus, candidates, parameterScores, parameterWeightages, parameters, quotientScores } from "@/db/schema";
 import { getCompany } from "@/lib/companies";
-import { getCompanyRoleCandidate, getCompanyRoles, roleCandidate } from "@/lib/roles";
+import { companyRoles, getCompanyRoleCandidates, getCompanyRoles, getRole, roleCandidates } from "@/lib/roles";
 import { createCandidateSchema } from "@/utils/bodyValidationSchemas";
 import { and, eq, sql } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 import { paramWeightage, paramQuotientId } from "@/lib/parameters";
 
-export async function GET(request: NextResponse, { params }: { params: { company_id: number, role_id: number}}) {
+export async function GET(request: NextRequest, { params }: { params: { company_id: number, role_id: number}}) {
     try{
         const companyIdExist: Companies[] = await getCompany(params.company_id);
         if (companyIdExist.length === 0) {
           return NextResponse.json({ error: "Company not found" }, { status: 404 });
         };
-        const rolesCandidate: roleCandidate[] = await getCompanyRoleCandidate(params.company_id, params.role_id);
+        const roleIdExist: companyRoles[] = await getRole(params.company_id, params.role_id);
+        if (roleIdExist.length === 0) {
+            return NextResponse.json({ error: "Role not found" }, { status: 404 });
+          };
+        const rolesCandidate: roleCandidates[] = await getCompanyRoleCandidates(params.company_id, params.role_id);
         if (rolesCandidate.length === 0) {
             return NextResponse.json({ error: "No candidates under this role" }, { status: 404});
         };
