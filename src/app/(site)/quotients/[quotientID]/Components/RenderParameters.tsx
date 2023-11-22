@@ -1,10 +1,13 @@
-import { ITEMS_PER_PAGE, } from '@/utils/constants';
-import { ParameterFactors } from '@/utils/types';
+import React, { useState } from 'react';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import React, { useState } from 'react';
+
 import ReactPaginate from 'react-paginate';
+
+import { ITEMS_PER_PAGE, } from '@/utils/constants';
+import { ParameterFactors } from '@/utils/types';
 
 const RenderParameters = ({
   parameters,
@@ -52,7 +55,17 @@ const RenderParameters = ({
                     {index + 1}
                   </td>
                   <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
-                    {detail.parameter_name}
+                    <div className='flex justify-center'>
+                      <div className='flex gap-2'>
+                        <span>{detail.parameter_name}</span>
+                        <span className=''>
+                          <Link href={`/quotients/${quotientID}/edit/${detail.parameter_id}`}>
+                            <Image width={20} height={20} src={'/images/edit.png'} alt="edit-icon" className="cursor-pointer" />
+                          </Link>
+                        </span>
+                      </div>
+                    </div>
+
                   </td>
                 </tr>
               ))}
