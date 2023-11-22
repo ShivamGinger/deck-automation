@@ -3,13 +3,13 @@
 import React, { ChangeEvent, Dispatch, SetStateAction, useEffect, useLayoutEffect, useState } from 'react';
 
 import Image from 'next/image';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 
 import Loading from '@/app/(site)/Components/Loading';
 import { ParameterFactors } from '@/utils/types';
-import Input from '../../../Components/Input';
-import Modal from '../../../Components/Modal';
-import Select from '../../../Components/Select';
+import Input from '../../../../Components/Input';
+import Modal from '../../../../Components/Modal';
+import Select from '../../../../Components/Select';
 
 interface ParametersUnderQuotientsError extends ParameterFactors {
   error: boolean
@@ -26,7 +26,11 @@ interface parametersUnderQuotientsend extends ParameterFactors {
 const AddParameterUnderQuotient = () => {
   const router = useRouter();
 
-  const { companyID, roleID, quotientID } = useParams();
+  const { companyID, roleID, quotient_w_ID } = useParams();
+
+  const searchParams = useSearchParams();
+
+  const quotientID = searchParams.get('qid');
 
   const [quotientName, setQuotientName] = useState('');
 
@@ -54,7 +58,6 @@ const AddParameterUnderQuotient = () => {
         setQuotientName(data.data[0].quotient_name);
       } else {
         const data = await response.json();
-        console.log(data);
 
         setError(true);
         setErrorDetails(data.error);
@@ -209,11 +212,10 @@ const AddParameterUnderQuotient = () => {
 
       if (response.ok) {
 
-        router.push(`/deck-automation/${companyID}/${roleID}/${quotientID}`);
+        router.push(`/deck-automation/${companyID}/${roleID}/quotients/${quotient_w_ID}`);
 
       } else {
         const data = await response.json();
-        console.log(data);
 
         setError(true);
         setErrorDetails(data.data);

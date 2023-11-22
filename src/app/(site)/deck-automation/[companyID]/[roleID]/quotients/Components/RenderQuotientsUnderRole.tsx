@@ -75,7 +75,7 @@ const RenderQuotientsUnderRole = ({
                   </td>
 
                   <td className="">
-                    <Link href={`/deck-automation/${companyID}/${roleID}/${detail.quotient_weightage_id}`}>
+                    <Link href={`/deck-automation/${companyID}/${roleID}/quotients/${detail.quotient_weightage_id}?qid=${detail.quotient_id}`}>
                       <Image width={20} height={20} src={'/images/plus.png'} alt="edit-icon" className="cursor-pointer" />
                     </Link>
                   </td>

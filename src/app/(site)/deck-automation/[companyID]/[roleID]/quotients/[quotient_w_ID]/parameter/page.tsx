@@ -2,7 +2,7 @@
 
 import React, { useLayoutEffect, useState } from 'react';
 
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 
 import Image from 'next/image';
 
@@ -10,7 +10,7 @@ import Loading from '@/app/(site)/Components/Loading';
 import AddParameterUnderQuotient from './Components/AddParameterUnderQuotients';
 
 const QuotientAddPage = () => {
-  const { roleID, companyID, quotientID } = useParams();
+  const { roleID, companyID, quotient_w_ID } = useParams();
 
   const router = useRouter();
 
@@ -19,7 +19,7 @@ const QuotientAddPage = () => {
   useLayoutEffect(() => {
     const getData = async () => {
       try {
-        const response = await fetch(`/api/companies/${companyID}/roles/${roleID}/quotients/${quotientID}/parameters`, {
+        const response = await fetch(`/api/companies/${companyID}/roles/${roleID}/quotients/${quotient_w_ID}/parameters`, {
           method: 'GET'
         });
 
@@ -27,7 +27,7 @@ const QuotientAddPage = () => {
           const data = await response.json();
 
           if (data.data.length !== 0) {
-            router.replace(`/deck-automation/${companyID}/${roleID}/${quotientID}`);
+            router.replace(`/deck-automation/${companyID}/${roleID}/quotients/${quotient_w_ID}`);
           }
         }
       } catch (err) {
@@ -37,7 +37,7 @@ const QuotientAddPage = () => {
       }
     };
     getData();
-  }, [companyID, roleID, router, quotientID]);
+  }, [companyID, roleID, router, quotient_w_ID]);
 
   return (
     <section className='mt-12'>

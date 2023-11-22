@@ -203,6 +203,7 @@ const AddQuotientWeightage = () => {
         })
       });
 
+
       if (response.ok) {
         router.push(`/deck-automation/${companyID}/${roleID}/quotients`);
 

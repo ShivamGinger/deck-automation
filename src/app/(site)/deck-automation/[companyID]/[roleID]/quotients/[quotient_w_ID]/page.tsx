@@ -2,14 +2,18 @@
 
 import React, { useLayoutEffect, useState } from 'react';
 
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 
 import Loading from '@/app/(site)/Components/Loading';
 import { ParametersQuotientFactors } from '@/utils/types';
 import RenderParametersUnderQuotient from './Components/RenderParametersUnderQuotients';
 
 const DisplayParametersUnderQuotients = () => {
-  const { roleID, companyID, quotientID } = useParams();
+  const { roleID, companyID, quotient_w_ID } = useParams();
+
+  const searchParams = useSearchParams();
+
+  const quotientID = searchParams.get('qid');
 
   const router = useRouter();
 
@@ -22,7 +26,7 @@ const DisplayParametersUnderQuotients = () => {
   useLayoutEffect(() => {
     const getData = async () => {
       try {
-        const response = await fetch(`/api/companies/${companyID}/roles/${roleID}/quotients/${quotientID}/parameters`, {
+        const response = await fetch(`/api/companies/${companyID}/roles/${roleID}/quotients/${quotient_w_ID}/parameters`, {
           method: 'GET'
         });
 
@@ -30,7 +34,7 @@ const DisplayParametersUnderQuotients = () => {
           const data = await response.json();
 
           if (data.data.length === 0) {
-            router.replace(`/deck-automation/${companyID}/${roleID}/${quotientID}/parameter`);
+            router.replace(`/deck-automation/${companyID}/${roleID}/quotients/${quotient_w_ID}/parameter?qid=${quotientID}`);
 
           } else {
             setParameterUnderQuotient(data.data);
@@ -44,7 +48,7 @@ const DisplayParametersUnderQuotients = () => {
       }
     };
     getData();
-  }, [companyID, roleID, router, quotientID]);
+  }, [companyID, roleID, router, quotient_w_ID, quotientID]);
 
   return (
     <section className='mt-12'>
