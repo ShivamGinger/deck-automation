@@ -1,5 +1,5 @@
 import { db } from "@/db";
-import { Role, candidates, companies, parameterScores, parameters, quotientScores, roles } from "@/db/schema";
+import { Role, candidates, companies, parameterScores, parameters, quotientScores, quotientWeightages, roles } from "@/db/schema";
 import { and, desc, eq, sql } from "drizzle-orm";
 
 export type companyRoles = {
@@ -39,10 +39,23 @@ export type roleCandidate = {
 };
 
 export async function getCompanyRoleCandidate(companyid: number, roleid: number): Promise<roleCandidate[]> {
-  const qScoreSum = db.select({ 
+  // const qWeightage = db.select({
+  //   quotient_weightage_id: quotientWeightages.id,
+  //   quotient_weightage: quotientWeightages.qWeightage,
+  //   quotient_score: quotientScores.totalScore,
+  //   quotient_total_score: quotientScores.totalScore * quotientWeightages.qWeightage,
+
+  // })
+  
+  const qScoreSum = db.select({
     candidateId: quotientScores.candidateId,
-    gp_score: sql<number>`sum(${quotientScores.totalScore})`.mapWith(quotientScores.totalScore).as('totalScore')
-  }).from(quotientScores).groupBy(quotientScores.candidateId).as('qScoreSum');
+    gp_score: sql<number>`sum(${quotientScores.totalScore} * ${quotientWeightages.qWeightage})`.mapWith(quotientScores.totalScore).as('gp_score')
+  })
+  .from(quotientScores)
+  .innerJoin(quotientWeightages, eq(quotientWeightages.quotientId, quotientScores.quotientId))
+  .where(and(eq(quotientWeightages.companyId, companyid), eq(quotientWeightages.roleId, roleid)))
+  .groupBy(quotientScores.candidateId)
+  .as('qScoreSum');
     
     const companyRole: roleCandidate[] = await db.select({
     candidate_id: candidates.id,

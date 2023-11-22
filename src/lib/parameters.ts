@@ -1,6 +1,15 @@
 import { db } from "@/db";
 import { companies, parameters, Parameters, parameterWeightages, quotients, quotientWeightages, roles } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
+import { number } from "zod";
+
+export type paramWeightage = {
+    parameter_weightage: number;
+};
+
+export type paramQuotientId = {
+    quotient_id: number;
+};
 
 export type qParams = {
     quotient_id: number;

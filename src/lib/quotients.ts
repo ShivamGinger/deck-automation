@@ -11,7 +11,6 @@ export type quotientw = {
     quotient_id: number;
     quotient_name: string;
     quotient_weightage: number;
-
 };
 
 export async function getAllCmpQuotientsW(cmpId: number, rleId: number): Promise<quotientw[]> {
