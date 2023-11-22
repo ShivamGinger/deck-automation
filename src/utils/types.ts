@@ -37,7 +37,7 @@ export interface ParametersQuotientFactors extends ParameterFactors, CompanyDeta
 };
 
 export interface ParametersQuotientFactorsValue extends ParametersQuotientFactors {
-  value: number,
+  parameter_score: number,
 };
 
 export interface ParameterFactorsValues extends ParameterFactors {
@@ -86,7 +86,8 @@ export interface CompleteCandidateInformation extends BasicCandidateInformation,
   company_id: string, //- while sending convert to number
   company_name: string,
   role_id: string, //- while sending convert to number
-  role_name: string
+  role_name: string,
+  candidate_id: number
 };
 
 export interface AddCandidateTrackingInformation extends BasicCandidateInformation {
@@ -98,15 +99,15 @@ export interface AddCandidateTrackingInformation extends BasicCandidateInformati
     candidate_reject_reason: string,
   },
   achievement: string[],
-  keyPoints: string[]
+  key_points: string[]
 };
 
 export interface ParameterDetails extends ParametersQuotientFactorsValue, QuotientFactorsWeightage { };
 
 export interface AddCandidateInformation extends BasicCandidateInformation {
   achievement: string[],
-  keyPoints: string[],
-  parameterDetails: ParameterDetails[]
+  key_points: string[],
+  candidate_parameter_scores: ParametersQuotientFactorsValue[]
 };
 
 export type HandleCandidateInputChangeValue = (
@@ -114,7 +115,10 @@ export type HandleCandidateInputChangeValue = (
   value: string | string[] | boolean | {
     id: number,
     parameters: QuotientFactors[] | []
-  } | ParameterDetails[],
+  } | {
+    parameter_id: number,
+    parameter_score: number
+  }[],
   field: string
 ) => void;
 

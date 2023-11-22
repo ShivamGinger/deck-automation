@@ -64,9 +64,8 @@ const CheckAddCandidate = () => {
             } else {
               const modifiedData = data.data.map((param: QuotientFactorsWeightage) => ({
                 ...param,
-                value: 1
+                parameter_score: 1
               }));
-
 
               parametersData = [...parametersData, ...modifiedData];
             }

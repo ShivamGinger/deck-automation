@@ -52,21 +52,30 @@ const Page = () => {
   const searchParams = useSearchParams();
 
   const name = searchParams.get('name');
-  const gender = searchParams.get('gender');
+
+  const profilePic = searchParams.get('profilePic');
 
   const keyPointsString = searchParams.get('keyPoints');
   let keyPoints = [''];
-
-  const top5AttributesString = searchParams.get('topAttributes');
-  let top5Attributes: Attribute[] | undefined;
-
   if (keyPointsString) {
     keyPoints = JSON.parse(keyPointsString);
-  }
+  };
 
-  if (top5AttributesString) {
-    top5Attributes = JSON.parse(top5AttributesString);
-  }
+  const social = searchParams.get('social');
+
+  const companyName = searchParams.get('companyName');
+
+  const roleName = searchParams.get('roleName');
+
+  const email = searchParams.get('email');
+
+  const gpScore = searchParams.get('gp-score');
+
+  const achivementsString = searchParams.get('achivements');
+  let achivements = [''];
+  if (achivementsString) {
+    achivements = JSON.parse(achivementsString);
+  };
 
   const IQValueString = searchParams.get('IQValue');
   const IQValue = IQValueString ? parseFloat(IQValueString) : 0;
@@ -80,38 +89,58 @@ const Page = () => {
   const AQValueString = searchParams.get('AQValue');
   const AQValue = AQValueString ? parseFloat(AQValueString) : 0;
 
+  const description = searchParams.get('description');
+
+  const gender = searchParams.get('gender');
+
+  const experience = searchParams.get('experience');
+
+  const fixedLpa = searchParams.get('fixedLpa');
+
+  const phoneNumber = searchParams.get('phoneNumber');
+
+  const top5AttributesString = searchParams.get('topAttributes');
+  let top5Attributes: Attribute[] | undefined;
+  if (top5AttributesString) {
+    top5Attributes = JSON.parse(top5AttributesString);
+  };
+
   return (
     <>
       <div className="flex h-screen">
         <div className="flex flex-col z-20 bg-white pt-12 px-8 ">
           <div className="">
-            <Image width={120} height={120} src={'/images/Ginger Partners_Logo with tagline.png'} alt="profile pic" className="rounded-xl " priority/>
+            <Image width={120} height={120} src={'/images/Ginger Partners_Logo with tagline.png'} alt="profile pic" className="rounded-xl " priority />
           </div>
 
           <div className="cadidate info flex flex-col gap-y-2  py-4 ">
-            <Image
-              src={'https://demo-images-bucket-stream-helper.s3.ap-south-1.amazonaws.com/2db1dec435f61a90ff7411696d648abe'}
-              width={0}
-              height={0}
-              priority
-              className="object-cover rounded-md h-32"
-              style={{ width: "100%" }}
-              alt={`Profile Pic for ${name}`}
-              sizes="(max-width: 600px) 100vw, 600px"
-            />
+            {profilePic ?
+              <Image
+                src={profilePic}
+                width={0}
+                height={0}
+                priority
+                className="object-cover rounded-md h-32"
+                style={{ width: "100%" }}
+                alt={`Profile Pic for ${name}`}
+                sizes="(max-width: 600px) 100vw, 600px"
+              /> :
+              <>
+                No Profile Pic for {name}
+              </>
+            }
             <p className="font-bold text-lg " id="name">
               {name}
             </p>
             <p className="font-bold text-lg " id="role">
-              Head AI Researcher
+              {roleName}
             </p>
           </div>
 
           <div className='border-b border-black'></div>
 
           <p className="py-6 w-44 font-medium break-words " id="description">
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Saepe, esse.
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Saepe, esse.
+            {description}
           </p>
 
           <div className='border-b border-black'></div>
@@ -120,14 +149,30 @@ const Page = () => {
             <p className="uppercase font-semibold text-lg" id="personal-details">personal details</p>
             <div className='flex gap-4'>
               <div className='flex flex-col gap-y-4 justify-center'>
-                {gender === 'M' ? <Image width={25} height={25} src={'/images/gender.png'} alt="male" /> : <Image width={25} height={25} src={'/images/female.png'} alt="female" />}
+                {gender === 'male' &&
+                  <Image width={25} height={25} src={'/images/gender.png'} alt="male" />
+                }
+                {gender === 'female' &&
+                  <Image width={25} height={25} src={'/images/female.png'} alt="male" />
+                }
+                {gender === 'other' &&
+                  <Image width={25} height={25} src={'/images/other genders.png'} alt="male" />
+                }
                 <Image width={25} height={25} src={'/images/experience.png'} alt="experience" />
                 <Image width={25} height={25} src={'/images/money.png'} alt="money" />
               </div>
               <div className='flex flex-col gap-y-4 justify-center '>
-                {gender === 'M' ? <div>Male</div> : <div>Female</div>}
-                <div>7+ years</div>
-                <div>INR 70 LPA</div>
+                {gender === 'male' &&
+                  <div>Male</div>
+                }
+                {gender === 'female' &&
+                  <div>Female</div>
+                }
+                {gender === 'other' &&
+                  <div>Other</div>
+                }
+                <div>{experience}</div>
+                <div>INR {fixedLpa && parseInt(fixedLpa)} LPA</div>
               </div>
             </div>
           </div>
@@ -143,9 +188,9 @@ const Page = () => {
                 <Image width={25} height={25} src={'/images/linkedin.png'} alt="profile pic" />
               </div>
               <div className='flex flex-col gap-y-4 justify-center '>
-                <div>123456789</div>
-                <div className='text-xs'>sdfsfsfsjlsdjlksflksj@gmail.com</div>
-                <Link href={'https://www.linkedin.com/in/shivam-taneja/'} target='_blank'>Linkedin profile</Link>
+                <div>{phoneNumber}</div>
+                {email && email?.length > 18 ? <div className='text-xs'>{email}</div> : <div className=''>{email}</div>}
+                {social ? <Link href={social} target='_blank'>Linkedin profile</Link> : <div>Linkedin profile</div>}
               </div>
             </div>
           </div>
@@ -155,14 +200,13 @@ const Page = () => {
 
         <div className="flex flex-col pl-12 pt-12 w-screen " id="details-right-bg">
           <div className="flex flex-row gap-x-8 font-bold text-2xl pb-6" id="candidate-role">
-            <h2>Candidate-1</h2>
-            <h2>Minus Zero</h2>
+            <h2>{companyName}</h2>
           </div>
 
           <div className="pb-6">
             <div id="gp-score" className="bg-[#542C06] text-white p-4 text-3xl font-bold rounded-2xl w-56 flex justify-center">
               <span>
-                GP Score- 5
+                GP Score- {gpScore && parseInt(gpScore)}
               </span>
             </div>
           </div>
@@ -186,7 +230,7 @@ const Page = () => {
                 <div className="font-bold uppercase pb-3" id="details-heading">experience and achivements</div>
                 <div className="pl-12">
                   <ul className="list-disc text-sm">
-                    {keyPoints.map((point, index) => (
+                    {achivements.map((point, index) => (
                       <li key={index} className='text-lg'>{point}</li>
                     ))}
                   </ul>

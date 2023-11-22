@@ -69,7 +69,7 @@ const AddCandidate = ({
       ...(prevCandidateInfo),
       {
         candidate_name: '',
-        keyPoints: [''],
+        key_points: [''],
         profile_pic: '',
         social: '',
         email: '',
@@ -86,7 +86,7 @@ const AddCandidate = ({
         gender: 'male',
         current_company: '',
         esop_rsu: '',
-        parameterDetails: parametersUnderQuotients.map(parameter => {
+        candidate_parameter_scores: parametersUnderQuotients.map(parameter => {
           const matchingQuotient = quotientsDetailsUnderRole.find(
             (quotient) =>
               parameter.quotient_id === quotient.quotient_id && parameter.role_id === quotient.role_id
@@ -264,13 +264,13 @@ const AddCandidate = ({
               />
 
               <Input
-                name='Social Network URL'
-                id={`social_network_url_${candidateNo}`}
-                placeholder={candidateInfo[candidateNo - 1]?.social}
+                name='Notice Period'
+                id={`notice_period_${candidateNo}`}
+                placeholder={candidateInfo[candidateNo - 1]?.notice_period}
                 required
                 type='text'
-                moveLabel={candidateInfo[candidateNo - 1]?.social != ''}
-                onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(candidateNo, e.target.value, 'social')}
+                moveLabel={candidateInfo[candidateNo - 1]?.notice_period != ''}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(candidateNo, e.target.value, 'notice_period')}
               />
 
               <Input
@@ -305,8 +305,8 @@ const AddCandidate = ({
               />
 
               <KeyPoints
-                placeholderData={candidateInfo[candidateNo - 1].keyPoints}
-                count={candidateInfo[candidateNo - 1].keyPoints.length}
+                placeholderData={candidateInfo[candidateNo - 1].key_points}
+                count={candidateInfo[candidateNo - 1].key_points.length}
                 handleInputChange={handleInputChange}
                 candidateNo={candidateNo}
                 error={error}
@@ -334,14 +334,14 @@ const AddCandidate = ({
                       {
                         parametersUnderQuotients
                           .filter(param => param.quotient_id === quotient_id)
-                          .map(({ parameter_weightage_id, parameter_name, quotient_id, value }, index) => (
+                          .map(({ parameter_id, parameter_name }, index) => (
                             <div key={index}>
                               <ParameterQuotient
-                                parameterWId={parameter_weightage_id}
+                                parameterId={parameter_id}
                                 parameterName={parameter_name}
-                                parameterValue={candidateInfo[candidateNo - 1].parameterDetails.filter(param => param.parameter_weightage_id === parameter_weightage_id)[0]?.value}
+                                parameterValue={candidateInfo[candidateNo - 1].candidate_parameter_scores.filter(param => param.parameter_id === parameter_id)[0]?.parameter_score}
                                 handleInputChange={handleInputChange}
-                                parameterDetails={candidateInfo[candidateNo - 1].parameterDetails}
+                                parameterDetails={candidateInfo[candidateNo - 1].candidate_parameter_scores}
                                 candidateNo={candidateNo}
                               />
                             </div>
@@ -370,23 +370,32 @@ const AddCandidate = ({
       return;
     };
 
-    const response = await fetch('/', {
-      method: 'post',
+    const response = await fetch(`/api/companies/${companyID}/roles/${roleID}/role_candidates`, {
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-
+        candidate_information: candidateInfo.map(candidate => ({
+          ...candidate,
+          share_candidate_status: false,
+          candidate_status: null,
+          fixed_lpa: parseFloat(candidate.fixed_lpa),
+          variable_lpa: parseFloat(candidate.variable_lpa),
+          esop_rsu: parseFloat(candidate.esop_rsu)
+        }))
       }),
       credentials: 'include',
-    }
-    );
+    });
 
     if (response.ok) {
+      const data = await response.json();
 
+      router.replace(`/deck-automation/${companyID}/${roleID}/candidates`);
 
     } else {
       const errorData = await response.json();
+      console.log(errorData);
 
       setError(true);
       setErrorDetails(errorData.error);

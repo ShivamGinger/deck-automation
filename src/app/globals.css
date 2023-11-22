@@ -65,3 +65,11 @@
 .modal-open {
   @apply overflow-hidden
 }
+
+.normal-cursor {
+  cursor: default;
+}
+
+.loading-cursor {
+  cursor: wait;
+}
