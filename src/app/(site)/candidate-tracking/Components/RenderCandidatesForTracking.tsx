@@ -1,19 +1,22 @@
 "use client";
 
-import { ITEMS_PER_PAGE } from '@/utils/constants';
-import { CompleteCandidateInformation } from '@/utils/types';
+import React, { useState } from 'react';
+
 import Image from 'next/image';
 import Link from 'next/link';
-import React, { useLayoutEffect, useState } from 'react';
+
+import { CSVLink } from "react-csv";
 import ReactPaginate from 'react-paginate';
+
+import { ITEMS_PER_PAGE } from '@/utils/constants';
+import { CompleteCandidateInformation } from '@/utils/types';
 import Status from './Status';
 
 const RenderCandidatesForTracking = ({
   candidates
-}:
-  {
-    candidates: CompleteCandidateInformation[]
-  }) => {
+}: {
+  candidates: CompleteCandidateInformation[]
+}) => {
   const [currentPage, setCurrentPage] = useState(0);
 
   const handlePageChange = (selectedPage: { selected: number }) => {
@@ -28,15 +31,61 @@ const RenderCandidatesForTracking = ({
 
   const currentData = candidates?.slice(startIndex, endIndex);
 
+  const getFileName = () => {
+    const currentDate = new Date();
+    const formattedDate = currentDate.toISOString().slice(0, 19).replace(/:/g, '-');
+
+    return `candidate-tracking-report-${formattedDate}.csv`
+  };
+
+  const getHeader = () => {
+    const firstObject = currentData[0];
+
+    const headers = Object.keys(firstObject).map(key => ({
+      label: key.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase()),
+      key: key,
+    }));
+
+    return headers;
+  };
+
+  const getExtractedData = () => {
+    const extractedData = currentData.map((obj: any) => {
+      const formattedObject: { [key: string]: any } = {};
+
+      for (const key in obj) {
+        if (key === "key_points") {
+          formattedObject[key] = obj[key].keyPoints;
+        } else if (key === "achievement") {
+          formattedObject[key] = obj[key].achievement;
+        } else {
+          formattedObject[key] = obj[key]
+        }
+      }
+      return formattedObject;
+    });
+
+    return extractedData;
+  };
+
   return (
     <>
       <div className='flex flex-col'>
         <div className="rounded-lg shadow bg-white">
           <div className='p-4 flex flex-row justify-between'>
             <h2 className='font-bold uppercase text-2xl text-[#542C06]'>Candidate Tracking</h2>
-            {/* <div className='p-2'>
+            <div className='p-2 flex items-center gap-4'>
+              {/* <div>
                 search ...
               </div> */}
+              <CSVLink
+                headers={getHeader()}
+                data={getExtractedData()}
+                filename={getFileName()}
+              >
+                <Image width={20} height={20} src={'/images/download.png'} alt="edit-icon" className="cursor-pointer" />
+              </CSVLink>
+            </div>
           </div>
           <div className='flex flex-col'>
             <div className='overflow-x-auto'>
@@ -119,7 +168,9 @@ const RenderCandidatesForTracking = ({
                       </td>
 
                       <td className=" ">
-                        <Image width={20} height={20} src={'/images/edit.png'} alt="edit-icon" className="cursor-pointer" />
+                        <Link href={`/candidate-tracking/edit/${detail.candidate_id}`}>
+                          <Image width={20} height={20} src={'/images/edit.png'} alt="edit-icon" className="cursor-pointer" />
+                        </Link>
                       </td>
                     </tr>
                   ))}

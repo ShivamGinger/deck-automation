@@ -6,7 +6,7 @@ export function validateCandidates(candidateInfo: AddCandidateInformation[]) {
   for (const candidate of candidateInfo) {
     const {
       candidate_name,
-      keyPoints,
+      key_points,
       profile_pic,
       social,
       email,
@@ -22,12 +22,12 @@ export function validateCandidates(candidateInfo: AddCandidateInformation[]) {
       achievement,
       gender,
       esop_rsu,
-      parameterDetails
+      candidate_parameter_scores
     } = candidate;
 
     if (
       !candidate_name ||
-      (keyPoints.length >= 1 && keyPoints.some(element => element === '')) ||
+      (key_points.length > 1 && key_points.some(element => element === '')) ||
       !profile_pic ||
       !social ||
       !email || !isValidEmail(email) ||
@@ -40,9 +40,9 @@ export function validateCandidates(candidateInfo: AddCandidateInformation[]) {
       !expected_ctc ||
       !notice_period ||
       !description ||
-      (achievement.length >= 1 && achievement.some(element => element === '')) ||
+      (achievement.length > 1 && achievement.some(element => element === '')) ||
       !gender || !(['male', 'female', 'other'].includes(gender)) ||
-      parameterDetails.some(param => param.value > 5 || param.value <= 0 || isNaN(param.value))
+      candidate_parameter_scores.some(param => param.parameter_score > 5 || param.parameter_score <= 0 || isNaN(param.parameter_score))
     ) {
       return false;
     } else {

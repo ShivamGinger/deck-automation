@@ -10,27 +10,24 @@ import { useRouter } from 'next/navigation';
 import ReactPaginate from 'react-paginate';
 
 import { ITEMS_PER_PAGE } from '@/utils/constants';
+import { CompleteCandidateInformation, QuotientFactorsWeightage } from '@/utils/types';
+import { saveAs } from 'file-saver';
 import CanAddCandidate from './CanAddCandidate';
 
 const RenderCandidatesUnderRole = ({
   roleName,
   companyName,
-  quotientsDetailsUnderRole,
   candidateDetailsUnderRole
 }: {
   roleName: string,
   companyName: string,
-  quotientsDetailsUnderRole: {
-    id: number,
-    quoweightage: number,
-    qname: string,
-    qid: number
-  }[],
   candidateDetailsUnderRole: {
-    id: number,
-    quoweightage: number,
-    qname: string,
-    qid: number
+    candidate_id: number,
+    profile_pic: string,
+    candidate_name: string,
+    role_name: string,
+    gp_score: string,
+    description: string,
   }[]
 }) => {
   const { companyID, roleID } = useParams();
@@ -51,6 +48,42 @@ const RenderCandidatesUnderRole = ({
 
   const currentData = candidateDetailsUnderRole?.slice(startIndex, endIndex);
 
+  const handleDownloadPdf = async (roleID: string | string[], companyID: string | string[], candidateID: number, candidateName: string) => {
+    document.body.classList.add('loading-cursor');
+    document.body.classList.remove('normal-cursor');
+
+    try {
+      const response = await fetch('/api/pdf-generate', {
+        method: 'post',
+        body: JSON.stringify({
+          role_id: Array.isArray(roleID) ? parseInt(roleID[0]) : parseInt(roleID),
+          company_id: Array.isArray(companyID) ? parseInt(companyID[0]) : parseInt(companyID),
+          candidate_id: candidateID
+        }),
+      });
+
+      if (response.ok) {
+        const Buffer = await response.json();
+
+        const bufferData = Buffer.data;
+
+        const blob = new Blob([new Uint8Array(bufferData)], { type: 'application/pdf' });
+
+        const currentDate = new Date();
+        const formattedDate = currentDate.toISOString().slice(0, 19).replace(/:/g, '-');
+
+        saveAs(blob, `report-for-${candidateName}-${formattedDate}.pdf`);
+      } else {
+        alert("Error generating pdf!");
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      document.body.classList.remove('loading-cursor');
+      document.body.classList.add('normal-cursor');
+    }
+  };
+
   return (
     <>
       <div className='flex flex-col'>
@@ -64,13 +97,15 @@ const RenderCandidatesUnderRole = ({
               search ...
             </div> */}
           </div>
-          render candidate details
-          {/* <table className="w-full border-separate border-spacing-4 px-6 pt-2">
+          <table className="w-full border-separate border-spacing-4 px-6 pt-2">
             <thead className="">
               <tr className='gap-x-4'>
                 <th className="table-headings">S.No.</th>
-                <th className="table-headings">Quotient Name</th>
-                <th className="table-headings">Quotient Weightage</th>
+                <th className="table-headings">Candidate</th>
+                <th className="table-headings">Candidate Name</th>
+                <th className="table-headings">Role</th>
+                <th className="table-headings">GP Score</th>
+                <th className="table-headings">Key Observations</th>
               </tr>
             </thead>
             <tbody className="">
@@ -80,22 +115,51 @@ const RenderCandidatesUnderRole = ({
                     {index + 1}
                   </td>
                   <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
-                    {detail.qname}
+                    <>
+                      {detail.profile_pic ?
+                        <div className='flex justify-center'>
+                          <Image
+                            src={detail.profile_pic}
+                            width={150}
+                            height={0}
+                            priority
+                            // style={{ width: '150px' }}
+                            className="rounded-md h-32"
+                            alt={`Profile Pic for ${detail.candidate_name}`}
+                            sizes="(max-width: 600px) 100vw, 600px"
+                          />
+                        </div>
+                        :
+                        <>
+                          No Profile Pic for {detail.candidate_name}
+                        </>
+                      }
+                    </>
                   </td>
 
                   <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
-                    {detail.quoweightage}
+                    {detail.candidate_name}
                   </td>
 
-                  <td className="">
-                    <Link href={`/deck-automation/${companyID}/${roleID}/${detail.qid}`}>
-                      <Image width={20} height={20} src={'/images/plus.png'} alt="edit-icon" className="cursor-pointer" />
-                    </Link>
+                  <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
+                    {detail.role_name}
+                  </td>
+
+                  <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
+                    {detail.gp_score}
+                  </td>
+
+                  <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
+                    {detail.description}
+                  </td>
+
+                  <td className="" onClick={() => handleDownloadPdf(roleID, companyID, detail.candidate_id, detail.candidate_name)}>
+                    <Image width={20} height={20} src={'/images/download.png'} alt="edit-icon" className="cursor-pointer" />
                   </td>
                 </tr>
               ))}
             </tbody>
-          </table> */}
+          </table>
 
           <div className='p-4'>
             Add Candidates? <Link href={`/deck-automation/${companyID}/${roleID}/candidates/addCandidate`} className='underline text-blue-500'>Click here</Link>

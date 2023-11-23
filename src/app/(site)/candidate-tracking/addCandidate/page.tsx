@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 
 import AddCandidate from './Components/AddCandidate';
 
-const AddCandidateTracking = () => {
+const EditCandidateTracking = () => {
   const router = useRouter();
 
   return <>
@@ -31,4 +31,4 @@ const AddCandidateTracking = () => {
   </>
 }
 
-export default AddCandidateTracking
+export default EditCandidateTracking

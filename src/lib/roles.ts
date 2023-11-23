@@ -12,16 +12,16 @@ export type companyRoles = {
 
 export async function getCompanyRoles(companyid: number): Promise<companyRoles[]> {
   const companyRoles: companyRoles[] = await db
-  .select({
-    role_id: roles.id,
-    role_name: roles.name,
-    company_id: roles.companyId,
-    company_name: companies.name,
-    created_at: roles.createdAt
-  })
-  .from(roles)
-  .innerJoin(companies, eq(companies.id, roles.companyId))
-  .where(eq(roles.companyId, companyid));
+    .select({
+      role_id: roles.id,
+      role_name: roles.name,
+      company_id: roles.companyId,
+      company_name: companies.name,
+      created_at: roles.createdAt
+    })
+    .from(roles)
+    .innerJoin(companies, eq(companies.id, roles.companyId))
+    .where(eq(roles.companyId, companyid));
 
   return companyRoles;
 };
@@ -38,18 +38,45 @@ export type roleCandidates = {
   gp_score: string | null;
 };
 
+export type roleCandidate = {
+  candidate_id: number;
+  candidate_name: string;
+  key_points: any
+  profile_pic: string | null
+  social: string | null
+  company_id: number
+  company_name: string
+  role_id: number
+  role_name: string
+  email: string;
+  current_position: string | null
+  current_location: string | null
+  experience: string | null
+  phone_number: string | null
+  fixed_lpa: string | null
+  variable_lpa: string | null
+  expected_ctc: string | null
+  notice_period: string | null
+  description: string | null
+  achievement: any | null
+  gender: string | null
+  current_company: string | null
+  esop_rsu: string | null
+  gp_score: string | null
+};
+
 export async function getCompanyRoleCandidates(companyid: number, roleid: number): Promise<roleCandidates[]> {
   const qScoreSum = db.select({
     candidateId: quotientScores.candidateId,
     gp_score: sql<number>`sum(${quotientScores.totalScore} * ${quotientWeightages.qWeightage})`.mapWith(quotientScores.totalScore).as('gp_score')
   })
-  .from(quotientScores)
-  .innerJoin(quotientWeightages, eq(quotientWeightages.quotientId, quotientScores.quotientId))
-  .where(and(eq(quotientWeightages.companyId, companyid), eq(quotientWeightages.roleId, roleid)))
-  .groupBy(quotientScores.candidateId)
-  .as('qScoreSum');
-    
-    const companyRole: roleCandidates[] = await db.select({
+    .from(quotientScores)
+    .innerJoin(quotientWeightages, eq(quotientWeightages.quotientId, quotientScores.quotientId))
+    .where(and(eq(quotientWeightages.companyId, companyid), eq(quotientWeightages.roleId, roleid)))
+    .groupBy(quotientScores.candidateId)
+    .as('qScoreSum');
+
+  const companyRole: roleCandidates[] = await db.select({
     candidate_id: candidates.id,
     candidate_name: candidates.name,
     profile_pic: candidates.profilePic,
@@ -60,27 +87,27 @@ export async function getCompanyRoleCandidates(companyid: number, roleid: number
     description: candidates.description,
     gp_score: qScoreSum.gp_score
   })
-  .from(candidates)
-  .innerJoin(companies, eq(companies.id, candidates.companyId))
-  .innerJoin(roles, eq(roles.id, candidates.roleId))
-  .leftJoin(qScoreSum, eq(qScoreSum.candidateId, candidates.id))
-  .where(and(eq(candidates.companyId, companyid), eq(candidates.roleId, roleid)));
+    .from(candidates)
+    .innerJoin(companies, eq(companies.id, candidates.companyId))
+    .innerJoin(roles, eq(roles.id, candidates.roleId))
+    .leftJoin(qScoreSum, eq(qScoreSum.candidateId, candidates.id))
+    .where(and(eq(candidates.companyId, companyid), eq(candidates.roleId, roleid)));
 
   return companyRole;
 };
 
-export async function getCompanyRoleCandidate(companyid: number, roleid: number, candidate_id: number): Promise<roleCandidates[]> {
+export async function getCompanyRoleCandidate(companyid: number, roleid: number, candidate_id: number): Promise<roleCandidate[]> {
   const qScoreSum = db.select({
     candidateId: quotientScores.candidateId,
     gp_score: sql<number>`sum(${quotientScores.totalScore} * ${quotientWeightages.qWeightage})`.mapWith(quotientScores.totalScore).as('gp_score')
   })
-  .from(quotientScores)
-  .innerJoin(quotientWeightages, eq(quotientWeightages.quotientId, quotientScores.quotientId))
-  .where(and(eq(quotientWeightages.companyId, companyid), eq(quotientWeightages.roleId, roleid)))
-  .groupBy(quotientScores.candidateId)
-  .as('qScoreSum');
-    
-    const companyRole: roleCandidates[] = await db.select({
+    .from(quotientScores)
+    .innerJoin(quotientWeightages, eq(quotientWeightages.quotientId, quotientScores.quotientId))
+    .where(and(eq(quotientWeightages.companyId, companyid), eq(quotientWeightages.roleId, roleid)))
+    .groupBy(quotientScores.candidateId)
+    .as('qScoreSum');
+
+  const companyRole: roleCandidate[] = await db.select({
     candidate_id: candidates.id,
     candidate_name: candidates.name,
     key_points: candidates.keyPoints,
@@ -106,11 +133,11 @@ export async function getCompanyRoleCandidate(companyid: number, roleid: number,
     esop_rsu: candidates.esopRsu,
     gp_score: qScoreSum.gp_score
   })
-  .from(candidates)
-  .innerJoin(companies, eq(companies.id, candidates.companyId))
-  .innerJoin(roles, eq(roles.id, candidates.roleId))
-  .leftJoin(qScoreSum, eq(qScoreSum.candidateId, candidates.id))
-  .where(and(eq(candidates.companyId, companyid), eq(candidates.roleId, roleid), eq(candidates.id, candidate_id)));
+    .from(candidates)
+    .innerJoin(companies, eq(companies.id, candidates.companyId))
+    .innerJoin(roles, eq(roles.id, candidates.roleId))
+    .leftJoin(qScoreSum, eq(qScoreSum.candidateId, candidates.id))
+    .where(and(eq(candidates.companyId, companyid), eq(candidates.roleId, roleid), eq(candidates.id, candidate_id)));
 
   return companyRole;
 };
@@ -125,9 +152,9 @@ export async function getRole(cid: number, rid: number): Promise<companyRoles[]>
       created_at: roles.createdAt
     }
   )
-  .from(roles)
-  .innerJoin(companies, eq(companies.id, roles.companyId))
-  .where(and(eq(roles.companyId, cid), eq(roles.id, rid)));
+    .from(roles)
+    .innerJoin(companies, eq(companies.id, roles.companyId))
+    .where(and(eq(roles.companyId, cid), eq(roles.id, rid)));
 
   return role;
 };

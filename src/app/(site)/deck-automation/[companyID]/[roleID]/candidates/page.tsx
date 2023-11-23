@@ -7,7 +7,7 @@ import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
 
 import Loading from '@/app/(site)/Components/Loading';
-import { QuotientFactorsWeightage } from '@/utils/types';
+import { CompleteCandidateInformation, QuotientFactorsWeightage } from '@/utils/types';
 import Link from 'next/link';
 import CanAddCandidate from './Components/CanAddCandidate';
 import RenderCandidatesUnderRole from './Components/RenderCandidatesUnderRole';
@@ -21,7 +21,14 @@ const DisplayCandidatesUnderRoles = () => {
 
   const [quotientsDetailsUnderRole, setQuotientsDetailsUnderRole] = useState<QuotientFactorsWeightage[]>([]);
 
-  const [candidateDetailsUnderRole, setCandidateDetailsUnderRole] = useState([]);
+  const [candidateDetailsUnderRole, setCandidateDetailsUnderRole] = useState<{
+    candidate_id: number,
+    profile_pic: string,
+    candidate_name: string,
+    role_name: string,
+    gp_score: string,
+    description: string,
+  }[]>([]);
 
   const [roleName, setRoleName] = useState('');
 
@@ -66,7 +73,8 @@ const DisplayCandidatesUnderRoles = () => {
 
         if (response.ok) {
           const data = await response.json();
-
+          
+          setCandidateDetailsUnderRole(data.data);
         } else {
           const data = await response.json();
           setErrorDetails(data.error);
@@ -110,7 +118,6 @@ const DisplayCandidatesUnderRoles = () => {
                 <RenderCandidatesUnderRole
                   roleName={roleName}
                   companyName={companyName}
-                  quotientsDetailsUnderRole={quotientsDetailsUnderRole}
                   candidateDetailsUnderRole={candidateDetailsUnderRole}
                 />
               }

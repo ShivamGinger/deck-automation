@@ -1,36 +1,36 @@
 
-import { HandleCandidateInputChangeValue, ParameterDetails } from '@/utils/types';
-import React, { ChangeEvent, useState } from 'react';
+import { HandleCandidateInputChangeValue, ParameterDetails, ParametersQuotientFactorsValue } from '@/utils/types';
+import React, { ChangeEvent } from 'react';
 import Input from './Input';
 
 const ParameterQuotient = ({
-  parameterWId,
+  parameterId,
   parameterName,
   parameterValue,
   handleInputChange,
   parameterDetails,
   candidateNo
 }: {
-  parameterWId: number,
+  parameterId: number,
   parameterName: string,
   parameterValue: number,
   handleInputChange: HandleCandidateInputChangeValue,
-  parameterDetails: ParameterDetails[],
+  parameterDetails: ParametersQuotientFactorsValue[],
   candidateNo: number
 }) => {
 
   const handleParameterValueChange = (value: number) => {
-    const indexToUpdate = parameterDetails.findIndex(param => param.parameter_weightage_id === parameterWId);
+    const indexToUpdate = parameterDetails.findIndex(param => param.parameter_id === parameterId);
 
     if (indexToUpdate !== -1) {
       const updatedParameterDetails = [...parameterDetails];
 
       updatedParameterDetails[indexToUpdate] = {
         ...updatedParameterDetails[indexToUpdate],
-        value: value
+        parameter_score: value
       };
 
-      handleInputChange(candidateNo, updatedParameterDetails, 'parameterDetails');
+      handleInputChange(candidateNo, updatedParameterDetails, 'candidate_parameter_scores');
     }
   };
 
