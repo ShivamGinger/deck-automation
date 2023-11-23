@@ -76,7 +76,7 @@ export async function POST(request: NextRequest, { params }: { params : { compan
           let scoreToBeSummed = [];
           let parameter_quotient_id: paramQuotientId[] = [];
           for( const score of data.candidate_parameter_scores ) {
-            txn.insert(parameterScores).values({
+            await txn.insert(parameterScores).values({
               candidateId: parseInt(candId.rows[0]["LAST_INSERT_ID()"]),
               parameterId: score.parameter_id,
               score: score.parameter_score
@@ -100,7 +100,7 @@ export async function POST(request: NextRequest, { params }: { params : { compan
           const summedScore = scoreToBeSummed.reduce((accumulator, currentValue) => {
             return accumulator + currentValue
           }, 0) / 100;
-          console.log(summedScore);
+
           await txn.insert(quotientScores).values({
             candidateId: parseInt(candId.rows[0]["LAST_INSERT_ID()"]),
             quotientId: parameter_quotient_id[0].quotient_id,
