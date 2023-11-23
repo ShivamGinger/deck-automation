@@ -77,18 +77,6 @@ const Page = () => {
     achivements = JSON.parse(achivementsString);
   };
 
-  const IQValueString = searchParams.get('IQValue');
-  const IQValue = IQValueString ? parseFloat(IQValueString) : 0;
-
-  const EQValueString = searchParams.get('EQValue');
-  const EQValue = EQValueString ? parseFloat(EQValueString) : 0;
-
-  const SQValueString = searchParams.get('SQValue');
-  const SQValue = SQValueString ? parseFloat(SQValueString) : 0;
-
-  const AQValueString = searchParams.get('AQValue');
-  const AQValue = AQValueString ? parseFloat(AQValueString) : 0;
-
   const description = searchParams.get('description');
 
   const gender = searchParams.get('gender');
@@ -103,6 +91,12 @@ const Page = () => {
   let top5Attributes: Attribute[] | undefined;
   if (top5AttributesString) {
     top5Attributes = JSON.parse(top5AttributesString);
+  };
+
+  const quotientScoresString = searchParams.get('quotientScores');
+  let quotientScores: Attribute[] | undefined;
+  if (quotientScoresString) {
+    quotientScores = JSON.parse(quotientScoresString);
   };
 
   return (
@@ -242,55 +236,67 @@ const Page = () => {
               <div className="flex flex-col">
                 <div className="font-bold uppercase pb-3" id="details-heading">gp quotient</div>
                 <div className="justify-center flex ">
-                  <div className=" flex flex-col gap-8">
-                    <div className='flex gap-8'>
-                      <div className='pt-4 w-28 h-28 flex flex-col justify-center items-center rounded-lg relative' id='quotient'>
-                        <GaugeChart value={IQValue} />
+                  {quotientScores &&
+                    <div className=" flex flex-col gap-8">
+                      <div className='flex gap-8'>
 
-                        <div className='p-3 font-semibold border-b border-gray-500'>
-                          IQ
-                        </div>
-                        <div className='font-semibold p-2'>
-                          {IQValue}
-                        </div>
+                        {quotientScores[0] &&
+                          <div className='pt-4 w-28 h-28 flex flex-col justify-center items-center rounded-lg relative' id='quotient'>
+                            <GaugeChart value={quotientScores[0]?.value} />
+
+                            <div className='p-3 font-semibold border-b border-gray-500'>
+                              {quotientScores[0]?.title}
+                            </div>
+                            <div className='font-semibold p-2'>
+                              {quotientScores[0]?.value}
+                            </div>
+                          </div>
+                        }
+
+                        {quotientScores[1] &&
+                          <div className='pt-4 w-28 h-28 flex flex-col justify-center items-center rounded-lg relative' id='quotient'>
+                            <GaugeChart value={quotientScores[1]?.value} />
+
+                            <div className='p-3 font-semibold border-b border-gray-500'>
+                              {quotientScores[1]?.title}
+                            </div>
+                            <div className='font-semibold p-2'>
+                              {quotientScores[1]?.value}
+                            </div>
+                          </div>
+                        }
                       </div>
 
-                      <div className='pt-4 w-28 h-28 flex flex-col justify-center items-center rounded-lg relative' id='quotient'>
-                        <GaugeChart value={EQValue} />
+                      <div className='flex gap-8'>
 
-                        <div className='p-3 font-semibold border-b border-gray-500'>
-                          EQ
-                        </div>
-                        <div className='font-semibold p-2'>
-                          {EQValue}
-                        </div>
+                        {quotientScores[2] &&
+                          <div className='pt-4 w-28 h-28 flex flex-col justify-center items-center rounded-lg relative' id='quotient'>
+                            <GaugeChart value={quotientScores[2]?.value} />
+
+                            <div className='p-3 font-semibold border-b border-gray-500'>
+                              {quotientScores[2]?.title}
+                            </div>
+                            <div className='font-semibold p-2'>
+                              {quotientScores[2]?.value}
+                            </div>
+                          </div>
+                        }
+
+                        {quotientScores[3] &&
+                          <div className='pt-4 w-28 h-28 flex flex-col justify-center items-center rounded-lg relative' id='quotient'>
+                            <GaugeChart value={quotientScores[3]?.value} />
+
+                            <div className='p-3 font-semibold border-b border-gray-500'>
+                              {quotientScores[3]?.title}
+                            </div>
+                            <div className='font-semibold p-2'>
+                              {quotientScores[3]?.value}
+                            </div>
+                          </div>
+                        }
                       </div>
                     </div>
-
-                    <div className='flex gap-8'>
-                      <div className='pt-4 w-28 h-28 flex flex-col justify-center items-center rounded-lg relative' id='quotient'>
-                        <GaugeChart value={SQValue} />
-
-                        <div className='p-3 font-semibold border-b border-gray-500'>
-                          SQ
-                        </div>
-                        <div className='font-semibold p-2'>
-                          {SQValue}
-                        </div>
-                      </div>
-
-                      <div className='pt-4 w-28 h-28 flex flex-col justify-center items-center rounded-lg relative' id='quotient'>
-                        <GaugeChart value={AQValue} />
-
-                        <div className='p-3 font-semibold border-b border-gray-500'>
-                          AQ
-                        </div>
-                        <div className='font-semibold p-2'>
-                          {AQValue}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  }
                 </div>
               </div>
             </div>
