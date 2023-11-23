@@ -1,7 +1,7 @@
-//TODO: score retrieval for the candidate GET,PUT, DELETE(baad mai dekh liyo iska)
+//TODO: score retrieval for the candidate PUT, DELETE(baad mai dekh liyo iska)
 
 import { Companies } from "@/db/schema";
-import { candidateParamScoreExist, candidateParamScoreList, candidateQuoScoreExist, paramScoreList, scoreExist } from "@/lib/candidates";
+import { candidateParamScoreExist, candidateParamScoreList, candidateQuoScoreExist, candidateQuoScoreList, paramScoreList, quoScoreList, scoreExist } from "@/lib/candidates";
 import { getCompany } from "@/lib/companies";
 import { companyRoles, getCompanyRoleCandidate, getRole, roleCandidates } from "@/lib/roles";
 import { NextRequest, NextResponse } from "next/server";
@@ -30,10 +30,13 @@ export async function GET(request: NextRequest, { params }: { params: { company_
         };
 
         const candidateParamScore: paramScoreList[] = await candidateParamScoreList(params.role_candidate_id);
-        // const candidateQuoScore: quoScoreList[] = await candidateQuoScoreList(params.role_candidate_id);
+        const candidateQuoScore: quoScoreList[] = await candidateQuoScoreList(params.role_candidate_id);
 
         return NextResponse.json({ "candidate_id": params.role_candidate_id, 
-        "candidate_scores": candidateParamScore 
+        "candidate_scores": {
+            "quotient_scores": candidateQuoScore,
+            "parameter_scores": candidateParamScore
+        } 
         }, { status: 200});
     
     } catch (error: any) {

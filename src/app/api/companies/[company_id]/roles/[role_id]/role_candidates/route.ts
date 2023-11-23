@@ -1,5 +1,5 @@
 import { db } from "@/db";
-import { Companies, Role, candidateStatus, candidates, parameterScores, parameterWeightages, parameters, quotientScores } from "@/db/schema";
+import { Companies, Role, candidateStatus, candidates, parameterScores, parameterWeightages, parameters, quotientScores, quotients } from "@/db/schema";
 import { getCompany } from "@/lib/companies";
 import { companyRoles, getCompanyRoleCandidates, getCompanyRoles, getRole, roleCandidates } from "@/lib/roles";
 import { createCandidateSchema } from "@/utils/bodyValidationSchemas";
@@ -73,39 +73,38 @@ export async function POST(request: NextRequest, { params }: { params : { compan
               reasonReject: statusData?.candidate_reject_reason
             });
           };
-          let scoreToBeSummed = [];
-          let parameter_quotient_id: paramQuotientId[] = [];
+          // let scoreToBeSummed = [];
+          // let parameter_quotient_id: paramQuotientId[] = [];
           for( const score of data.candidate_parameter_scores ) {
             await txn.insert(parameterScores).values({
               candidateId: parseInt(candId.rows[0]["LAST_INSERT_ID()"]),
               parameterId: score.parameter_id,
               score: score.parameter_score
             });
-            const parameterWeightage: paramWeightage[] = await txn.select({
-              parameter_weightage: parameterWeightages.pWeightage
-          })
-          .from(parameterWeightages)
-          .where(and(eq(parameterWeightages.companyId, cSlug), eq(parameterWeightages.roleId, rSlug), eq(parameterWeightages.parameterId, score.parameter_id)));
-          
-          scoreToBeSummed.push((score.parameter_score * parameterWeightage[0].parameter_weightage));
-
-          parameter_quotient_id = await txn.select(
-            {
-              quotient_id: parameters.quotientId
-            }
-          )
-          .from(parameters)
-          .where(eq(parameters.id, score.parameter_id));
           };
-          const summedScore = scoreToBeSummed.reduce((accumulator, currentValue) => {
-            return accumulator + currentValue
-          }, 0) / 100;
 
-          await txn.insert(quotientScores).values({
-            candidateId: parseInt(candId.rows[0]["LAST_INSERT_ID()"]),
-            quotientId: parameter_quotient_id[0].quotient_id,
-            totalScore:  String(summedScore)
-          });
+          const totalQScore = await txn.select({
+            quotient_id: quotients.id,
+            total_score: sql<number>`SUM(${parameterWeightages.pWeightage} * ${parameterScores.score}) / 100`.as('total_score') //mapWith().
+          })
+          .from(parameterScores)
+          .innerJoin(parameterWeightages, eq(parameterWeightages.parameterId, parameterScores.parameterId))
+          .innerJoin(parameters, eq(parameters.id, parameterScores.parameterId))
+          .innerJoin(quotients, eq(quotients.id, parameters.quotientId))
+          .where(and(eq(parameterScores.candidateId, parseInt(candId.rows[0]["LAST_INSERT_ID()"])), eq(parameterWeightages.companyId, cSlug), eq(parameterWeightages.roleId, rSlug)))
+          .groupBy(quotients.id)
+          // .as('totalScore');
+          // if (totalQScore) {
+            for (const data of totalQScore) {
+              console.log(data);
+              await txn.insert(quotientScores).values({
+                  candidateId: parseInt(candId.rows[0]["LAST_INSERT_ID()"]),
+                  quotientId: data.quotient_id,
+                  totalScore: data.total_score
+                }
+              );
+            };
+          // };
         });
         
       };

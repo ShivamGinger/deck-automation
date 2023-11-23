@@ -172,10 +172,10 @@ export async function candidateQuoScoreExist(candidate_id: number): Promise<scor
 };
 
 export type paramScoreList = {
-  quotient_score_id: number;
-  quotient_id: number;
-  quotient_name: string;
-  quotient_score: string;
+  // quotient_score_id: number;
+  // quotient_id: number;
+  // quotient_name: string;
+  // quotient_score: string;
   parameter_score_id: number;
   parameter_id: number;
   parameter_name: string;
@@ -184,41 +184,38 @@ export type paramScoreList = {
 
 export async function candidateParamScoreList(candidate_id: number): Promise<paramScoreList[]> {
   const score: paramScoreList[] = await db.select({
-    quotient_score_id: quotientScores.id,
-    quotient_id: quotientScores.quotientId,
     quotient_name: quotients.quotient,
-    quotient_score: quotientScores.totalScore,
     parameter_score_id: parameterScores.id,
     parameter_id: parameterScores.parameterId,
     parameter_name: parameters.parameter,
     parameter_score: parameterScores.score,
   })
   .from(parameterScores)
-  .innerJoin(quotientScores, eq(quotientScores.candidateId, parameterScores.candidateId))
-  .innerJoin(quotients, eq(quotients.id, quotientScores.quotientId))
   .innerJoin(parameters, eq(parameters.id, parameterScores.parameterId))
+  .innerJoin(quotients, eq(quotients.id, parameters.quotientId))
   .where(eq(parameterScores.candidateId, candidate_id));
 
   return score;
 };
-// export type quoScoreList = {
-//   quotient_score_id: number;
-//   quotient_id: number;
-//   quotient_name: string;
-//   quotient_score: string;
-// };
 
-// export async function candidateQuoScoreList(candidate_id: number): Promise<quoScoreList[]> {
-// const score: quoScoreList[] = await db.select({
-//       quotient_score_id: quotientScores.id,
-//       quotient_id: quotientScores.quotientId,
-//       quotient_name: quotients.quotient,
-//       quotient_score: quotientScores.totalScore,  
-// })
-// .from(quotientScores)
-// .innerJoin(quotients, eq(quotients.id, quotientScores.quotientId))
-// .where(eq(quotientScores.candidateId, candidate_id));
+export type quoScoreList = {
+  quotient_score_id: number;
+  quotient_id: number;
+  quotient_name: string;
+  quotient_score: string;
+};
 
-// return score
+export async function candidateQuoScoreList(candidate_id: number): Promise<quoScoreList[]> {
+const score: quoScoreList[] = await db.select({
+      quotient_score_id: quotientScores.id,
+      quotient_id: quotientScores.quotientId,
+      quotient_name: quotients.quotient,
+      quotient_score: quotientScores.totalScore,  
+})
+.from(quotientScores)
+.innerJoin(quotients, eq(quotients.id, quotientScores.quotientId))
+.where(eq(quotientScores.candidateId, candidate_id));
 
-// };
+return score
+
+};
