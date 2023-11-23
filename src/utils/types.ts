@@ -82,17 +82,33 @@ export interface CandidateTrackingInformation extends BasicCandidateInformation 
   }
 };
 
+export interface EditCandidateTrackingInformation extends BasicCandidateInformation {
+  candidate_profile_share_date: string,
+  candidate_status: CandidateTrackingStatus,
+  candidate_reject_reason: string,
+  candidate_round_completed: string, //- while sending convert to number,
+  achievement: {
+    achievement: string[]
+  },
+  key_points: {
+    keyPoints: string[]
+  },
+  company_id: number,
+  role_id: number,
+};
+
 export interface CompleteCandidateInformation extends BasicCandidateInformation, CandidateTrackingInformation {
   company_id: string, //- while sending convert to number
   company_name: string,
   role_id: string, //- while sending convert to number
   role_name: string,
-  candidate_id: number
+  candidate_id: number,
+  created_at: string
 };
 
 export interface AddCandidateTrackingInformation extends BasicCandidateInformation {
-  shareCandidateStatus: boolean,
-  candidateStatus: {
+  share_candidate_status: boolean,
+  candidate_status: {
     candidate_profile_share_date: string,
     candidate_status: CandidateTrackingStatus,
     candidate_round_completed: string, //- while sending convert to number,
@@ -117,8 +133,18 @@ export type HandleCandidateInputChangeValue = (
     parameters: QuotientFactors[] | []
   } | {
     parameter_id: number,
-    parameter_score: number
-  }[],
+    parameter_score: string
+  }[] | ParametersQuotientFactorsValue[],
   field: string
 ) => void;
 
+export type HandleEditCandidateInputChangeValue = (
+  value: string | string[] | boolean | {
+    id: number,
+    parameters: QuotientFactors[] | []
+  } | {
+    parameter_id: number,
+    parameter_score: number
+  }[] | number | null,
+  field: string
+) => void;
