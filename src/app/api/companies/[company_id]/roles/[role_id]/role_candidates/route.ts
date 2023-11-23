@@ -73,8 +73,7 @@ export async function POST(request: NextRequest, { params }: { params : { compan
               reasonReject: statusData?.candidate_reject_reason
             });
           };
-          // let scoreToBeSummed = [];
-          // let parameter_quotient_id: paramQuotientId[] = [];
+
           for( const score of data.candidate_parameter_scores ) {
             await txn.insert(parameterScores).values({
               candidateId: parseInt(candId.rows[0]["LAST_INSERT_ID()"]),
@@ -93,10 +92,8 @@ export async function POST(request: NextRequest, { params }: { params : { compan
           .innerJoin(quotients, eq(quotients.id, parameters.quotientId))
           .where(and(eq(parameterScores.candidateId, parseInt(candId.rows[0]["LAST_INSERT_ID()"])), eq(parameterWeightages.companyId, cSlug), eq(parameterWeightages.roleId, rSlug)))
           .groupBy(quotients.id)
-          // .as('totalScore');
-          // if (totalQScore) {
+
             for (const data of totalQScore) {
-              console.log(data);
               await txn.insert(quotientScores).values({
                   candidateId: parseInt(candId.rows[0]["LAST_INSERT_ID()"]),
                   quotientId: data.quotient_id,
