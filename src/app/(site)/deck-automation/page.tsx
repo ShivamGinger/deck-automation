@@ -4,13 +4,13 @@ import React, { useLayoutEffect, useState } from 'react';
 
 import Link from 'next/link';
 
-import { CompanyDetails } from '@/utils/types';
+import { CompanyDetailsRoleCount } from '@/utils/types';
 import Loading from '../Components/Loading';
 import RenderCompanies from './Components/RenderCompanies';
 
 const Companies = () => {
 
-  const [companies, setCompanies] = useState<CompanyDetails[]>([]);
+  const [companies, setCompanies] = useState<CompanyDetailsRoleCount[]>([]);
 
   const [loading, setLoading] = useState(true);
 
