@@ -2,7 +2,7 @@
 
 import React, { ChangeEvent, useEffect, useState } from 'react';
 
-import { HandleCandidateInputChangeValue } from '@/utils/constants';
+import { HandleCandidateInputChangeValue } from '@/utils/types';
 
 const KeyPoints = (
   {
@@ -65,7 +65,7 @@ const KeyPoints = (
     setKeyPointsCount(prevCount => prevCount + 1);
     const updatedKeyPoints = [...keyPoints, ''];
 
-    handleInputChange(candidateNo, updatedKeyPoints, 'keyPoints');
+    handleInputChange(candidateNo, updatedKeyPoints, 'key_points');
 
     setKeyPoints(updatedKeyPoints);
   };
@@ -79,7 +79,7 @@ const KeyPoints = (
 
       setKeyPoints(updatedKeyPoints);
 
-      handleInputChange(candidateNo, updatedKeyPoints, 'keyPoints');
+      handleInputChange(candidateNo, updatedKeyPoints, 'key_points');
     }
 
   };

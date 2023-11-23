@@ -102,7 +102,7 @@ const ProfilePic = (
         </> :
         <div className='mt-6 flex flex-col w-72'>
           <div className='flex flex-row justify-between'>
-            <label htmlFor={`profile_pic_upload_`} className='font-semibold pb-2'>Upload Profile Picture</label>
+            <label htmlFor={`profile_pic_upload_${candidateNo}`} className='font-semibold pb-2'>Upload Profile Picture &ensp;<span className='text-red-600 font-bold'>*</span></label>
           </div>
           <input type="file" accept='image/*' id={`profile_pic_upload_${candidateNo}`} onChange={handleFileChange} />
         </div>

@@ -1,4 +1,4 @@
-import { AddCandidateTrackingInformation } from "@/utils/types";
+import { AddCandidateTrackingInformation, EditCandidateTrackingInformation } from "@/utils/types";
 import { string } from "zod";
 
 export function isValidDecimalNumber(value: string) {
@@ -40,8 +40,8 @@ export function validateTrackingCandidates(candidateInfo: AddCandidateTrackingIn
       variable_lpa,
       gender,
       esop_rsu,
-      shareCandidateStatus,
-      candidateStatus: { candidate_profile_share_date, candidate_round_completed }
+      share_candidate_status,
+      candidate_status: { candidate_profile_share_date, candidate_round_completed }
     } = candidate;
 
     if (
@@ -55,10 +55,42 @@ export function validateTrackingCandidates(candidateInfo: AddCandidateTrackingIn
         (esop_rsu && !isValidDecimalNumber(esop_rsu)) ||
         (fixed_lpa && !isValidDecimalNumber(fixed_lpa)) ||
         (variable_lpa && !isValidDecimalNumber(variable_lpa)) ||
-        (shareCandidateStatus && ((candidate_profile_share_date && !isValidDateFormat(candidate_profile_share_date)) || (candidate_round_completed && !isValidNumber(candidate_round_completed))))
+        (share_candidate_status && ((candidate_profile_share_date && !isValidDateFormat(candidate_profile_share_date)) || (candidate_round_completed && !isValidNumber(candidate_round_completed))))
       ) {
         return false;
       }
+    }
+  }
+  return true;
+};
+
+export function validateEditTrackingCandidates(showAddStatus: boolean, candidateInfo: EditCandidateTrackingInformation) {
+  const {
+    candidate_name,
+    email,
+    phone_number,
+    fixed_lpa,
+    variable_lpa,
+    gender,
+    esop_rsu,
+    candidate_profile_share_date,
+    candidate_round_completed
+  } = candidateInfo;
+
+  if (
+    !candidate_name || !phone_number || phone_number.length < 10 || phone_number.length > 15 ||
+    !email || !isValidEmail(email) ||
+    !gender || !(['male', 'female', 'other'].includes(gender))
+  ) {
+    return false;
+  } else {
+    if (
+      (esop_rsu && !isValidDecimalNumber(esop_rsu)) ||
+      (fixed_lpa && !isValidDecimalNumber(fixed_lpa)) ||
+      (variable_lpa && !isValidDecimalNumber(variable_lpa)) ||
+      ((candidate_profile_share_date && !isValidDateFormat(candidate_profile_share_date)) || (candidate_round_completed && !isValidNumber(candidate_round_completed)))
+    ) {
+      return false;
     }
   }
   return true;
