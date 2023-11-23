@@ -76,11 +76,11 @@ const CheckAddCandidate = () => {
       }
 
       setParameterUnderQuotient(parametersData);
+      setLoading(false);
     };
 
     if (quotientsDetailsUnderRole.length > 0) {
       makeAPICalls();
-      setLoading(false);
     }
   }, [quotientsDetailsUnderRole, companyID, roleID, router])
 

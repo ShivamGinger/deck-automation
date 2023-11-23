@@ -10,10 +10,11 @@ import Select from '@/app/(site)/Components/Select';
 
 import { isValidDecimalNumber, isValidEmail } from '@/app/(site)/Components/Candidate/validationFunctions';
 import { AddCandidateInformation, HandleCandidateInputChangeValue, ParametersQuotientFactorsValue, QuotientFactorsWeightage } from '@/utils/types';
-import ExpAchiv from './ExpAchiv';
-import KeyPoints from './KeyPoints';
+
 import ParameterQuotient from './ParameterQuotient';
 import { validateCandidates } from './validationFunctions';
+import KeyPoints from '@/app/(site)/Components/Candidate/KeyPoints';
+import ExpAchiv from '@/app/(site)/Components/Candidate/ExpAchiv';
 
 const AddCandidate = ({
   quotientsDetailsUnderRole,
@@ -151,6 +152,7 @@ const AddCandidate = ({
                 type='text'
                 moveLabel={candidateInfo[candidateNo - 1]?.candidate_name != ''}
                 onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(candidateNo, e.target.value, 'candidate_name')}
+                error={candidateInfo[candidateNo - 1]?.candidate_name === ''}
               />
               <Input
                 name='Small Description'
@@ -160,6 +162,7 @@ const AddCandidate = ({
                 type='text'
                 moveLabel={candidateInfo[candidateNo - 1]?.description != ''}
                 onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(candidateNo, e.target.value, 'description')}
+                error={candidateInfo[candidateNo - 1]?.description === ''}
               />
 
               <ProfilePic
@@ -187,6 +190,7 @@ const AddCandidate = ({
                 type='text'
                 moveLabel={candidateInfo[candidateNo - 1]?.current_position != ''}
                 onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(candidateNo, e.target.value, 'current_position')}
+                error={candidateInfo[candidateNo - 1]?.current_position === ''}
               />
 
               <Input
@@ -197,6 +201,7 @@ const AddCandidate = ({
                 type='text'
                 moveLabel={candidateInfo[candidateNo - 1]?.current_location != ''}
                 onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(candidateNo, e.target.value, 'current_location')}
+                error={candidateInfo[candidateNo - 1]?.current_location === ''}
               />
 
               <Input
@@ -207,6 +212,7 @@ const AddCandidate = ({
                 type='text'
                 moveLabel={candidateInfo[candidateNo - 1]?.experience != ''}
                 onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(candidateNo, e.target.value, 'experience')}
+                error={candidateInfo[candidateNo - 1]?.experience === ''}
               />
 
               <Input
@@ -217,6 +223,7 @@ const AddCandidate = ({
                 type='text'
                 moveLabel={candidateInfo[candidateNo - 1]?.expected_ctc != ''}
                 onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(candidateNo, e.target.value, 'expected_ctc')}
+                error={candidateInfo[candidateNo - 1]?.expected_ctc === ''}
               />
 
               <Input
@@ -271,6 +278,7 @@ const AddCandidate = ({
                 type='text'
                 moveLabel={candidateInfo[candidateNo - 1]?.notice_period != ''}
                 onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(candidateNo, e.target.value, 'notice_period')}
+                error={candidateInfo[candidateNo - 1]?.notice_period === ''}
               />
 
               <Input
@@ -302,6 +310,7 @@ const AddCandidate = ({
                 type='text'
                 moveLabel={candidateInfo[candidateNo - 1]?.social != ''}
                 onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(candidateNo, e.target.value, 'social')}
+                error={candidateInfo[candidateNo - 1]?.social === ''}
               />
 
               <KeyPoints
@@ -382,7 +391,7 @@ const AddCandidate = ({
           candidate_status: null,
           fixed_lpa: parseFloat(candidate.fixed_lpa),
           variable_lpa: parseFloat(candidate.variable_lpa),
-          esop_rsu: parseFloat(candidate.esop_rsu)
+          esop_rsu: parseFloat(candidate.esop_rsu),
         }))
       }),
       credentials: 'include',
