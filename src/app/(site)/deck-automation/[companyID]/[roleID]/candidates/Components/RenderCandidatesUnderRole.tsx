@@ -146,7 +146,7 @@ const RenderCandidatesUnderRole = ({
                   </td>
 
                   <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
-                    {detail.gp_score}
+                    {parseFloat(detail.gp_score).toFixed(2)}
                   </td>
 
                   <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>

@@ -13,6 +13,7 @@ import AddExpAchiv from './AddExpAchiv';
 import AddKeyPoints from './AddKeyPoints';
 import EditCustomSelectCompany from './EditCustomSelectCompany';
 import EditCustomSelectRole from './EditCustomSelectRole';
+import EditExpAchiv from './EditExpAchiv';
 import EditKeyPoints from './EditKeyPoints';
 import ProfilePicEditCandidate from './ProfilePicEditCandidate';
 
@@ -383,7 +384,15 @@ const EditCandidate = ({
                       />
                     </> :
                     <>
-                      edit kro
+                      <EditExpAchiv
+                        expiAchivData={candidateInfo && candidateInfo?.achievement.achievement}
+                        placeholderData={candidateInfo && candidateInfo?.key_points.keyPoints}
+                        count={candidateInfo && candidateInfo?.key_points.keyPoints.length}
+                        handleInputChange={handleInputChange}
+                        error={error}
+                        setError={setError}
+                        setErrorDetails={setErrorDetails}
+                      />
                     </>
                   }
 
