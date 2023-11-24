@@ -47,7 +47,7 @@ export type candidate = {
   current_position: string | null;
   current_location: string | null;
   experience: string | null;
-  phone_number: string | null;
+  phone_number: string;
   fixed_lpa: string | null;
   variable_lpa: string | null;
   expected_ctc: string | null;
@@ -172,10 +172,6 @@ export async function candidateQuoScoreExist(candidate_id: number): Promise<scor
 };
 
 export type paramScoreList = {
-  // quotient_score_id: number;
-  // quotient_id: number;
-  // quotient_name: string;
-  // quotient_score: string;
   parameter_score_id: number;
   parameter_id: number;
   parameter_name: string;
@@ -206,16 +202,15 @@ export type quoScoreList = {
 };
 
 export async function candidateQuoScoreList(candidate_id: number): Promise<quoScoreList[]> {
-const score: quoScoreList[] = await db.select({
+  const score: quoScoreList[] = await db.select({
       quotient_score_id: quotientScores.id,
       quotient_id: quotientScores.quotientId,
       quotient_name: quotients.quotient,
       quotient_score: quotientScores.totalScore,  
-})
-.from(quotientScores)
-.innerJoin(quotients, eq(quotients.id, quotientScores.quotientId))
-.where(eq(quotientScores.candidateId, candidate_id));
-
-return score
-
+  })
+  .from(quotientScores)
+  .innerJoin(quotients, eq(quotients.id, quotientScores.quotientId))
+  .where(eq(quotientScores.candidateId, candidate_id));
+  
+  return score;
 };
