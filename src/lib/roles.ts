@@ -68,7 +68,7 @@ export type roleCandidate = {
 export async function getCompanyRoleCandidates(companyid: number, roleid: number): Promise<roleCandidates[]> {
   const qScoreSum = db.select({
     candidateId: quotientScores.candidateId,
-    gp_score: sql<number>`sum(${quotientScores.totalScore} * ${quotientWeightages.qWeightage})`.mapWith(quotientScores.totalScore).as('gp_score')
+    gp_score: sql<number>`sum(${quotientScores.totalScore} * (${quotientWeightages.qWeightage} / 100))`.mapWith(quotientScores.totalScore).as('gp_score')
   })
     .from(quotientScores)
     .innerJoin(quotientWeightages, eq(quotientWeightages.quotientId, quotientScores.quotientId))
