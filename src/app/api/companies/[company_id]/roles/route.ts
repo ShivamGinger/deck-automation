@@ -7,7 +7,7 @@ import { eq, sql } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 import { ZodError } from "zod";
 
-export async function GET(request: NextResponse, { params }: { params: { company_id: number } }) {
+export async function GET(request: NextRequest, { params }: { params: { company_id: number } }) {
   try {
     const companyIdExist = await getCompany(params.company_id);
     if (companyIdExist.length === 0) {

@@ -21,6 +21,9 @@ export interface QuotientFactorsCount extends QuotientFactors {
   parameter_count: number
 };
 
+export interface QuotientFactorsError extends QuotientFactors {
+  error: boolean
+};
 export interface ParameterFactors extends QuotientFactors {
   parameter_id: number,
   parameter_name: string,

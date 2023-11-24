@@ -3,6 +3,8 @@ import { db } from '@/db';
 import { Candidates, CandidatesStatus, candidateStatus, candidates, companies, parameterScores, parameters, quotientScores, quotients, roles } from '@/db/schema';
 import { eq, and } from 'drizzle-orm';
 
+export type CandidateStatusType = "yet_to_share" | "joined" | "negotiation" | "in_process" | "on_hold" | "feedback_pending" | "dropped_out" | "rejected"
+
 export type candidateStatus = {
   candidate_status_id: number;
   candidate_id: number;
