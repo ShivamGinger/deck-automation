@@ -54,7 +54,16 @@ const RenderCompanies = ({
                     {index + 1}
                   </td>
                   <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
-                    {detail.company_name}
+                    <div className='flex justify-center'>
+                      <div className='flex gap-2'>
+                        <span>{detail.company_name}</span>
+                        <span className=''>
+                          <Link href={`/deck-automation/edit/${detail.company_id}`}>
+                            <Image width={20} height={20} src={'/images/edit.png'} alt="edit-icon" className="cursor-pointer" />
+                          </Link>
+                        </span>
+                      </div>
+                    </div>
                   </td>
 
                   <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
