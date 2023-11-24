@@ -103,6 +103,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(pdf);
   } catch (err) {
     console.log(err);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json({ error: 'Internal Server Error', errMsg: err }, { status: 500 });
   }
 };
