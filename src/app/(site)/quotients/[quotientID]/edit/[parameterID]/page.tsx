@@ -18,16 +18,14 @@ const EditParameter = () => {
   useLayoutEffect(() => {
     const getData = async () => {
       try {
-        const response = await fetch(`/api/quotients-all/${quotientID}/qparam-all`, {
+        const response = await fetch(`/api/quotients-all/${quotientID}/qparam-all/${parameterID}`, {
           method: 'GET',
         });
 
         if (response.ok) {
           const data = await response.json();
 
-          setParameter(data.data.filter((q: ParameterFactors) =>
-            q.parameter_id === (Array.isArray(parameterID) ? parseInt(parameterID[0]) : parseInt(parameterID))
-          )[0]?.parameter_name);
+          setParameter(data.data[0]?.parameter_name);
 
         } else {
           const data = await response.json();
@@ -50,7 +48,7 @@ const EditParameter = () => {
     }
 
     try {
-      const response = await fetch(`/api/quotients-all/${quotientID}/qparam-all/`, {
+      const response = await fetch(`/api/quotients-all/${quotientID}/qparam-all/${parameterID}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -106,7 +104,7 @@ const EditParameter = () => {
               disabled={!parameter || error}
               className={`${!parameter || error ? 'cursor-not-allowed opacity-50' : ''} font-semibold py-2 px-8 uppercase bg-[#B06500] text-white rounded-lg border-[#B06500]`}
             >
-              Submit
+              Update
             </button>
           </div>
 

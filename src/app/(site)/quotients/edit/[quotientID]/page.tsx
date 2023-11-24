@@ -19,16 +19,14 @@ const EditQuotient = () => {
   useLayoutEffect(() => {
     const getData = async () => {
       try {
-        const response = await fetch(`/api/quotients-all`, {
+        const response = await fetch(`/api/quotients-all/${quotientID}`, {
           method: 'GET',
         });
 
         if (response.ok) {
           const data = await response.json();
 
-          setQuotient(data.data.filter((q: QuotientFactorsCount) =>
-            q.quotient_id === (Array.isArray(quotientID) ? parseInt(quotientID[0]) : parseInt(quotientID))
-          )[0]?.quotient_name);
+          setQuotient(data.data[0]?.quotient);
 
         } else {
           const data = await response.json();
@@ -51,7 +49,7 @@ const EditQuotient = () => {
     }
 
     try {
-      const response = await fetch(`/api/quotients-all`, {
+      const response = await fetch(`/api/quotients-all/${quotientID}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -107,7 +105,7 @@ const EditQuotient = () => {
               disabled={!quotient || error}
               className={`${!quotient || error ? 'cursor-not-allowed opacity-50' : ''} font-semibold py-2 px-8 uppercase bg-[#B06500] text-white rounded-lg border-[#B06500]`}
             >
-              Submit
+              Update
             </button>
           </div>
 
