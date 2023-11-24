@@ -2,33 +2,33 @@
 
 import React, { ChangeEvent, useEffect, useState } from 'react';
 
-import { HandleCandidateInputChangeValue } from '@/utils/types';
+import { HandleEditCandidateInputChangeValue } from '@/utils/types';
 
-const KeyPoints = (
+const EditKeyPoints = (
   {
     handleInputChange,
-    candidateNo,
     error,
     setErrorDetails,
     setError,
     count,
-    placeholderData
+    placeholderData,
+    keyPointsData
   }:
     {
-      handleInputChange: HandleCandidateInputChangeValue,
-      candidateNo: number,
+      handleInputChange: HandleEditCandidateInputChangeValue,
       error: boolean,
       setErrorDetails: (details: string | null) => void,
       setError: (error: boolean) => void,
       count: number,
-      placeholderData: string[]
+      placeholderData: string[] | undefined,
+      keyPointsData: string[]
     }
 ) => {
   const [keyPointsCount, setKeyPointsCount] = useState(count);
 
   const [placeholder, setPlaceholderData] = useState(placeholderData);
 
-  const [keyPoints, setKeyPoints] = useState<string[]>(['']);
+  const [keyPoints, setKeyPoints] = useState<string[]>(keyPointsData);
 
   useEffect(() => {
     setKeyPointsCount(count);
@@ -65,23 +65,19 @@ const KeyPoints = (
     setKeyPointsCount(prevCount => prevCount + 1);
     const updatedKeyPoints = [...keyPoints, ''];
 
-    handleInputChange(candidateNo, updatedKeyPoints, 'key_points');
+    handleInputChange(updatedKeyPoints, 'key_points');
 
     setKeyPoints(updatedKeyPoints);
   };
 
   const handleKeyPointsChange = (index: number, value: string) => {
-
     const updatedKeyPoints = [...keyPoints];
 
-    if (updatedKeyPoints) {
-      updatedKeyPoints[index - 1] = value;
+    updatedKeyPoints[index - 1] = value;
 
-      setKeyPoints(updatedKeyPoints);
+    setKeyPoints(updatedKeyPoints);
 
-      handleInputChange(candidateNo, updatedKeyPoints, 'key_points');
-    }
-
+    handleInputChange(updatedKeyPoints, 'key_points');
   };
 
   const handleRemoveKeyPoints = () => {
@@ -94,26 +90,27 @@ const KeyPoints = (
       return;
     };
 
-    setKeyPointsCount(prevCount => Math.max(1, prevCount - 1));
+    setKeyPointsCount((prevCount) => Math.max(1, (prevCount !== undefined ? prevCount : 1) - 1));
 
     const updatedKeyPoints = keyPoints.slice(0, -1);
 
     setKeyPoints(updatedKeyPoints);
 
-    handleInputChange(candidateNo, updatedKeyPoints, 'key_points');
+    handleInputChange(updatedKeyPoints, 'key_points');
   };
 
   const elements = [];
 
-  for (let i = 1; i <= keyPointsCount; i++) {
-    elements.push(
-      <div key={i}>
-        <input
-          type="text"
-          name=""
-          id=""
-          placeholder={placeholder[i - 1]}
-          className={`
+  if (keyPointsCount != undefined) {
+    for (let i = 1; i <= keyPointsCount; i++) {
+      elements.push(
+        <div key={i}>
+          <input
+            type="text"
+            name=""
+            id=""
+            placeholder={placeholder && placeholder[i - 1]}
+            className={`
                     mt-2
                     h-full 
                     w-full 
@@ -126,11 +123,13 @@ const KeyPoints = (
                     border
                     border-black
                     `}
-          onChange={(e: ChangeEvent<HTMLInputElement>) => handleKeyPointsChange(i, e.target.value)}
-        />
-      </div>
-    )
+            onChange={(e: ChangeEvent<HTMLInputElement>) => handleKeyPointsChange(i, e.target.value)}
+          />
+        </div>
+      )
+    }
   }
+
 
   return <>
     <div className='mt-4 w-72 flex flex-col'>
@@ -151,4 +150,4 @@ const KeyPoints = (
 
 }
 
-export default KeyPoints
+export default EditKeyPoints

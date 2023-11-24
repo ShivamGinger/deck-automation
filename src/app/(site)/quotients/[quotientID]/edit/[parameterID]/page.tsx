@@ -50,7 +50,7 @@ const EditParameter = () => {
     }
 
     try {
-      const response = await fetch(`/api/quotients-all/${quotientID}/qparam-all`, {
+      const response = await fetch(`/api/quotients-all/${quotientID}/qparam-all/`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

@@ -88,11 +88,11 @@ const RenderCandidatesUnderRole = ({
     <>
       <div className='flex flex-col'>
         <div className="rounded-lg shadow overflow-x-auto bg-white">
-          <div className='p-4 font-bold text-2xl cursor-pointer' onClick={() => router.replace(`/deck-automation/${companyID}/${roleID}`)}>
+          <div className='p-4 font-bold text-2xl cursor-pointer' onClick={() => router.replace(`/deck-automation/${companyID}`)}>
             {'<'}
           </div>
           <div className='p-4 flex flex-row justify-between'>
-            <h2 className='font-bold uppercase text-2xl text-[#542C06]'>List of Candidate for {roleName} Under {companyName}</h2>
+            <h2 className='font-bold uppercase text-2xl text-[#542C06]'>List of Candidates for {roleName} Under {companyName}</h2>
             {/* <div className='p-2'>
               search ...
             </div> */}

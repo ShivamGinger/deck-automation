@@ -75,8 +75,8 @@ const AddCandidate = () => {
         gender: 'male',
         current_company: '',
         esop_rsu: '',
-        shareCandidateStatus: false,
-        candidateStatus: {
+        share_candidate_status: false,
+        candidate_status: {
           candidate_profile_share_date: '',
           candidate_status: 'yet_to_share',
           candidate_round_completed: '',
@@ -105,8 +105,8 @@ const AddCandidate = () => {
     const updatedCandidateInfo = [...candidateInfo];
     updatedCandidateInfo[index - 1] = {
       ...updatedCandidateInfo[index - 1],
-      candidateStatus: {
-        ...updatedCandidateInfo[index - 1].candidateStatus,
+      candidate_status: {
+        ...updatedCandidateInfo[index - 1].candidate_status,
         candidate_status: value
       }
     };
@@ -117,8 +117,8 @@ const AddCandidate = () => {
     const updatedCandidateInfo = [...candidateInfo];
     updatedCandidateInfo[index - 1] = {
       ...updatedCandidateInfo[index - 1],
-      candidateStatus: {
-        ...updatedCandidateInfo[index - 1].candidateStatus,
+      candidate_status: {
+        ...updatedCandidateInfo[index - 1].candidate_status,
         candidate_profile_share_date: value
       }
     };
@@ -129,8 +129,8 @@ const AddCandidate = () => {
     const updatedCandidateInfo = [...candidateInfo];
     updatedCandidateInfo[index - 1] = {
       ...updatedCandidateInfo[index - 1],
-      candidateStatus: {
-        ...updatedCandidateInfo[index - 1].candidateStatus,
+      candidate_status: {
+        ...updatedCandidateInfo[index - 1].candidate_status,
         candidate_round_completed: value
       }
     };
@@ -141,16 +141,16 @@ const AddCandidate = () => {
     const updatedCandidateInfo = [...candidateInfo];
     updatedCandidateInfo[index - 1] = {
       ...updatedCandidateInfo[index - 1],
-      candidateStatus: {
-        ...updatedCandidateInfo[index - 1].candidateStatus,
+      candidate_status: {
+        ...updatedCandidateInfo[index - 1].candidate_status,
         candidate_reject_reason: value
       }
     };
     setCandidateInfo(updatedCandidateInfo);
   };
 
-  const getShowCandidateStatus = () => {
-    return candidateInfo[0].shareCandidateStatus ? 'true' : 'false'
+  const getShowcandidate_status = () => {
+    return candidateInfo[0].share_candidate_status ? 'true' : 'false'
   };
 
   const renderCandidateInputs = () => {
@@ -309,7 +309,7 @@ const AddCandidate = () => {
                 moveLabel={candidateInfo[candidateNo - 1]?.social != ''}
                 onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(candidateNo, e.target.value, 'social')}
               />
-              
+
               <Input
                 name='Notice Period'
                 id={`notice_period_${candidateNo}`}
@@ -368,14 +368,14 @@ const AddCandidate = () => {
                   </p>
                   <CustomSelect
                     id={`candidate_status_choose_${candidateNo}`}
-                    value={getShowCandidateStatus()}
+                    value={getShowcandidate_status()}
                     options={[{ value: 'true', text: 'True' }, { value: 'false', text: 'False' }]}
-                    onChange={(e: ChangeEvent<HTMLSelectElement>) => handleInputChange(candidateNo, e.target.value === 'true', 'shareCandidateStatus')}
+                    onChange={(e: ChangeEvent<HTMLSelectElement>) => handleInputChange(candidateNo, e.target.value === 'true', 'share_candidate_status')}
                     required
                   />
                 </div>
               </div>
-              {candidateInfo[candidateNo - 1]?.shareCandidateStatus &&
+              {candidateInfo[candidateNo - 1]?.share_candidate_status &&
                 <>
                   <label className={`font-semibold flex justify-between pt-4 underline text-lg`}>
                     Details for Candidate Status:
@@ -383,32 +383,32 @@ const AddCandidate = () => {
                   <Input
                     name='Profile Share Date (YYYY/MM/DD)'
                     id={`candidate_profile_${candidateNo}`}
-                    placeholder={candidateInfo[candidateNo - 1]?.candidateStatus?.candidate_profile_share_date}
+                    placeholder={candidateInfo[candidateNo - 1]?.candidate_status?.candidate_profile_share_date}
                     required={false}
                     type='text'
-                    error={candidateInfo[candidateNo - 1]?.candidateStatus?.candidate_profile_share_date != '' && !isValidDateFormat(candidateInfo[candidateNo - 1]?.candidateStatus?.candidate_profile_share_date)}
-                    moveLabel={candidateInfo[candidateNo - 1]?.candidateStatus?.candidate_profile_share_date != ''}
+                    error={candidateInfo[candidateNo - 1]?.candidate_status?.candidate_profile_share_date != '' && !isValidDateFormat(candidateInfo[candidateNo - 1]?.candidate_status?.candidate_profile_share_date)}
+                    moveLabel={candidateInfo[candidateNo - 1]?.candidate_status?.candidate_profile_share_date != ''}
                     onChange={(e: ChangeEvent<HTMLInputElement>) => handleProfileShareDateChange(candidateNo, e.target.value)}
                   />
 
                   <Input
                     name='Reason Rejected'
                     id={`candidate_profile_${candidateNo}`}
-                    placeholder={candidateInfo[candidateNo - 1]?.candidateStatus?.candidate_reject_reason}
+                    placeholder={candidateInfo[candidateNo - 1]?.candidate_status?.candidate_reject_reason}
                     required={false}
                     type='text'
-                    moveLabel={candidateInfo[candidateNo - 1]?.candidateStatus?.candidate_reject_reason != ''}
+                    moveLabel={candidateInfo[candidateNo - 1]?.candidate_status?.candidate_reject_reason != ''}
                     onChange={(e: ChangeEvent<HTMLInputElement>) => handleReasonRejectChange(candidateNo, e.target.value)}
                   />
 
                   <Input
                     name='Round Done (eg: 1)'
                     id={`candidate_profile_${candidateNo}`}
-                    placeholder={candidateInfo[candidateNo - 1]?.candidateStatus?.candidate_round_completed}
+                    placeholder={candidateInfo[candidateNo - 1]?.candidate_status?.candidate_round_completed}
                     required={false}
                     type='text'
-                    error={candidateInfo[candidateNo - 1]?.candidateStatus?.candidate_round_completed != '' && !isValidNumber(candidateInfo[candidateNo - 1]?.candidateStatus?.candidate_round_completed)}
-                    moveLabel={candidateInfo[candidateNo - 1]?.candidateStatus?.candidate_round_completed != ''}
+                    error={candidateInfo[candidateNo - 1]?.candidate_status?.candidate_round_completed != '' && !isValidNumber(candidateInfo[candidateNo - 1]?.candidate_status?.candidate_round_completed)}
+                    moveLabel={candidateInfo[candidateNo - 1]?.candidate_status?.candidate_round_completed != ''}
                     onChange={(e: ChangeEvent<HTMLInputElement>) => handleRoundDoneChange(candidateNo, e.target.value)}
                   />
 
@@ -419,7 +419,7 @@ const AddCandidate = () => {
                     </p>
                     <CustomSelect
                       id={`candidate_status_choose_${candidateNo}`}
-                      value={candidateInfo[candidateNo - 1].candidateStatus?.candidate_status}
+                      value={candidateInfo[candidateNo - 1].candidate_status?.candidate_status}
                       options={[
                         { value: 'yet_to_share', text: 'Yet To Share' },
                         { value: 'joined', text: 'Joined' },
@@ -467,14 +467,17 @@ const AddCandidate = () => {
             variable_lpa: candidate.variable_lpa ? parseFloat(candidate.variable_lpa) : null,
             company_id: null,
             role_id: null,
-            ...(candidate.shareCandidateStatus ?
+            ...(candidate.share_candidate_status ?
               {
-                candidateStatus: {
-                  ...candidate.candidateStatus,
-                  candidate_round_completed: candidate.candidateStatus.candidate_round_completed ? parseInt(candidate.candidateStatus.candidate_round_completed) : null
+                candidate_status: {
+                  ...candidate.candidate_status,
+                  candidate_round_completed: candidate.candidate_status.candidate_round_completed ? parseInt(candidate.candidate_status.candidate_round_completed) : null
                 }
               } :
-              { shareCandidateStatus: false }
+              {
+                sharecandidate_status: false,
+                candidate_status: null
+              }
             ),
           }))
         }),

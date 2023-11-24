@@ -57,7 +57,7 @@ const EditQuotient = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          quotient_name: quotient,
+          quotient_name: quotient
         }),
         credentials: 'include',
       });

@@ -1,17 +1,22 @@
 'use client';
 
+import { CompanyDetailsRoleCount } from '@/utils/types';
 import React, { FC } from 'react';
 
 interface SelectProps extends React.HtmlHTMLAttributes<HTMLSelectElement> {
   required: boolean,
-  options: {
-    value: string,
-    text: string
-  }[],
-  value: string
+  options: CompanyDetailsRoleCount[],
+  value: string | undefined,
 }
 
-const CustomSelect: FC<SelectProps> = ({ required, options, value, ...props }) => {
+const EditCustomSelectCompany: FC<SelectProps> = ({ required, options, value, ...props }) => {
+  const selectedIndex = options.findIndex(option => option.company_name === value);
+
+  if (selectedIndex !== -1) {
+    const selectedOption = options.splice(selectedIndex, 1)[0];
+    options.unshift(selectedOption);
+  }
+
   return (
     <div className=''>
       <select
@@ -32,12 +37,12 @@ const CustomSelect: FC<SelectProps> = ({ required, options, value, ...props }) =
           border 
           border-[#542C06]
         `}>
-        {options.map(({ value, text }, index) => (
-          <option value={value} key={index}>{text}</option>
+        {options.map(({ company_id, company_name }, index) => (
+          <option value={company_id} key={index}>{company_name}</option>
         ))}
       </select>
     </div>
   )
 }
 
-export default CustomSelect
+export default EditCustomSelectCompany

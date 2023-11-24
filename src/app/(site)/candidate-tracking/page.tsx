@@ -24,7 +24,12 @@ const CandidateListing = () => {
         if (response.ok) {
           const data = await response.json();
 
-          setCandidates(data.data);
+          setCandidates(data.data.sort((a: CompleteCandidateInformation, b: CompleteCandidateInformation) => {
+            const dateA = new Date(a.created_at).getTime();
+            const dateB = new Date(b.created_at).getTime();
+
+            return dateA - dateB;
+          }));
         } else {
           const data = await response.json();
           setResponseDetails(data.error);

@@ -1,12 +1,12 @@
 "use client";
 
-import { HandleCandidateInputChangeValue } from '@/utils/types';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 
-const ExpAchiv = (
+import { HandleCandidateInputChangeValue, HandleEditCandidateInputChangeValue } from '@/utils/types';
+
+const AddExpAchiv = (
   {
     handleInputChange,
-    candidateNo,
     error,
     setErrorDetails,
     setError,
@@ -14,16 +14,15 @@ const ExpAchiv = (
     placeholderData
   }:
     {
-      handleInputChange: HandleCandidateInputChangeValue,
-      candidateNo: number,
+      handleInputChange: HandleEditCandidateInputChangeValue,
       error: boolean,
       setErrorDetails: (details: string | null) => void,
       setError: (error: boolean) => void,
-      count: number,
-      placeholderData: string[]
+      count: number | undefined,
+      placeholderData: string[] | undefined
     }
 ) => {
-  const [expAchivCount, setExpAchivCount] = useState(1);
+  const [expAchivCount, setExpAchivCount] = useState(count);
 
   const [placeholder, setPlaceholderData] = useState(placeholderData);
 
@@ -60,7 +59,7 @@ const ExpAchiv = (
       return;
     }
 
-    setExpAchivCount(prevCount => prevCount + 1);
+    setExpAchivCount(prevCount => (prevCount === undefined ? 0 : prevCount + 1));
     const updatedKeyPoints = [...expAchiv, ''];
 
     setExpAchiv(updatedKeyPoints);
@@ -75,7 +74,7 @@ const ExpAchiv = (
 
       setExpAchiv(updatedExpiAchiv);
 
-      handleInputChange(candidateNo, updatedExpiAchiv, 'achievement');
+      handleInputChange(updatedExpiAchiv, 'achievement');
     }
   };
 
@@ -89,44 +88,45 @@ const ExpAchiv = (
       return;
     };
 
-    setExpAchivCount(prevCount => Math.max(1, prevCount - 1));
+    setExpAchivCount(prevCount => Math.max(1, (prevCount !== undefined ? prevCount : 1) - 1));
 
     const updatedKeyPoints = expAchiv.slice(0, -1);
 
     setExpAchiv(updatedKeyPoints);
 
-    handleInputChange(candidateNo, updatedKeyPoints, 'achievement');
+    handleInputChange(updatedKeyPoints, 'achievement');
   };
 
   const elements = [];
 
-  for (let i = 1; i <= expAchivCount; i++) {
-    elements.push(
-      <div key={i}>
-        <input
-          type="text"
-          name=""
-          id=""
-          placeholder={placeholder[i - 1]}
-          className={`
-                  mt-2
-                  h-full 
-                  w-full 
-                  rounded-[7px]
-                  bg-transparent           
-                  px-3 
-                  py-2.5 
-                  font-sans 
-                  text-base
-                  border
-                  border-black
-                  `}
-          onChange={(e: ChangeEvent<HTMLInputElement>) => handleExpiAchivChange(i, e.target.value)}
-        />
-      </div>
-    )
+  if (expAchivCount != undefined) {
+    for (let i = 1; i <= expAchivCount; i++) {
+      elements.push(
+        <div key={i}>
+          <input
+            type="text"
+            name=""
+            id=""
+            placeholder={placeholder && placeholder[i - 1]}
+            className={`
+                    mt-2
+                    h-full 
+                    w-full 
+                    rounded-[7px]
+                    bg-transparent           
+                    px-3 
+                    py-2.5 
+                    font-sans 
+                    text-base
+                    border
+                    border-black
+                    `}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => handleExpiAchivChange(i, e.target.value)}
+          />
+        </div>
+      )
+    }
   }
-
 
   return <>
     <div className='mt-4 w-72 flex flex-col'>
@@ -145,4 +145,4 @@ const ExpAchiv = (
   </>
 }
 
-export default ExpAchiv
+export default AddExpAchiv

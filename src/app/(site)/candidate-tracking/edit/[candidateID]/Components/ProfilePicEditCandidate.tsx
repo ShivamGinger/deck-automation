@@ -3,21 +3,19 @@ import React, { ChangeEvent, Dispatch, SetStateAction, useLayoutEffect, useState
 
 import Image from 'next/image';
 
-import { HandleCandidateInputChangeValue } from '@/utils/types';
+import { HandleEditCandidateInputChangeValue } from '@/utils/types';
 
-const ProfilePic = (
+const ProfilePicEditCandidate = (
   {
     handleInputChange,
-    candidateNo,
     prevFileUploaded,
     candidateName,
     setErrorDetails,
     setError
   }: {
-    handleInputChange: HandleCandidateInputChangeValue,
-    candidateNo: number,
-    prevFileUploaded: string,
-    candidateName: string,
+    handleInputChange: HandleEditCandidateInputChangeValue,
+    prevFileUploaded: string | undefined,
+    candidateName: string | undefined,
     setErrorDetails: Dispatch<SetStateAction<string | null>>,
     setError: Dispatch<SetStateAction<boolean>>
   }
@@ -32,45 +30,49 @@ const ProfilePic = (
   const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.currentTarget.files?.[0];
     if (file) {
-      const formData = new FormData();
+      if (candidateName) {
+        const formData = new FormData();
 
-      formData.append('profile-pic', file);
-      formData.append('candidate-name', candidateName);
+        formData.append('profile-pic', file);
+        formData.append('candidate-name', candidateName);
 
-      try {
-        const response = await fetch('/api/s3-upload', {
-          method: 'POST',
-          body: formData,
-        });
+        try {
+          const response = await fetch('/api/s3-upload', {
+            method: 'POST',
+            body: formData,
+          });
 
-        if (response.ok) {
-          const data = await response.json();
+          if (response.ok) {
+            const data = await response.json();
 
-          setFileUploaded(true);
+            setFileUploaded(true);
 
-          handleInputChange(candidateNo, data.imageUrl, 'profile_pic');
-        } else {
-          const data = await response.json();
-          setError(true);
-          setErrorDetails(data.error);
+            handleInputChange(data.imageUrl, 'profile_pic');
+          } else {
+            const data = await response.json();
+            setError(true);
+            setErrorDetails(data.error);
 
-          const fileInput = document.getElementById(`profile_pic_upload_${candidateNo}`) as HTMLInputElement;
+            const fileInput = document.getElementById(`profile_pic_upload_${candidateName}`) as HTMLInputElement;
 
-          if (fileInput) {
-            fileInput.value = '';
+            if (fileInput) {
+              fileInput.value = '';
+            }
           }
+        } catch (error) {
+          console.error('Network error', error);
         }
-      } catch (error) {
-        console.error('Network error', error);
+      } else {
+        setError(true);
+        setErrorDetails("Candidate Name Missing!");
       }
-
     }
   };
 
   const handleProfilePicRemove = () => {
     setFileUploaded(false);
 
-    handleInputChange(candidateNo, '', 'profile_pic');
+    handleInputChange('', 'profile_pic');
   };
 
   return (
@@ -93,7 +95,7 @@ const ProfilePic = (
                   priority
                   className="object-cover rounded-md h-32"
                   style={{ width: "100%" }}
-                  alt={`Profile Pic for ${candidateNo}`}
+                  alt={`Profile Pic for ${candidateName}`}
                   sizes="(max-width: 600px) 100vw, 600px"
                 />
               </>
@@ -102,13 +104,13 @@ const ProfilePic = (
         </> :
         <div className='mt-6 flex flex-col w-72'>
           <div className='flex flex-row justify-between'>
-            <label htmlFor={`profile_pic_upload_${candidateNo}`} className='font-semibold pb-2'>Upload Profile Picture &ensp;<span className='text-red-600 font-bold'>*</span></label>
+            <label htmlFor={`profile_pic_upload_`} className='font-semibold pb-2'>Upload Profile Picture</label>
           </div>
-          <input type="file" accept='image/*' id={`profile_pic_upload_${candidateNo}`} onChange={handleFileChange} />
+          <input type="file" accept='image/*' id={`profile_pic_upload_${candidateName}`} onChange={handleFileChange} />
         </div>
       }
     </>
   )
 }
 
-export default ProfilePic
+export default ProfilePicEditCandidate
