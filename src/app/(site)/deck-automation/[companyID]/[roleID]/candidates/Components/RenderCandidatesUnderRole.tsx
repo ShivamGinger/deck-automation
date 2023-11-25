@@ -74,6 +74,8 @@ const RenderCandidatesUnderRole = ({
 
         saveAs(blob, `report-for-${candidateName}-${formattedDate}.pdf`);
       } else {
+        const data = await response.json();
+        console.log(data);
         alert("Error generating pdf!");
       }
     } catch (err) {
