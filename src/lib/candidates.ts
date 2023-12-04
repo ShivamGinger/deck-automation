@@ -1,6 +1,6 @@
 import { db } from '@/db';
 
-import { Candidates, CandidatesStatus, candidateStatus, candidates, companies, parameterScores, parameters, quotientScores, quotients, roles } from '@/db/schema';
+import { Candidates, CandidatesStatus, candidateStatus, candidates, companies, parameterScores, parameters, quotientScores, quotients, roles, statusHistory } from '@/db/schema';
 import { eq, and } from 'drizzle-orm';
 
 export type CandidateStatusType = "yet_to_share" | "joined" | "negotiation" | "in_process" | "on_hold" | "feedback_pending" | "dropped_out" | "rejected"
@@ -16,9 +16,33 @@ export type candidateStatus = {
   candidate_round_completed: number | null;
   candidate_reject_reason: string | null;
 };
+export type candidateStatusHistory = {
+  candidate_status_history_id: number;
+  candidate_name: string;
+  candidate_profile_share_date: string | null;
+  candidate_status: string;
+  candidate_round_completed: number | null;
+  candidate_reject_reason: string | null;
+  status_updated_at: string | null;
+};
 
-
-export async function getAllCandStat(): Promise<candidateStatus[]> {
+export async function getCandidateStatusHistory(candidate_id: number): Promise<candidateStatusHistory[]> {
+  const result: candidateStatusHistory[] = await db.select({
+    candidate_status_history_id: statusHistory.id,
+    candidate_name: candidates.name,
+    candidate_profile_share_date: statusHistory.profileShrDate,
+    candidate_status: statusHistory.status,
+    candidate_round_completed: statusHistory.roundDone,
+    candidate_reject_reason: statusHistory.reasonReject,
+    status_updated_at: statusHistory.updatedAt
+  })
+  .from(statusHistory)
+  .innerJoin(candidates, eq(candidates.id, statusHistory.candidateId))
+  .where(eq(statusHistory.candidateId, candidate_id));
+  
+  return result;
+};
+export async function getCandidateStatus(candidate_id: number): Promise<candidateStatus[]> {
   const result: candidateStatus[] = await db.select({
     candidate_status_id: candidateStatus.id,
     candidate_id: candidates.id,
@@ -31,7 +55,8 @@ export async function getAllCandStat(): Promise<candidateStatus[]> {
     candidate_reject_reason: candidateStatus.reasonReject
   })
   .from(candidateStatus)
-  .innerJoin(candidates, eq(candidates.id, candidateStatus.candidateId));
+  .innerJoin(candidates, eq(candidates.id, candidateStatus.candidateId))
+  .where(eq(candidateStatus.candidateId, candidate_id));
   
   return result;
 };
