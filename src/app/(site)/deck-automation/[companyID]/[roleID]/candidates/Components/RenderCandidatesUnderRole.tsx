@@ -14,6 +14,9 @@ import { CompleteCandidateInformation, QuotientFactorsWeightage } from '@/utils/
 import { saveAs } from 'file-saver';
 import CanAddCandidate from './CanAddCandidate';
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 const RenderCandidatesUnderRole = ({
   roleName,
   companyName,
@@ -52,6 +55,17 @@ const RenderCandidatesUnderRole = ({
     document.body.classList.add('loading-cursor');
     document.body.classList.remove('normal-cursor');
 
+    toast.success('Download Started!', {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
+
     try {
       const response = await fetch('/api/pdf-generate', {
         method: 'post',
@@ -81,6 +95,17 @@ const RenderCandidatesUnderRole = ({
     } catch (err) {
       console.log(err);
     } finally {
+      toast.success('Download Finished!', {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+
       document.body.classList.remove('loading-cursor');
       document.body.classList.add('normal-cursor');
     }
@@ -88,6 +113,7 @@ const RenderCandidatesUnderRole = ({
 
   return (
     <>
+      <ToastContainer />
       <div className='flex flex-col'>
         <div className="rounded-lg shadow overflow-x-auto bg-white">
           <div className='p-4 font-bold text-2xl cursor-pointer' onClick={() => router.replace(`/deck-automation/${companyID}`)}>
