@@ -75,7 +75,7 @@ export async function POST(request: NextRequest) {
 
     const page = await browser.newPage();
 
-    const website_url = `${origin}/html2pdf/?name=${encodeURIComponent(rolesCandidate[0]?.candidate_name)}&profilePic=${rolesCandidate[0]?.profile_pic}&keyPoints=${keyPointsString}&social=${rolesCandidate[0].social}&companyName=${rolesCandidate[0].company_name}&roleName=${rolesCandidate[0].role_name}&email=${rolesCandidate[0]?.email}&gp-score=${rolesCandidate[0]?.gp_score}&achivements=${achivementsString}&description=${rolesCandidate[0]?.description}&gender=${rolesCandidate[0]?.gender}&experience=${rolesCandidate[0].experience}&fixedLpa=${rolesCandidate[0].fixed_lpa}&phoneNumber=${rolesCandidate[0].phone_number}&topAttributes=${top5AttributesString}&quotientScores=${quotientScoresString}`;
+    const website_url = `${origin}/html2pdf/?name=${encodeURIComponent(rolesCandidate[0].candidate_name)}&profilePic=${rolesCandidate[0].profile_pic}&keyPoints=${encodeURIComponent(keyPointsString)}&social=${rolesCandidate[0].social}&companyName=${encodeURIComponent(rolesCandidate[0].company_name)}&roleName=${encodeURIComponent(rolesCandidate[0].role_name)}&email=${encodeURIComponent(rolesCandidate[0]?.email)}&gp-score=${rolesCandidate[0].gp_score}&achivements=${encodeURIComponent(achivementsString)}&description=${rolesCandidate[0].description}&gender=${rolesCandidate[0].gender}&experience=${rolesCandidate[0].experience}&fixedLpa=${rolesCandidate[0].fixed_lpa}&phoneNumber=${rolesCandidate[0].phone_number}&topAttributes=${encodeURIComponent(top5AttributesString)}&quotientScores=${encodeURIComponent(quotientScoresString)}`;
 
     // console.log(website_url);
 
