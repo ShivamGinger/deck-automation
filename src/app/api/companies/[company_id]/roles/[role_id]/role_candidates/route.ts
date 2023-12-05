@@ -61,7 +61,7 @@ export async function POST(request: NextRequest, { params }: { params: { company
           achievement: data.achievement,
           gender: data.gender,
           currCmp: data.current_company,
-          esopRsu: String(data.esop_rsu)
+          esopRsu: data.esop_rsu ? String(data.esop_rsu) : null
         }
 
         await txn.insert(candidates).values(vals);
