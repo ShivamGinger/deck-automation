@@ -2,7 +2,7 @@
 
 import React, { ChangeEvent, useEffect, useState } from 'react';
 
-import { HandleCandidateInputChangeValue, HandleEditCandidateInputChangeValue } from '@/utils/types';
+import { HandleEditCandidateInputChangeValue } from '@/utils/types';
 
 const AddExpAchiv = (
   {

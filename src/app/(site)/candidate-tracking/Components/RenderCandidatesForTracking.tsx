@@ -161,14 +161,14 @@ const RenderCandidatesForTracking = ({
                         {detail.notice_period}
                       </td>
                       <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
-                        <Link href={detail.social} target='_blank' rel='noopener noreferrer'>{detail.candidate_name}</Link>
+                        <Link href={detail.social} target='_blank' rel='noopener noreferrer' prefetch={false}>{detail.candidate_name}</Link>
                       </td>
                       <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
                         {detail.description}
                       </td>
 
                       <td className=" ">
-                        <Link href={`/candidate-tracking/edit/${detail.candidate_id}`}>
+                        <Link href={`/candidate-tracking/edit/${detail.candidate_id}`} prefetch={false} rel='noopener noreferrer'>
                           <Image width={20} height={20} src={'/images/edit.png'} alt="edit-icon" className="cursor-pointer" />
                         </Link>
                       </td>
@@ -179,7 +179,7 @@ const RenderCandidatesForTracking = ({
             </div>
             <div className='flex justify-between'>
               <div className='p-4 self-center'>
-                Add Candidate? <Link href={`/candidate-tracking/addCandidate`} className='underline text-blue-500'>Click here</Link>
+                Add Candidate? <Link href={`/candidate-tracking/addCandidate`} className='underline text-blue-500' prefetch={false} rel='noopener noreferrer'>Click here</Link>
               </div>
               <div className='pb-4 pr-4'>
                 <ReactPaginate

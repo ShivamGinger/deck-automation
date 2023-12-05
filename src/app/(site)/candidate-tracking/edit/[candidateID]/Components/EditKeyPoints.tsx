@@ -128,8 +128,7 @@ const EditKeyPoints = (
         </div>
       )
     }
-  }
-
+  };
 
   return <>
     <div className='mt-4 w-72 flex flex-col'>

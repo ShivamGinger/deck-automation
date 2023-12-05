@@ -75,7 +75,7 @@ const RenderQuotientsUnderRole = ({
                   </td>
 
                   <td className="">
-                    <Link href={`/deck-automation/${companyID}/${roleID}/quotients/${detail.quotient_weightage_id}?qid=${detail.quotient_id}`}>
+                    <Link href={`/deck-automation/${companyID}/${roleID}/quotients/${detail.quotient_weightage_id}?qid=${detail.quotient_id}`} prefetch={false} rel='noopener noreferrer'>
                       <Image width={20} height={20} src={'/images/plus.png'} alt="edit-icon" className="cursor-pointer" />
                     </Link>
                   </td>
@@ -84,7 +84,7 @@ const RenderQuotientsUnderRole = ({
             </tbody>
           </table>
           <div className='p-4'>
-            View Candidates? <Link href={`/deck-automation/${companyID}/${roleID}/candidates`} className='underline text-blue-500'>Click here</Link>
+            View Candidates? <Link href={`/deck-automation/${companyID}/${roleID}/candidates`} className='underline text-blue-500' prefetch={false} rel='noopener noreferrer'>Click here</Link>
           </div>
         </div>
       </div>

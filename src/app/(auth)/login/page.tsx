@@ -102,7 +102,7 @@ const Login = () => {
           </form>
           <div className='flex gap-2'>
             <p>Dont have an account?</p>
-            <Link href={'/register'} className='underline text-blue-500'>Click Here</Link>
+            <Link href={'/register'} className='underline text-blue-500' prefetch={false}>Click Here</Link>
           </div>
         </div>
       </div>

@@ -185,7 +185,7 @@ const SingleCandidate = ({
               <div className='flex flex-col gap-y-4 justify-center '>
                 <div>{phoneNumber}</div>
                 {email && email?.length > 18 ? <div className='text-xs'>{email}</div> : <div className=''>{email}</div>}
-                {social ? <Link href={social} target='_blank'>Linkedin profile</Link> : <div>Linkedin profile</div>}
+                {social ? <Link href={social} target='_blank' prefetch={false} rel='noopener noreferrer'>Linkedin profile</Link> : <div>Linkedin profile</div>}
               </div>
             </div>
           </div>
