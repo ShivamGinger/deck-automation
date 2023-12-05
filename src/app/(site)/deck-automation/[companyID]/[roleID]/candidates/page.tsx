@@ -73,7 +73,6 @@ const DisplayCandidatesUnderRoles = () => {
 
         if (response.ok) {
           const data = await response.json();
-          console.log(data.data);
 
           setCandidateDetailsUnderRole(data.data);
         } else {

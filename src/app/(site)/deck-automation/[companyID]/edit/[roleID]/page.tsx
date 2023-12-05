@@ -62,7 +62,7 @@ const EditRole = () => {
       });
 
       if (response.ok) {
-        router.replace(`/deck-automation`);
+        router.replace(`/deck-automation/${companyID}`);
         router.refresh();
       } else {
         const data = await response.json();
