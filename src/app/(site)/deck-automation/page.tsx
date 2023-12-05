@@ -25,7 +25,7 @@ const Companies = () => {
 
         if (response.ok) {
           const data = await response.json();
-          
+
           setCompanies(data.data);
         } else {
           const data = await response.json();
@@ -53,7 +53,7 @@ const Companies = () => {
                 <>
                   {responseDetails}
                   <div className='overflow-x-auto bg-white p-2'>
-                    Add Company? <Link href={'/deck-automation/addCompany'} className='underline text-blue-500'>Click here</Link>
+                    Add Company? <Link href={'/deck-automation/addCompany'} className='underline text-blue-500' prefetch={false} rel='noopener noreferrer'>Click here</Link>
                   </div>
                 </>
                 :

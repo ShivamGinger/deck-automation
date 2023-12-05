@@ -1,6 +1,6 @@
 "use client";
 
-import React, { ChangeEvent, Dispatch, SetStateAction, useEffect, useLayoutEffect, useState } from 'react';
+import React, { ChangeEvent, useEffect, useLayoutEffect, useState } from 'react';
 
 import Image from 'next/image';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';

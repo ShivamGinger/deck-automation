@@ -53,7 +53,7 @@ const AllQuotients = () => {
                   <>
                     {responseDetails}
                     <div className='overflow-x-auto bg-white p-2'>
-                      Add Quotient? <Link href={'/quotients/addQuotient'} className='underline text-blue-500'>Click here</Link>
+                      Add Quotient? <Link href={'/quotients/addQuotient'} className='underline text-blue-500' prefetch={false} rel='noopener noreferrer'>Click here</Link>
                     </div>
                   </>
                   :

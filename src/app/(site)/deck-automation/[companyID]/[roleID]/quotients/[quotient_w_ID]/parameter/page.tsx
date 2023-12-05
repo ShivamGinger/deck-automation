@@ -2,7 +2,7 @@
 
 import React, { useLayoutEffect, useState } from 'react';
 
-import { useParams, useRouter, useSearchParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 
 import Image from 'next/image';
 

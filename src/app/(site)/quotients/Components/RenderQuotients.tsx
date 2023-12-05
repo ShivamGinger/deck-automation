@@ -58,7 +58,7 @@ const RenderQuotients = ({
                       <div className='flex gap-2'>
                         <span>{detail.quotient_name}</span>
                         <span className=''>
-                          <Link href={`/quotients/edit/${detail.quotient_id}`}>
+                          <Link href={`/quotients/edit/${detail.quotient_id}`} prefetch={false} rel='noopener noreferrer'>
                             <Image width={20} height={20} src={'/images/edit.png'} alt="edit-icon" className="cursor-pointer" />
                           </Link>
                         </span>
@@ -71,7 +71,7 @@ const RenderQuotients = ({
                   </td>
 
                   <td className="">
-                    <Link href={`/quotients/${detail.quotient_id}`}>
+                    <Link href={`/quotients/${detail.quotient_id}`} prefetch={false} rel='noopener noreferrer'>
                       <Image width={20} height={20} src={'/images/plus.png'} alt="edit-icon" className="cursor-pointer" />
                     </Link>
                   </td>
@@ -80,7 +80,7 @@ const RenderQuotients = ({
             </tbody>
           </table>
           <div className='p-4'>
-            Add Quotient? <Link href={'/quotients/addQuotient'} className='underline text-blue-500'>Click here</Link>
+            Add Quotient? <Link href={'/quotients/addQuotient'} className='underline text-blue-500' prefetch={false} rel='noopener noreferrer'>Click here</Link>
           </div>
         </div>
       </div>

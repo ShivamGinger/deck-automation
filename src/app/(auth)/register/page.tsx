@@ -151,7 +151,7 @@ const Register = () => {
           </form>
           <div className='flex gap-2'>
             <p>Login with an exsisting account</p>
-            <Link href={'/login'} className='underline text-blue-500'>Click Here</Link>
+            <Link href={'/login'} className='underline text-blue-500' prefetch={false}>Click Here</Link>
           </div>
         </div>
       </div>

@@ -20,7 +20,7 @@ const DisplayQuotientsUnderRoles = () => {
 
         if (response.ok) {
           const data = await response.json();
-          
+
           if (data.data.length === 0) {
             router.replace(`/deck-automation/${companyID}/${roleID}/quotients/addQuotients`);
 

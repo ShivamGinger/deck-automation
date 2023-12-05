@@ -17,7 +17,6 @@ import EditExpAchiv from './EditExpAchiv';
 import EditKeyPoints from './EditKeyPoints';
 import ProfilePicEditCandidate from './ProfilePicEditCandidate';
 
-
 const EditCandidate = ({
   candidates
 }: {

@@ -62,7 +62,7 @@ const CanAddCandidate = ({
         </div>
         :
         <div className='p-4'>
-          Add Candidates? <Link href={`/deck-automation/${companyID}/${roleID}/candidates/addCandidate`} className='underline text-blue-500'>Click here</Link>
+          Add Candidates? <Link href={`/deck-automation/${companyID}/${roleID}/candidates/addCandidate`} className='underline text-blue-500' prefetch={false} rel='noopener noreferrer'>Click here</Link>
         </div>
       }
     </>

@@ -67,7 +67,7 @@ const RenderRolesUnderCompany = ({
                       <div className='flex gap-2'>
                         <span>{detail.role_name}</span>
                         <span className=''>
-                          <Link href={`/deck-automation/${companyID}/edit/${detail.role_id}`}>
+                          <Link href={`/deck-automation/${companyID}/edit/${detail.role_id}`} prefetch={false} rel='noopener noreferrer'>
                             <Image width={20} height={20} src={'/images/edit.png'} alt="edit-icon" className="cursor-pointer" />
                           </Link>
                         </span>
@@ -76,7 +76,7 @@ const RenderRolesUnderCompany = ({
                   </td>
 
                   <td className="">
-                    <Link href={`/deck-automation/${companyID}/${detail.role_id}`}>
+                    <Link href={`/deck-automation/${companyID}/${detail.role_id}`} prefetch={false} rel='noopener noreferrer'>
                       <Image width={20} height={20} src={'/images/plus.png'} alt="edit-icon" className="cursor-pointer" />
                     </Link>
                   </td>
@@ -85,7 +85,7 @@ const RenderRolesUnderCompany = ({
             </tbody>
           </table>
           <div className='p-4'>
-            Add Role? <Link href={`/deck-automation/${companyID}/addRole`} className='underline text-blue-500'>Click here</Link>
+            Add Role? <Link href={`/deck-automation/${companyID}/addRole`} className='underline text-blue-500' prefetch={false} rel='noopener noreferrer'>Click here</Link>
           </div>
         </div>
       </div>
