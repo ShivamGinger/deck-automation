@@ -290,20 +290,12 @@ const RenderCandidatesUnderRole = ({
             <tbody className="">
               {currentData?.map((detail, index) => (
                 <tr className={`${index % 2 === 0 ? 'bg-white' : ''}`} key={index}>
-                  <td className={`table-row-data relative ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}
-                    onMouseEnter={() => setIsHovered(!isHovered)}
-                    onMouseLeave={() => setIsHovered(!isHovered)}
-                  >
-                    {isHovered ?
-                      <input
-                        type="checkbox"
-                        onChange={() => handleCheckboxChange(detail.candidate_id)}
-                        checked={selectedCandidates.includes(detail.candidate_id)}
-                      /> :
-                      <>
-                        {index + 1}
-                      </>
-                    }
+                  <td className={`table-row-data relative ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
+                    <input
+                      type="checkbox"
+                      onChange={() => handleCheckboxChange(detail.candidate_id)}
+                      checked={selectedCandidates.includes(detail.candidate_id)}
+                    />
                   </td>
                   <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
                     <>
