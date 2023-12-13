@@ -68,6 +68,7 @@ export const groupPermissions = mysqlTable("group_permissions", {
 	groupId: bigint("group_id", { mode: "number" }).notNull(),
 	permissionType: varchar("permission_type", { length: 255 }),
 	permissionValue: tinyint("permission_value").notNull(),
+	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull()
 },
 (table) => {
 	return {
@@ -83,6 +84,7 @@ export const groups = mysqlTable("groups", {
 	canEdit: tinyint("can_edit").default(0),
 	canCreate: tinyint("can_create").default(0),
 	canDelete: tinyint("can_delete").default(0),
+	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull()
 },
 (table) => {
 	return {
