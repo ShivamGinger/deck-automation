@@ -1,7 +1,8 @@
 'use client';
 
-import { RoleDetails } from '@/utils/types';
 import React, { FC } from 'react';
+
+import { RoleDetails } from '@/utils/types';
 
 interface SelectProps extends React.HtmlHTMLAttributes<HTMLSelectElement> {
   required: boolean,

@@ -58,7 +58,7 @@ const RenderCompanies = ({
                       <div className='flex gap-2'>
                         <span>{detail.company_name}</span>
                         <span className=''>
-                          <Link href={`/deck-automation/edit/${detail.company_id}`}>
+                          <Link href={`/deck-automation/edit/${detail.company_id}`} prefetch={false} rel='noopener noreferrer'>
                             <Image width={20} height={20} src={'/images/edit.png'} alt="edit-icon" className="cursor-pointer" />
                           </Link>
                         </span>
@@ -71,7 +71,7 @@ const RenderCompanies = ({
                   </td>
 
                   <td className="">
-                    <Link href={`/deck-automation/${detail.company_id}`}>
+                    <Link href={`/deck-automation/${detail.company_id}`} prefetch={false} rel='noopener noreferrer'>
                       <Image width={20} height={20} src={'/images/plus.png'} alt="edit-icon" className="cursor-pointer" />
                     </Link>
                   </td>
@@ -80,7 +80,7 @@ const RenderCompanies = ({
             </tbody>
           </table>
           <div className='p-4'>
-            Add Company? <Link href={'/deck-automation/addCompany'} className='underline text-blue-500'>Click here</Link>
+            Add Company? <Link href={'/deck-automation/addCompany'} className='underline text-blue-500' prefetch={false} rel='noopener noreferrer'>Click here</Link>
           </div>
         </div>
       </div>

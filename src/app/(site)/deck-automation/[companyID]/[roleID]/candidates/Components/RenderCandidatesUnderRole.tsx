@@ -14,7 +14,7 @@ import { CompleteCandidateInformation, QuotientFactorsWeightage } from '@/utils/
 import { saveAs } from 'file-saver';
 import CanAddCandidate from './CanAddCandidate';
 
-import { ToastContainer, toast } from 'react-toastify';
+import { CloseButtonProps, ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const RenderCandidatesUnderRole = ({
@@ -37,6 +37,10 @@ const RenderCandidatesUnderRole = ({
 
   const router = useRouter();
 
+  const [selectedCandidates, setSelectedCandidates] = useState<number[]>([]);
+
+  const [isHovered, setIsHovered] = useState(false);
+
   const [currentPage, setCurrentPage] = useState(0);
 
   const handlePageChange = (selectedPage: { selected: number }) => {
@@ -51,11 +55,15 @@ const RenderCandidatesUnderRole = ({
 
   const currentData = candidateDetailsUnderRole?.slice(startIndex, endIndex);
 
+  const customCloseButton = ({ closeToast }: CloseButtonProps) => (
+    <div onClick={closeToast}>X</div>
+  );
+
   const handleDownloadPdf = async (roleID: string | string[], companyID: string | string[], candidateID: number, candidateName: string) => {
     document.body.classList.add('loading-cursor');
     document.body.classList.remove('normal-cursor');
 
-    toast.success('Download Started!', {
+    toast('Download Started!', {
       position: "top-right",
       autoClose: 5000,
       hideProgressBar: false,
@@ -63,7 +71,16 @@ const RenderCandidatesUnderRole = ({
       pauseOnHover: true,
       draggable: true,
       progress: undefined,
-      theme: "dark",
+      style: {
+        background: '#B06500',
+        color: '#ffffff',
+        border: '2px solid #B06500'
+      },
+      progressStyle: {
+        background: '#ffffff',
+        height: '4px',
+      },
+      closeButton: customCloseButton
     });
 
     try {
@@ -95,7 +112,7 @@ const RenderCandidatesUnderRole = ({
     } catch (err) {
       console.log(err);
     } finally {
-      toast.success('Download Finished!', {
+      toast('Download Finished!', {
         position: "top-right",
         autoClose: 2000,
         hideProgressBar: false,
@@ -103,12 +120,138 @@ const RenderCandidatesUnderRole = ({
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: "dark",
+        style: {
+          background: '#B06500',
+          color: '#ffffff',
+          border: '2px solid #B06500'
+        },
+        progressStyle: {
+          background: '#ffffff',
+          height: '4px',
+        },
+        closeButton: customCloseButton
       });
 
       document.body.classList.remove('loading-cursor');
       document.body.classList.add('normal-cursor');
     }
+  };
+
+  const handleMultipleDownloadPdf = async (roleID: string | string[], companyID: string | string[]) => {
+    if (selectedCandidates.length === 0) {
+      toast(`Select Candidates first!`, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        style: {
+          background: '#B06500',
+          color: '#ffffff',
+          border: '2px solid #B06500'
+        },
+        progressStyle: {
+          background: '#ffffff',
+          height: '4px',
+        },
+        closeButton: customCloseButton
+      });
+      return;
+    }
+
+    document.body.classList.add('loading-cursor');
+    document.body.classList.remove('normal-cursor');
+
+    toast('Multiple Download Started!', {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      style: {
+        background: '#B06500',
+        color: '#ffffff',
+        border: '2px solid #B06500'
+      },
+      progressStyle: {
+        background: '#ffffff',
+        height: '4px',
+      },
+      closeButton: customCloseButton
+    });
+
+    try {
+      const response = await fetch('/api/pdf-generate-multiple', {
+        method: 'post',
+        body: JSON.stringify({
+          role_id: Array.isArray(roleID) ? parseInt(roleID[0]) : parseInt(roleID),
+          company_id: Array.isArray(companyID) ? parseInt(companyID[0]) : parseInt(companyID),
+          candidate_list: selectedCandidates
+        }),
+      });
+
+
+      if (response.ok) {
+        const Buffer = await response.json();
+
+        const bufferData = Buffer.data;
+
+        const blob = new Blob([new Uint8Array(bufferData)], { type: 'application/pdf' });
+
+        const currentDate = new Date();
+        const formattedDate = currentDate.toISOString().slice(0, 19).replace(/:/g, '-');
+
+        saveAs(blob, `executive-summary-for-${companyID}-${formattedDate}.pdf`);
+      } else {
+        const data = await response.json();
+        console.log(data);
+        alert("Error generating pdf!");
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      toast('Multiple Download Finished!', {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        style: {
+          background: '#B06500',
+          color: '#ffffff',
+          border: '2px solid #B06500'
+        },
+        progressStyle: {
+          background: '#ffffff',
+          height: '4px',
+        },
+        closeButton: customCloseButton
+      });
+
+      document.body.classList.remove('loading-cursor');
+      document.body.classList.add('normal-cursor');
+    }
+  };
+
+  const handleCheckboxChange = (candidate_id: number) => {
+    const updatedSelectedCandidates = [...selectedCandidates];
+
+    if (updatedSelectedCandidates.includes(candidate_id)) {
+
+      const index = updatedSelectedCandidates.indexOf(candidate_id);
+      updatedSelectedCandidates.splice(index, 1);
+    } else {
+
+      updatedSelectedCandidates.push(candidate_id);
+    };
+
+    setSelectedCandidates(updatedSelectedCandidates);
   };
 
   return (
@@ -121,9 +264,17 @@ const RenderCandidatesUnderRole = ({
           </div>
           <div className='p-4 flex flex-row justify-between'>
             <h2 className='font-bold uppercase text-2xl text-[#542C06]'>List of Candidates for {roleName} Under {companyName}</h2>
-            {/* <div className='p-2'>
-              search ...
-            </div> */}
+            <div className='flex '>
+              {/* <div>
+                search ...
+              </div> */}
+              <div className={`flex gap-2 ${selectedCandidates.length === 0 ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`} onClick={() => handleMultipleDownloadPdf(roleID, companyID)}>
+                Multiple Download
+                <span className="pt-0.5">
+                  <Image width={20} height={20} src={'/images/download.png'} alt="edit-icon" />
+                </span>
+              </div>
+            </div>
           </div>
           <table className="w-full border-separate border-spacing-4 px-6 pt-2">
             <thead className="">
@@ -139,8 +290,12 @@ const RenderCandidatesUnderRole = ({
             <tbody className="">
               {currentData?.map((detail, index) => (
                 <tr className={`${index % 2 === 0 ? 'bg-white' : ''}`} key={index}>
-                  <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
-                    {index + 1}
+                  <td className={`table-row-data relative ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
+                    <input
+                      type="checkbox"
+                      onChange={() => handleCheckboxChange(detail.candidate_id)}
+                      checked={selectedCandidates.includes(detail.candidate_id)}
+                    />
                   </td>
                   <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
                     <>
@@ -190,13 +345,13 @@ const RenderCandidatesUnderRole = ({
           </table>
 
           <div className='p-4'>
-            Add Candidates? <Link href={`/deck-automation/${companyID}/${roleID}/candidates/addCandidate`} className='underline text-blue-500'>Click here</Link>
+            Add Candidates? <Link href={`/deck-automation/${companyID}/${roleID}/candidates/addCandidate`} className='underline text-blue-500' prefetch={false} rel='noopener noreferrer'>Click here</Link>
           </div>
           <div className='p-4 pt-0'>
-            View Quotients? <Link href={`/deck-automation/${companyID}/${roleID}/quotients`} className='underline text-blue-500'>Click here</Link>
+            View Quotients? <Link href={`/deck-automation/${companyID}/${roleID}/quotients`} className='underline text-blue-500' prefetch={false} rel='noopener noreferrer'>Click here</Link>
           </div>
         </div>
-      </div>
+      </div >
 
       <div className='self-end'>
         <ReactPaginate

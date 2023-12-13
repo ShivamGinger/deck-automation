@@ -63,7 +63,7 @@ const RolesUnderCompany = () => {
                 <>
                   {responseDetails}
                   <div className='overflow-x-auto bg-white p-2'>
-                    Add Role? <Link href={`/deck-automation/${companyID}/addRole`} className='underline text-blue-500'>Click here</Link>
+                    Add Role? <Link href={`/deck-automation/${companyID}/addRole`} className='underline text-blue-500' prefetch={false} rel='noopener noreferrer'>Click here</Link>
                   </div>
                 </>
                 :

@@ -59,7 +59,7 @@ const RenderParameters = ({
                       <div className='flex gap-2'>
                         <span>{detail.parameter_name}</span>
                         <span className=''>
-                          <Link href={`/quotients/${quotientID}/edit/${detail.parameter_id}`}>
+                          <Link href={`/quotients/${quotientID}/edit/${detail.parameter_id}`} prefetch={false} rel='noopener noreferrer'>
                             <Image width={20} height={20} src={'/images/edit.png'} alt="edit-icon" className="cursor-pointer" />
                           </Link>
                         </span>
@@ -72,7 +72,7 @@ const RenderParameters = ({
             </tbody>
           </table>
           <div className='p-4'>
-            Add Parameter? <Link href={`/quotients/${quotientID}/addParameter`} className='underline text-blue-500'>Click here</Link>
+            Add Parameter? <Link href={`/quotients/${quotientID}/addParameter`} className='underline text-blue-500' prefetch={false} rel='noopener noreferrer'>Click here</Link>
           </div>
         </div>
       </div>

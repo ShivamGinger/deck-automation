@@ -4,7 +4,6 @@ import React, { useLayoutEffect, useState } from 'react';
 
 import { useParams, useRouter } from 'next/navigation';
 
-import Image from 'next/image';
 
 import Loading from '@/app/(site)/Components/Loading';
 import { CompleteCandidateInformation, QuotientFactorsWeightage } from '@/utils/types';
@@ -73,7 +72,6 @@ const DisplayCandidatesUnderRoles = () => {
 
         if (response.ok) {
           const data = await response.json();
-          console.log(data.data);
 
           setCandidateDetailsUnderRole(data.data);
         } else {
@@ -109,7 +107,7 @@ const DisplayCandidatesUnderRoles = () => {
                     />
 
                     <div className='p-4 pt-0'>
-                      View Quotients? <Link href={`/deck-automation/${companyID}/${roleID}/quotients`} className='underline text-blue-500'>Click here</Link>
+                      View Quotients? <Link href={`/deck-automation/${companyID}/${roleID}/quotients`} className='underline text-blue-500' prefetch={false} rel='noopener noreferrer'>Click here</Link>
                     </div>
                   </div>
                 </>

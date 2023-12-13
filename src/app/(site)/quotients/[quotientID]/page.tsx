@@ -58,7 +58,7 @@ const RenderParameter = () => {
                   <>
                     {responseDetails}
                     <div className='overflow-x-auto bg-white p-2'>
-                      Add Parameter? <Link href={`/quotients/${quotientID}/addParameter`} className='underline text-blue-500'>Click here</Link>
+                      Add Parameter? <Link href={`/quotients/${quotientID}/addParameter`} className='underline text-blue-500' prefetch={false}>Click here</Link>
                     </div>
                   </>
                   :

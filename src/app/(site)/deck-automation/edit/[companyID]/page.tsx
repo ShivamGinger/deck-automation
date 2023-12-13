@@ -1,10 +1,11 @@
 'use client';
 
-import Input from '@/app/(site)/Components/Input';
-import { QuotientFactorsCount } from '@/utils/types';
+import React, { ChangeEvent, useLayoutEffect, useState } from 'react';
+
 import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
-import React, { ChangeEvent, useLayoutEffect, useState } from 'react';
+
+import Input from '@/app/(site)/Components/Input';
 
 const EditCompany = () => {
   const router = useRouter();

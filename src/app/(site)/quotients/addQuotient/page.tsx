@@ -1,9 +1,11 @@
 'use client';
 
-import Input from '@/app/(site)/Components/Input';
-import Image from 'next/image';
-import { useParams, useRouter } from 'next/navigation';
 import React, { ChangeEvent, useState } from 'react';
+
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+
+import Input from '@/app/(site)/Components/Input';
 
 const AddQuotient = () => {
   const router = useRouter();
