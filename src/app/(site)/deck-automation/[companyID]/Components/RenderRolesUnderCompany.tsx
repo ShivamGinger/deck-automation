@@ -10,6 +10,7 @@ import ReactPaginate from 'react-paginate';
 
 import { ITEMS_PER_PAGE } from '@/utils/constants';
 import { RoleDetails } from '@/utils/types';
+import { useSession } from 'next-auth/react';
 
 const RenderRolesUnderCompany = ({
   rolesUnderCompany,
@@ -35,6 +36,8 @@ const RenderRolesUnderCompany = ({
   const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, totalItems);
 
   const currentData = rolesUnderCompany?.slice(startIndex, endIndex);
+
+  const { data: session } = useSession();
 
   return (
     <>
@@ -66,11 +69,14 @@ const RenderRolesUnderCompany = ({
                     <div className='flex justify-center'>
                       <div className='flex gap-2'>
                         <span>{detail.role_name}</span>
-                        <span className=''>
-                          <Link href={`/deck-automation/${companyID}/edit/${detail.role_id}`} prefetch={false} rel='noopener noreferrer'>
-                            <Image width={20} height={20} src={'/images/edit.png'} alt="edit-icon" className="cursor-pointer" />
-                          </Link>
-                        </span>
+                        {
+                          session?.user.can_edit &&
+                          <span className=''>
+                            <Link href={`/deck-automation/${companyID}/edit/${detail.role_id}`} prefetch={false} rel='noopener noreferrer'>
+                              <Image width={20} height={20} src={'/images/edit.png'} alt="edit-icon" className="cursor-pointer" />
+                            </Link>
+                          </span>
+                        }
                       </div>
                     </div>
                   </td>
@@ -84,9 +90,12 @@ const RenderRolesUnderCompany = ({
               ))}
             </tbody>
           </table>
-          <div className='p-4'>
-            Add Role? <Link href={`/deck-automation/${companyID}/addRole`} className='underline text-blue-500' prefetch={false} rel='noopener noreferrer'>Click here</Link>
-          </div>
+          {
+            session?.user.can_create &&
+            <div className='p-4'>
+              Add Role? <Link href={`/deck-automation/${companyID}/addRole`} className='underline text-blue-500' prefetch={false} rel='noopener noreferrer'>Click here</Link>
+            </div>
+          }
         </div>
       </div>
 

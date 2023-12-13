@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
 
 import Input from '@/app/(site)/Components/Input';
+import { useSession } from 'next-auth/react';
 
 const EditCompany = () => {
   const router = useRouter();
@@ -17,7 +18,14 @@ const EditCompany = () => {
   const [error, setError] = useState(false);
   const [errorDeatils, setErrorDetails] = useState<string | null>('');
 
+  const { data: session } = useSession();
+
   useLayoutEffect(() => {
+    if (!session?.user.can_edit) {
+      router.replace('/');
+      return;
+    }
+
     const getData = async () => {
       try {
         const response = await fetch(`/api/companies/${companyID}`, {
@@ -39,7 +47,7 @@ const EditCompany = () => {
       }
     };
     getData();
-  }, [companyID]);
+  }, [companyID, router, session?.user.can_edit]);
 
   const handleSubmit = async () => {
     setErrorDetails(null);

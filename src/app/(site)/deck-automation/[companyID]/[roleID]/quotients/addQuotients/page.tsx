@@ -7,6 +7,7 @@ import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
 
 import Loading from '@/app/(site)/Components/Loading';
+import { useSession } from 'next-auth/react';
 import AddQuotientWeightage from './Components/AddQuotientWeightage';
 
 const QuotientAddPage = () => {
@@ -16,7 +17,14 @@ const QuotientAddPage = () => {
 
   const [loading, setLoading] = useState(true);
 
+  const { data: session } = useSession();
+
   useLayoutEffect(() => {
+    if (!session?.user.can_create) {
+      router.replace('/');
+      return;
+    }
+
     const getData = async () => {
       try {
         const response = await fetch(`/api/companies/${companyID}/roles/${roleID}/quotients`, {
@@ -37,7 +45,7 @@ const QuotientAddPage = () => {
       }
     };
     getData();
-  }, [companyID, roleID, router]);
+  }, [companyID, roleID, router, session?.user.can_create]);
 
   return (
     <section className='mt-12'>

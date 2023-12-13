@@ -6,6 +6,7 @@ import React, { useLayoutEffect, useState } from 'react';
 import { CompleteCandidateInformation } from '@/utils/types';
 import Loading from '../Components/Loading';
 import RenderCandidatesForTracking from './Components/RenderCandidatesForTracking';
+import { useSession } from 'next-auth/react';
 
 const CandidateListing = () => {
   const [candidates, setCandidates] = useState<CompleteCandidateInformation[]>([]);
@@ -13,6 +14,8 @@ const CandidateListing = () => {
   const [loading, setLoading] = useState(true);
 
   const [responseDetails, setResponseDetails] = useState<string | null>(null);
+
+  const { data: session } = useSession();
 
   useLayoutEffect(() => {
     const getData = async () => {
@@ -56,9 +59,12 @@ const CandidateListing = () => {
                 {responseDetails || candidates.length === 0 ?
                   <>
                     {responseDetails}
-                    <div className='overflow-x-auto bg-white p-2'>
-                      Add Candidate? <Link href={`/candidate-tracking/addCandidate`} className='underline text-blue-500' prefetch={false} rel='noopener noreferrer'>Click here</Link>
-                    </div>
+                    {
+                      session?.user.can_create &&
+                      <div className='overflow-x-auto bg-white p-2'>
+                        Add Candidate? <Link href={`/candidate-tracking/addCandidate`} className='underline text-blue-500' prefetch={false} rel='noopener noreferrer'>Click here</Link>
+                      </div>
+                    }
                   </>
                   :
                   <RenderCandidatesForTracking

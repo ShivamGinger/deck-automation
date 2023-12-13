@@ -11,6 +11,7 @@ import { useParams } from 'next/navigation';
 
 import { RoleDetails } from '@/utils/types';
 import Loading from '../../Components/Loading';
+import { useSession } from 'next-auth/react';
 
 const RolesUnderCompany = () => {
 
@@ -23,6 +24,8 @@ const RolesUnderCompany = () => {
   const [companyName, setCompanyName] = useState('');
 
   const [responseDetails, setResponseDetails] = useState<string | null>(null);
+
+  const { data: session } = useSession();
 
   useLayoutEffect(() => {
     const getData = async () => {
@@ -62,9 +65,12 @@ const RolesUnderCompany = () => {
               {responseDetails || rolesUnderCompany?.length === 0 ?
                 <>
                   {responseDetails}
-                  <div className='overflow-x-auto bg-white p-2'>
-                    Add Role? <Link href={`/deck-automation/${companyID}/addRole`} className='underline text-blue-500' prefetch={false} rel='noopener noreferrer'>Click here</Link>
-                  </div>
+                  {
+                    session?.user.can_create &&
+                    <div className='overflow-x-auto bg-white p-2'>
+                      Add Role? <Link href={`/deck-automation/${companyID}/addRole`} className='underline text-blue-500' prefetch={false} rel='noopener noreferrer'>Click here</Link>
+                    </div>
+                  }
                 </>
                 :
                 <RenderRolesUnderCompany

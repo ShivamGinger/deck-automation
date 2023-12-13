@@ -6,6 +6,7 @@ import { useParams, useRouter, useSearchParams } from 'next/navigation';
 
 import Loading from '@/app/(site)/Components/Loading';
 import { ParametersQuotientFactors } from '@/utils/types';
+import { useSession } from 'next-auth/react';
 import RenderParametersUnderQuotient from './Components/RenderParametersUnderQuotients';
 
 const DisplayParametersUnderQuotients = () => {
@@ -23,6 +24,10 @@ const DisplayParametersUnderQuotients = () => {
 
   const [quotientName, setQuotientName] = useState('');
 
+  const [errorDeatils, setErrorDetails] = useState<string | null>('');
+
+  const { data: session } = useSession();
+
   useLayoutEffect(() => {
     const getData = async () => {
       try {
@@ -33,12 +38,15 @@ const DisplayParametersUnderQuotients = () => {
         if (response.ok) {
           const data = await response.json();
 
-          if (data.data.length === 0) {
+          if (data.data.length === 0 && session?.user.can_create) {
             router.replace(`/deck-automation/${companyID}/${roleID}/quotients/${quotient_w_ID}/parameter?qid=${quotientID}`);
 
-          } else {
+          } else if (data.data.length > 0) {
             setParameterUnderQuotient(data.data);
             setQuotientName(data.data[0].quotient_name);
+          } else {
+            setErrorDetails('No paramters under this quotient');
+
           }
         }
       } catch (err) {
@@ -48,16 +56,27 @@ const DisplayParametersUnderQuotients = () => {
       }
     };
     getData();
-  }, [companyID, roleID, router, quotient_w_ID, quotientID]);
+  }, [companyID, roleID, router, quotient_w_ID, quotientID, session?.user.can_create]);
 
   return (
     <section className='mt-12'>
       <div className='max-w-screen-2xl mx-auto flex flex-col'>
         {
-          loading || parametersUnderQuotients.length === 0 ?
+          loading ?
             <Loading /> :
             <>
+              {errorDeatils &&
+                <>
+                  <div className='bg-white p-2'>
+                    <div className='p-4 font-bold text-2xl cursor-pointer' onClick={() => router.replace(`/deck-automation/${companyID}/${roleID}/quotients`)}>
+                      {'<'}
+                    </div>
+                    {errorDeatils}
+                  </div>
+                </>
+              }
               {
+                parametersUnderQuotients.length !== 0 &&
                 <RenderParametersUnderQuotient
                   quotientName={quotientName}
                   parametersUnderQuotients={parametersUnderQuotients}

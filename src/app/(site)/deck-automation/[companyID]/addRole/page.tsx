@@ -8,10 +8,19 @@ import { useRouter } from 'next/navigation';
 import { useParams } from 'next/navigation';
 
 import AddRole from './Components/AddRole';
+import { useSession } from 'next-auth/react';
 
 const AddRoleDetails = () => {
   const { companyID } = useParams();
   const router = useRouter();
+
+  const { data: session } = useSession();
+
+  if (!session?.user.can_create) {
+    router.replace('/');
+    return;
+  }
+
   return (
     <>
       <section className='bg-[#FEFAEF] '>

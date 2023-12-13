@@ -8,6 +8,7 @@ import ReactPaginate from 'react-paginate';
 
 import { ITEMS_PER_PAGE, } from '@/utils/constants';
 import { ParameterFactors } from '@/utils/types';
+import { useSession } from 'next-auth/react';
 
 const RenderParameters = ({
   parameters,
@@ -31,6 +32,9 @@ const RenderParameters = ({
   const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, totalItems);
 
   const currentData = parameters?.slice(startIndex, endIndex);
+
+  const { data: session } = useSession();
+
   return (
     <>
       <div className='flex flex-col'>
@@ -58,11 +62,14 @@ const RenderParameters = ({
                     <div className='flex justify-center'>
                       <div className='flex gap-2'>
                         <span>{detail.parameter_name}</span>
-                        <span className=''>
-                          <Link href={`/quotients/${quotientID}/edit/${detail.parameter_id}`} prefetch={false} rel='noopener noreferrer'>
-                            <Image width={20} height={20} src={'/images/edit.png'} alt="edit-icon" className="cursor-pointer" />
-                          </Link>
-                        </span>
+                        {
+                          session?.user.can_edit &&
+                          <span className=''>
+                            <Link href={`/quotients/${quotientID}/edit/${detail.parameter_id}`} prefetch={false} rel='noopener noreferrer'>
+                              <Image width={20} height={20} src={'/images/edit.png'} alt="edit-icon" className="cursor-pointer" />
+                            </Link>
+                          </span>
+                        }
                       </div>
                     </div>
 
@@ -71,9 +78,12 @@ const RenderParameters = ({
               ))}
             </tbody>
           </table>
-          <div className='p-4'>
-            Add Parameter? <Link href={`/quotients/${quotientID}/addParameter`} className='underline text-blue-500' prefetch={false} rel='noopener noreferrer'>Click here</Link>
-          </div>
+          {
+            session?.user.can_create &&
+            <div className='p-4'>
+              Add Parameter? <Link href={`/quotients/${quotientID}/addParameter`} className='underline text-blue-500' prefetch={false} rel='noopener noreferrer'>Click here</Link>
+            </div>
+          }
         </div>
       </div>
 

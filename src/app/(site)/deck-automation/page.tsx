@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { CompanyDetailsRoleCount } from '@/utils/types';
 import Loading from '../Components/Loading';
 import RenderCompanies from './Components/RenderCompanies';
+import { useSession } from 'next-auth/react';
 
 const Companies = () => {
 
@@ -15,6 +16,8 @@ const Companies = () => {
   const [loading, setLoading] = useState(true);
 
   const [responseDetails, setResponseDetails] = useState<string | null>(null);
+
+  const { data: session } = useSession();
 
   useLayoutEffect(() => {
     const getData = async () => {
@@ -52,9 +55,12 @@ const Companies = () => {
               {responseDetails || companies.length === 0 ?
                 <>
                   {responseDetails}
-                  <div className='overflow-x-auto bg-white p-2'>
-                    Add Company? <Link href={'/deck-automation/addCompany'} className='underline text-blue-500' prefetch={false} rel='noopener noreferrer'>Click here</Link>
-                  </div>
+                  {
+                    session?.user.can_create &&
+                    <div className='overflow-x-auto bg-white p-2'>
+                      Add Company? <Link href={'/deck-automation/addCompany'} className='underline text-blue-500' prefetch={false} rel='noopener noreferrer'>Click here</Link>
+                    </div>
+                  }
                 </>
                 :
                 <RenderCompanies companies={companies} />

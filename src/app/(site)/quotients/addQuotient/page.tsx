@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
 import Input from '@/app/(site)/Components/Input';
+import { useSession } from 'next-auth/react';
 
 const AddQuotient = () => {
   const router = useRouter();
@@ -14,6 +15,13 @@ const AddQuotient = () => {
 
   const [error, setError] = useState(false);
   const [errorDeatils, setErrorDetails] = useState<string | null>('');
+
+  const { data: session } = useSession();
+
+  if (!session?.user.can_create) {
+    router.replace('/');
+    return;
+  }
 
   const handleSubmit = async () => {
     setErrorDetails(null);

@@ -10,6 +10,7 @@ import ReactPaginate from 'react-paginate';
 
 import { ITEMS_PER_PAGE } from '@/utils/constants';
 import { CompleteCandidateInformation } from '@/utils/types';
+import { useSession } from 'next-auth/react';
 import Status from './Status';
 
 const RenderCandidatesForTracking = ({
@@ -30,6 +31,8 @@ const RenderCandidatesForTracking = ({
   const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, totalItems);
 
   const currentData = candidates?.slice(startIndex, endIndex);
+
+  const { data: session } = useSession();
 
   const getFileName = () => {
     const currentDate = new Date();
@@ -109,7 +112,10 @@ const RenderCandidatesForTracking = ({
                     <th className="table-headings">Notice Period</th>
                     <th className="table-headings">Linkedin</th>
                     <th className="table-headings">Key Observations</th>
-                    <th className="table-headings">Edit</th>
+                    {
+                      session?.user.can_edit &&
+                      <th className="table-headings">Edit</th>
+                    }
                   </tr>
                 </thead>
                 <tbody className="">
@@ -167,20 +173,26 @@ const RenderCandidatesForTracking = ({
                         {detail.description}
                       </td>
 
-                      <td className=" ">
-                        <Link href={`/candidate-tracking/edit/${detail.candidate_id}`} prefetch={false} rel='noopener noreferrer'>
-                          <Image width={20} height={20} src={'/images/edit.png'} alt="edit-icon" className="cursor-pointer" />
-                        </Link>
-                      </td>
+                      {
+                        session?.user.can_edit &&
+                        <td className=" ">
+                          <Link href={`/candidate-tracking/edit/${detail.candidate_id}`} prefetch={false} rel='noopener noreferrer'>
+                            <Image width={20} height={20} src={'/images/edit.png'} alt="edit-icon" className="cursor-pointer" />
+                          </Link>
+                        </td>
+                      }
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
-            <div className='flex justify-between'>
-              <div className='p-4 self-center'>
-                Add Candidate? <Link href={`/candidate-tracking/addCandidate`} className='underline text-blue-500' prefetch={false} rel='noopener noreferrer'>Click here</Link>
-              </div>
+            <div className={`flex ${session?.user.can_create ? 'justify-between' : 'self-end'}`}>
+              {
+                session?.user.can_create &&
+                <div className='p-4 self-center'>
+                  Add Candidate? <Link href={`/candidate-tracking/addCandidate`} className='underline text-blue-500' prefetch={false} rel='noopener noreferrer'>Click here</Link>
+                </div>
+              }
               <div className='pb-4 pr-4'>
                 <ReactPaginate
                   previousLabel={

@@ -7,6 +7,7 @@ import React, { useLayoutEffect, useState } from 'react';
 import { ParameterFactors } from '@/utils/types';
 import Loading from '../../Components/Loading';
 import RenderParameters from './Components/RenderParameters';
+import { useSession } from 'next-auth/react';
 
 const RenderParameter = () => {
   const { quotientID } = useParams();
@@ -18,6 +19,8 @@ const RenderParameter = () => {
   const [loading, setLoading] = useState(true);
 
   const [responseDetails, setResponseDetails] = useState<string | null>(null);
+
+  const { data: session } = useSession();
 
   useLayoutEffect(() => {
     const getData = async () => {
@@ -57,9 +60,12 @@ const RenderParameter = () => {
                 {responseDetails || parameters.length == 0 ?
                   <>
                     {responseDetails}
-                    <div className='overflow-x-auto bg-white p-2'>
-                      Add Parameter? <Link href={`/quotients/${quotientID}/addParameter`} className='underline text-blue-500' prefetch={false}>Click here</Link>
-                    </div>
+                    {
+                      session?.user.can_create &&
+                      <div className='overflow-x-auto bg-white p-2'>
+                        Add Parameter? <Link href={`/quotients/${quotientID}/addParameter`} className='underline text-blue-500' prefetch={false}>Click here</Link>
+                      </div>
+                    }
                   </>
                   :
                   <RenderParameters

@@ -7,6 +7,7 @@ import { useParams, useRouter } from 'next/navigation';
 
 import Loading from '@/app/(site)/Components/Loading';
 import { CompleteCandidateInformation, QuotientFactorsWeightage } from '@/utils/types';
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import CanAddCandidate from './Components/CanAddCandidate';
 import RenderCandidatesUnderRole from './Components/RenderCandidatesUnderRole';
@@ -35,6 +36,8 @@ const DisplayCandidatesUnderRoles = () => {
 
   const [errorDeatils, setErrorDetails] = useState<string | null>('');
 
+  const { data: session } = useSession();
+
   useLayoutEffect(() => {
     const getQuotientsDetails = async () => {
       try {
@@ -45,10 +48,10 @@ const DisplayCandidatesUnderRoles = () => {
         if (response.ok) {
           const data = await response.json();
 
-          if (data.data.length === 0) {
+          if (data.data.length === 0 && session?.user.can_create) {
             router.replace(`/deck-automation/${companyID}/${roleID}/quotients/addQuotients`);
 
-          } else {
+          } else if (data.data.length > 0) {
             setQuotientsDetailsUnderRole(data.data);
             setRoleName(data.data[0].role_name);
             setCompanyName(data.data[0].company_name);
@@ -61,7 +64,7 @@ const DisplayCandidatesUnderRoles = () => {
       }
     };
     getQuotientsDetails();
-  }, [companyID, roleID, router]);
+  }, [companyID, roleID, router, session?.user.can_create]);
 
   useLayoutEffect(() => {
     const getCandidateDetails = async () => {
@@ -102,9 +105,12 @@ const DisplayCandidatesUnderRoles = () => {
                     </div>
                     {errorDeatils}
 
-                    <CanAddCandidate
-                      quotientsDetailsUnderRole={quotientsDetailsUnderRole}
-                    />
+                    {
+                      session?.user.can_create &&
+                      <CanAddCandidate
+                        quotientsDetailsUnderRole={quotientsDetailsUnderRole}
+                      />
+                    }
 
                     <div className='p-4 pt-0'>
                       View Quotients? <Link href={`/deck-automation/${companyID}/${roleID}/quotients`} className='underline text-blue-500' prefetch={false} rel='noopener noreferrer'>Click here</Link>

@@ -15,7 +15,7 @@ const Sidebar = () => {
 
   if (status === 'unauthenticated') {
     router.replace('/login');
-  }
+  };
 
   return (
     <div className='w-80 bg-white flex justify-between flex-col shadow-2xl pr-2 border-r'>
@@ -25,7 +25,7 @@ const Sidebar = () => {
             <Image width={150} height={150} src={'/images/Ginger Partners_Logo with tagline.png'} alt="profile pic" className="rounded-xl " priority />
           </Link>
           <span className='font-semibold tracking-wide'>
-            {session?.user?.email}
+            {session?.user?.first_name} {session?.user?.last_name}
           </span>
         </div>
         <div className='p-2 flex flex-col gap-4'>
