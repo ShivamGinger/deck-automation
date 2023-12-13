@@ -44,7 +44,8 @@ export async function PUT(request: NextRequest, { params }: { params: { user_id:
         await db.update(userGroups).set({
             groupId: parsedData.data.group_id,
             userId: userSlug
-        });
+        })
+        .where(eq(userGroups.userId, userSlug));
 
         return NextResponse.json({ status: 201 });
 
