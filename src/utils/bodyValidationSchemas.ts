@@ -212,7 +212,6 @@ export const updateGroupSchema = z.object({
 });
 
 export const addUserToGroupSchema = z.object({
-  // group_id: z.number(),
   user_id: z.number()
 });
 
