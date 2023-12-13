@@ -5,6 +5,7 @@ import { InferSelectModel, sql } from "drizzle-orm"
 export const candidateStatus = mysqlTable("candidate_status", {
 	id: bigint("id", { mode: "number" }).autoincrement().notNull(),
 	candidateId: bigint("candidate_id", { mode: "number" }).notNull(),
+	// you can use { mode: 'date' }, if you want to have Date as type for this column
 	profileShrDate: date("profile_shr_date", { mode: 'string' }),
 	status: mysqlEnum("status", ['yet_to_share','joined','negotiation','on_hold','feedback_pending','dropped_out','rejected','in_process']).notNull(),
 	roundDone: tinyint("round_done"),
@@ -62,6 +63,33 @@ export const companies = mysqlTable("companies", {
 	}
 });
 
+export const groupPermissions = mysqlTable("group_permissions", {
+	id: bigint("id", { mode: "number" }).autoincrement().notNull(),
+	groupId: bigint("group_id", { mode: "number" }).notNull(),
+	permissionType: varchar("permission_type", { length: 255 }),
+	permissionValue: tinyint("permission_value").notNull(),
+},
+(table) => {
+	return {
+		groupIdIdx: index("group_id_idx").on(table.groupId),
+		groupPermissionsId: primaryKey(table.id),
+	}
+});
+
+export const groups = mysqlTable("groups", {
+	id: bigint("id", { mode: "number" }).autoincrement().notNull(),
+	groupName: varchar("group_name", { length: 255 }).notNull(),
+	canRead: tinyint("can_read").default(1),
+	canEdit: tinyint("can_edit").default(0),
+	canCreate: tinyint("can_create").default(0),
+	canDelete: tinyint("can_delete").default(0),
+},
+(table) => {
+	return {
+		groupsId: primaryKey(table.id),
+	}
+});
+
 export const parameterScores = mysqlTable("parameter_scores", {
 	id: bigint("id", { mode: "number" }).autoincrement().notNull(),
 	candidateId: bigint("candidate_id", { mode: "number" }).notNull(),
@@ -87,8 +115,8 @@ export const parameterWeightages = mysqlTable("parameter_weightages", {
 },
 (table) => {
 	return {
-		parameterIdIdx: index("parameter_id_idx").on(table.parameterId),
 		companyIdIdx: index("company_id_idx").on(table.companyId),
+		parameterIdIdx: index("parameter_id_idx").on(table.parameterId),
 		roleIdIdx: index("role_id_idx").on(table.roleId),
 		parameterWeightagesId: primaryKey(table.id),
 	}
@@ -132,8 +160,8 @@ export const quotientWeightages = mysqlTable("quotient_weightages", {
 },
 (table) => {
 	return {
-		quotientIdIdx: index("quotient_id_idx").on(table.quotientId),
 		companyIdIdx: index("company_id_idx").on(table.companyId),
+		quotientIdIdx: index("quotient_id_idx").on(table.quotientId),
 		roleIdIdx: index("role_id_idx").on(table.roleId),
 		quotientWeightagesId: primaryKey(table.id),
 	}
@@ -167,6 +195,7 @@ export const roles = mysqlTable("roles", {
 export const statusHistory = mysqlTable("status_history", {
 	id: bigint("id", { mode: "number" }).autoincrement().notNull(),
 	candidateId: bigint("candidate_id", { mode: "number" }).notNull(),
+	// you can use { mode: 'date' }, if you want to have Date as type for this column
 	profileShrDate: date("profile_shr_date", { mode: 'string' }),
 	status: mysqlEnum("status", ['yet_to_share','joined','negotiation','on_hold','feedback_pending','dropped_out','rejected','in_process']).notNull(),
 	roundDone: tinyint("round_done"),
@@ -179,11 +208,27 @@ export const statusHistory = mysqlTable("status_history", {
 	}
 });
 
+export const userGroups = mysqlTable("user_groups", {
+	id: bigint("id", { mode: "number" }).autoincrement().notNull(),
+	userId: bigint("user_id", { mode: "number" }).notNull(),
+	groupId: bigint("group_id", { mode: "number" }).notNull(),
+},
+(table) => {
+	return {
+		groupIdIdx: index("group_id_idx").on(table.groupId),
+		userIdIdx: index("user_id_idx").on(table.userId),
+		userGroupsId: primaryKey(table.id),
+	}
+});
+
 export const users = mysqlTable("users", {
 	id: bigint("id", { mode: "number" }).autoincrement().notNull(),
 	email: varchar("email", { length: 255 }).notNull(),
 	password: varchar("password", { length: 255 }).notNull(),
 	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
+	firstName: varchar("first_name", { length: 200 }),
+	lastName: varchar("last_name", { length: 200 }),
+	isAdmin: tinyint("is_admin").default(0),
 },
 (table) => {
 	return {
@@ -205,3 +250,6 @@ export type QuotientWeightages = InferSelectModel<typeof quotientWeightages>;
 export type Quotients = InferSelectModel<typeof quotients>;
 export type Role = InferSelectModel<typeof roles>;
 export type User = InferSelectModel<typeof users>;
+export type UserGroups = InferSelectModel<typeof userGroups>;
+export type Groups = InferSelectModel<typeof groups>;
+export type GroupPermissions = InferSelectModel<typeof groupPermissions>;
