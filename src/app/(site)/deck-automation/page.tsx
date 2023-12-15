@@ -8,6 +8,7 @@ import { CompanyDetailsRoleCount } from '@/utils/types';
 import Loading from '../Components/Loading';
 import RenderCompanies from './Components/RenderCompanies';
 import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 const Companies = () => {
 
@@ -18,6 +19,7 @@ const Companies = () => {
   const [responseDetails, setResponseDetails] = useState<string | null>(null);
 
   const { data: session } = useSession();
+  const router = useRouter();
 
   useLayoutEffect(() => {
     const getData = async () => {
@@ -40,8 +42,17 @@ const Companies = () => {
         setLoading(false);
       }
     };
-    getData();
-  }, []);
+
+    if (session?.user) {
+      if (session.user.can_read) {
+        getData();
+
+      } else {
+        router.replace('/');
+        return;
+      }
+    };
+  }, [session?.user, router]);
 
   return (
     <section className='mt-12'>

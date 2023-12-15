@@ -26,13 +26,6 @@ const UsersUnderGroups = () => {
   const { data: session } = useSession();
 
   useLayoutEffect(() => {
-    if (session?.user) {
-      if (!session?.user.can_create) {
-        router.replace('/');
-        return;
-      }
-    }
-
     const getData = async () => {
       try {
         const response = await fetch(`/api/groups/${groupID}/users`, {
@@ -54,7 +47,16 @@ const UsersUnderGroups = () => {
         setLoading(false);
       }
     };
-    getData();
+
+    if (session?.user) {
+      if (session?.user.can_create && session.user.can_read) {
+        getData();
+
+      } else {
+        router.replace('/');
+        return;
+      }
+    }
   }, [groupID, router, session?.user]);
 
   return (
@@ -75,7 +77,7 @@ const UsersUnderGroups = () => {
                       </div>
                       {responseDetails}
                       {
-                        session?.user.can_create &&
+                        session?.user.can_create && session.user.can_read &&
                         <div className='p-4'>
                           Add User? <Link href={`/groups/${groupID}/users/addUser`} className='underline text-blue-500' prefetch={false} rel='noopener noreferrer'>Click here</Link>
                         </div>

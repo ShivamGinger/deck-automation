@@ -8,8 +8,6 @@ import { useRouter } from 'next/navigation';
 import Input from '@/app/(site)/Components/Input';
 import { useSession } from 'next-auth/react';
 import randToken from 'rand-token';
-import { CloseButtonProps, ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 const AddUser = () => {
   const router = useRouter();
@@ -35,15 +33,11 @@ const AddUser = () => {
   }, []);
 
   if (session?.user) {
-    if (!session?.user.can_create) {
+    if (!session?.user.can_create || !session.user.can_read) {
       router.replace('/');
       return;
     }
   };
-
-  const customCloseButton = ({ closeToast }: CloseButtonProps) => (
-    <div onClick={closeToast}>X</div>
-  );
 
   const handleSubmit = async () => {
     setErrorDetails(null);
@@ -69,30 +63,7 @@ const AddUser = () => {
     });
 
     if (response.ok) {
-      toast('User Added!', {
-        position: "top-right",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        style: {
-          background: '#B06500',
-          color: '#ffffff',
-          border: '2px solid #B06500'
-        },
-        progressStyle: {
-          background: '#ffffff',
-          height: '4px',
-        },
-        closeButton: customCloseButton
-      });
-
-      setLastName('');
-      setFirstName('');
-      setEmail('');
-      generateRandomPassword();
+      router.replace('/users');
     } else {
       const data = await response.json();
       setError(true);
@@ -101,7 +72,6 @@ const AddUser = () => {
   };
 
   return <>
-    <ToastContainer />
     <section className='bg-[#FEFAEF]'>
       <div className='max-w-screen-2xl mx-auto bg-white shadow-2xl px-4 md:px-0 md:mt-10 rounded-xl '>
         <div className='p-4 font-bold text-2xl cursor-pointer' onClick={() => router.replace(`/users`)}>

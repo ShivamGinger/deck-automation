@@ -10,8 +10,8 @@ import RenderRolesUnderCompany from './Components/RenderRolesUnderCompany';
 import { useParams } from 'next/navigation';
 
 import { RoleDetails } from '@/utils/types';
-import Loading from '../../Components/Loading';
 import { useSession } from 'next-auth/react';
+import Loading from '../../Components/Loading';
 
 const RolesUnderCompany = () => {
 
@@ -52,8 +52,17 @@ const RolesUnderCompany = () => {
         setLoading(false);
       }
     }
-    getData();
-  }, [companyID, router]);
+
+    if (session?.user) {
+      if (session.user.can_read) {
+        getData();
+
+      } else {
+        router.replace('/');
+        return;
+      }
+    };
+  }, [companyID, router, session?.user]);
 
   return (
     <section className='mt-12'>

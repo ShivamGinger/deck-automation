@@ -31,13 +31,6 @@ const EditGroup = () => {
   const { data: session } = useSession();
 
   useLayoutEffect(() => {
-    if (session?.user) {
-      if (!session?.user.can_edit) {
-        router.replace('/');
-        return;
-      }
-    }
-
     const getData = async () => {
       try {
         const response = await fetch(`/api/groups/${groupID}`, {
@@ -66,7 +59,16 @@ const EditGroup = () => {
         setLoading(false);
       }
     };
-    getData();
+
+    if (session?.user) {
+      if (session?.user.can_edit && session.user.can_read) {
+        getData();
+
+      } else {
+        router.replace('/');
+        return;
+      }
+    }
   }, [groupID, router, session?.user]);
 
   const handleInputChange = (value: string, field: string) => {

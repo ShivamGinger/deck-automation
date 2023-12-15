@@ -55,8 +55,17 @@ const DisplayParametersUnderQuotients = () => {
         setLoading(false);
       }
     };
-    getData();
-  }, [companyID, roleID, router, quotient_w_ID, quotientID, session?.user.can_create]);
+
+    if (session?.user) {
+      if (session.user.can_read) {
+        getData();
+
+      } else {
+        router.replace('/');
+        return;
+      }
+    };
+  }, [companyID, roleID, router, quotient_w_ID, quotientID, session?.user]);
 
   return (
     <section className='mt-12'>

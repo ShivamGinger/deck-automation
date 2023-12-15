@@ -7,8 +7,8 @@ import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
 
 import Loading from '@/app/(site)/Components/Loading';
-import AddParameterUnderQuotient from './Components/AddParameterUnderQuotients';
 import { useSession } from 'next-auth/react';
+import AddParameterUnderQuotient from './Components/AddParameterUnderQuotients';
 
 const QuotientAddPage = () => {
   const { roleID, companyID, quotient_w_ID } = useParams();
@@ -20,11 +20,6 @@ const QuotientAddPage = () => {
   const { data: session } = useSession();
 
   useLayoutEffect(() => {
-    if (!session?.user.can_create) {
-      router.replace('/');
-      return;
-    }
-
     const getData = async () => {
       try {
         const response = await fetch(`/api/companies/${companyID}/roles/${roleID}/quotients/${quotient_w_ID}/parameters`, {
@@ -44,8 +39,17 @@ const QuotientAddPage = () => {
         setLoading(false);
       }
     };
+    if (session?.user) {
+      if (session.user.can_create && session.user.can_read) {
+        getData();
+
+      } else {
+        router.replace('/');
+        return;
+      }
+    };
     getData();
-  }, [companyID, roleID, router, quotient_w_ID, session?.user.can_create]);
+  }, [companyID, roleID, router, quotient_w_ID, session?.user]);
 
   return (
     <section className='mt-12'>

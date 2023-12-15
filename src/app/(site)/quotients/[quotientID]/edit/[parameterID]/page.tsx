@@ -20,11 +20,6 @@ const EditParameter = () => {
   const { data: session } = useSession();
 
   useLayoutEffect(() => {
-    if (!session?.user.can_edit) {
-      router.replace('/');
-      return;
-    }
-
     const getData = async () => {
       try {
         const response = await fetch(`/api/quotients-all/${quotientID}/qparam-all/${parameterID}`, {
@@ -45,8 +40,17 @@ const EditParameter = () => {
         console.log(err);
       };
     };
-    getData();
-  }, [parameterID, quotientID, router, session?.user.can_edit]);
+
+    if (session?.user) {
+      if (session?.user.can_edit && session.user.can_read) {
+        getData();
+
+      } else {
+        router.replace('/');
+        return;
+      }
+    }
+  }, [parameterID, quotientID, router, session?.user]);
 
   const handleSubmit = async () => {
     setErrorDetails(null);

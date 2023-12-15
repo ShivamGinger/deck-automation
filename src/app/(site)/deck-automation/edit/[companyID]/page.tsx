@@ -21,10 +21,7 @@ const EditCompany = () => {
   const { data: session } = useSession();
 
   useLayoutEffect(() => {
-    if (!session?.user.can_edit) {
-      router.replace('/');
-      return;
-    }
+
 
     const getData = async () => {
       try {
@@ -46,8 +43,16 @@ const EditCompany = () => {
         console.log(err);
       }
     };
-    getData();
-  }, [companyID, router, session?.user.can_edit]);
+
+    if (session?.user) {
+      if (session?.user.can_edit && session.user.can_read) {
+
+      } else {
+        router.replace('/');
+        return;
+      }
+    }
+  }, [companyID, router, session?.user]);
 
   const handleSubmit = async () => {
     setErrorDetails(null);

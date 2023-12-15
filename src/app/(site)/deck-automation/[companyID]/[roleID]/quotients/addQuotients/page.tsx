@@ -20,11 +20,6 @@ const QuotientAddPage = () => {
   const { data: session } = useSession();
 
   useLayoutEffect(() => {
-    if (!session?.user.can_create) {
-      router.replace('/');
-      return;
-    }
-
     const getData = async () => {
       try {
         const response = await fetch(`/api/companies/${companyID}/roles/${roleID}/quotients`, {
@@ -44,8 +39,16 @@ const QuotientAddPage = () => {
         setLoading(false);
       }
     };
-    getData();
-  }, [companyID, roleID, router, session?.user.can_create]);
+
+    if (session?.user) {
+      if (session?.user.can_create && session.user.can_read) {
+        getData();
+      } else {
+        router.replace('/');
+        return;
+      }
+    }
+  }, [companyID, roleID, router, session?.user]);
 
   return (
     <section className='mt-12'>

@@ -22,11 +22,6 @@ const EditQuotient = () => {
   const { data: session } = useSession();
 
   useLayoutEffect(() => {
-    if (!session?.user.can_edit) {
-      router.replace('/');
-      return;
-    }
-
     const getData = async () => {
       try {
         const response = await fetch(`/api/quotients-all/${quotientID}`, {
@@ -47,8 +42,17 @@ const EditQuotient = () => {
         console.log(err);
       }
     };
-    getData();
-  }, [quotientID, router, session?.user.can_edit]);
+
+    if (session?.user) {
+      if (session.user.can_edit && session.user.can_read) {
+        getData();
+
+      } else {
+        router.replace('/');
+        return;
+      }
+    };
+  }, [quotientID, router, session?.user]);
 
   const handleSubmit = async () => {
     setErrorDetails(null);

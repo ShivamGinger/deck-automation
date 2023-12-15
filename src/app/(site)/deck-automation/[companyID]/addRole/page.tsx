@@ -7,8 +7,8 @@ import { useRouter } from 'next/navigation';
 
 import { useParams } from 'next/navigation';
 
-import AddRole from './Components/AddRole';
 import { useSession } from 'next-auth/react';
+import AddRole from './Components/AddRole';
 
 const AddRoleDetails = () => {
   const { companyID } = useParams();
@@ -16,9 +16,11 @@ const AddRoleDetails = () => {
 
   const { data: session } = useSession();
 
-  if (!session?.user.can_create) {
-    router.replace('/');
-    return;
+  if (session?.user) {
+    if (!session?.user.can_create || !session.user.can_read) {
+      router.replace('/');
+      return;
+    }
   }
 
   return (

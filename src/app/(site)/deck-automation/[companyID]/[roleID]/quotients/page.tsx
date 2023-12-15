@@ -53,8 +53,17 @@ const DisplayQuotientsUnderRoles = () => {
         setLoading(false);
       }
     };
-    getData();
-  }, [companyID, roleID, router, session?.user.can_create]);
+
+    if (session?.user) {
+      if (session.user.can_read) {
+        getData();
+
+      } else {
+        router.replace('/');
+        return;
+      }
+    };
+  }, [companyID, roleID, router, session?.user]);
 
   return (
     <section className='mt-12'>

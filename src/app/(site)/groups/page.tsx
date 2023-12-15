@@ -22,13 +22,6 @@ const Allgroups = () => {
   const { data: session } = useSession();
 
   useLayoutEffect(() => {
-    if (session?.user) {
-      if (!session?.user.can_create) {
-        router.replace('/');
-        return;
-      }
-    }
-
     const getData = async () => {
       try {
         const response = await fetch('/api/groups', {
@@ -49,7 +42,16 @@ const Allgroups = () => {
         setLoading(false);
       }
     };
-    getData();
+
+    if (session?.user) {
+      if (session?.user.can_create) {
+        getData();
+
+      } else {
+        router.replace('/');
+        return;
+      }
+    }
   }, [router, session?.user]);
 
   return (

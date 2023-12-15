@@ -19,11 +19,13 @@ const AddCompany = () => {
   const { data: session } = useSession();
 
   useLayoutEffect(() => {
-    if (!session?.user.can_create) {
-      router.replace('/');
-      return;
+    if (session?.user) {
+      if (!session?.user.can_create || !session.user.can_read) {
+        router.replace('/');
+        return;
+      }
     }
-  }, [router, session?.user.can_create]);
+  }, [router, session?.user]);
 
   useEffect(() => {
     if (error) {
