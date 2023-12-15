@@ -13,6 +13,8 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const [email, setEmail] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [password, setPassword] = useState('');
 
   const [responseSucessful, setResponseSucessful] = useState(false);
@@ -20,7 +22,6 @@ const Register = () => {
 
   const [responseError, setResponseError] = useState(false);
   const [error, setError] = useState('');
-  const [errorDetails, setErrorDetails] = useState<{ field: string, message: string }[] | null>();
 
   const router = useRouter();
   const session = useSession();
@@ -41,39 +42,27 @@ const Register = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          email,
-          password
+          first_name: firstName,
+          last_name: lastName,
+          email: email,
+          password: password,
+          is_admin: 1
         }),
         credentials: 'include',
       });
 
-      if (response.status === 400) {
+      if (response.ok) {
         const errorData = await response.json();
 
-        setResponseSucessful(false);
-        setResponseError(true);
-        setError(errorData.error);
-        setErrorDetails(errorData.details);
-      } else if (response.status === 409) {
-        const errorData = await response.json();
-
-        setResponseSucessful(false);
-        setResponseError(true);
-        setError(errorData.error);
-        setErrorDetails(null);
-      } else if (response.status === 500) {
-        const errorData = await response.json();
-
-        setResponseSucessful(false);
-        setResponseError(true);
-        setError(errorData.error);
-        setErrorDetails(null);
-      } else if (response.status === 200) {
-        const sucessData = await response.json();
-
-        setSucessDetails(sucessData.msg);
         setResponseSucessful(true);
         setResponseError(false);
+        setSucessDetails(errorData.data);
+      } else {
+        const errorData = await response.json();
+
+        setResponseSucessful(false);
+        setResponseError(true);
+        setError(errorData.error);
       }
 
       console.log("res: " + response);
@@ -93,11 +82,6 @@ const Register = () => {
               <div className="bg-red-500 p-4 rounded-md md:w-80 w-full flex flex-row justify-between ">
                 <p className="text-base text-gray-50 font-semibold ">
                   {error}
-                  <span className='flex flex-col'>
-                    {errorDetails?.map(({ field, message }, index) => (
-                      <span key={index}>Field {field} : {message}</span>
-                    ))}
-                  </span>
                 </p>
                 <p className="text-base text-gray-50 font-semibold cursor-pointer" onClick={() => setResponseError(false)}>
                   X
@@ -119,6 +103,26 @@ const Register = () => {
           }
           <form className="space-y-8 relative" >
             <Input
+              name='First Name'
+              id='first_name'
+              placeholder={firstName}
+              required={true}
+              moveLabel={firstName != ''}
+              type='text'
+              onChange={(e: ChangeEvent<HTMLInputElement>) => setFirstName(e.target.value)}
+            />
+
+            <Input
+              name='Last name'
+              id='last_name'
+              placeholder={lastName}
+              required={true}
+              moveLabel={lastName != ''}
+              type='text'
+              onChange={(e: ChangeEvent<HTMLInputElement>) => setLastName(e.target.value)}
+            />
+
+            <Input
               name='Email'
               id='email'
               placeholder={email}
@@ -127,19 +131,20 @@ const Register = () => {
               type='email'
               onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
             />
-
-            <Input
-              name='Password (min: 6)'
-              id='password'
-              type={`${showPassword ? 'text' : 'password'}`}
-              placeholder={password}
-              required={true}
-              moveLabel={password != ''}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
-            />
-            <span className='absolute top-20 right-2 cursor-pointer' onClick={() => setShowPassword(!showPassword)}>
-              {showPassword ? <EyeShow /> : <EyeHide />}
-            </span>
+            <div className='relative'>
+              <Input
+                name='Password (min: 6)'
+                id='password'
+                type={`${showPassword ? 'text' : 'password'}`}
+                placeholder={password}
+                required={true}
+                moveLabel={password != ''}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
+              />
+              <span className='absolute top-2 right-2 cursor-pointer' onClick={() => setShowPassword(!showPassword)}>
+                {showPassword ? <EyeShow /> : <EyeHide />}
+              </span>
+            </div>
             <button
               type='submit'
               className={` ${!email || !password ? "cursor-not-allowed opacity-50" : ""} custom-brown-btn w-full`}

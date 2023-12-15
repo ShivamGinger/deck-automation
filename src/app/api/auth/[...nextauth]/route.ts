@@ -60,17 +60,40 @@ const authOptions: AuthOptions = {
           .innerJoin(users, eq(users.id, userGroups.userId))
           .where(eq(userGroups.userId, Number(user.id)));
 
-        const { can_read, can_create, can_edit, can_delete, first_name, last_name, email } = userGroup[0];
+        if (userGroup) {
+          const hasReadPermission = userGroup.some(user => user.can_read === 1);
+          const hasEditPermission = userGroup.some(user => user.can_edit === 1);
+          const hasCreatePermission = userGroup.some(user => user.can_create === 1);
+          const hasDeletePermission = userGroup.some(user => user.can_delete === 1);
 
-        token.user = {
-          can_read: can_read === 1 ? true : false,
-          can_create: can_create === 1 ? true : false,
-          can_edit: can_edit === 1 ? true : false,
-          can_delete: can_delete === 1 ? true : false,
-          first_name,
-          last_name,
-          email
-        };
+          token.user = {
+            can_read: hasReadPermission,
+            can_create: hasCreatePermission,
+            can_edit: hasEditPermission,
+            can_delete: hasDeletePermission,
+            first_name: userGroup[0].first_name,
+            last_name: userGroup[0].last_name,
+            email: userGroup[0].email
+          };
+        } else {
+          const userData = await db.select({
+            first_name: users.firstName,
+            last_name: users.lastName,
+            email: users.email
+          }).from(users).where(eq(users.id, Number(user.id)))
+
+          const { first_name, last_name, email } = userData[0];
+
+          token.user = {
+            can_read: false,
+            can_create: false,
+            can_edit: false,
+            can_delete: false,
+            first_name,
+            last_name,
+            email
+          };
+        }
       }
 
       return Promise.resolve(token);

@@ -6,46 +6,42 @@ import { users } from "@/db/schema";
 
 import bcrypt from 'bcrypt';
 import { eq } from "drizzle-orm";
-import { ZodError } from "zod";
+import { MySqlInsertValue } from "drizzle-orm/mysql-core";
 
 export async function POST(request: NextRequest) {
   try {
     const requestData = await request.json();
 
-    const parsedData = userRegistrationSchema.parse(requestData);
+    const parsedData = userRegistrationSchema.safeParse(requestData);
 
-    const hashedPassword = await bcrypt.hash(parsedData.password, 10);
+    if (!parsedData.success) {
+      return NextResponse.json({ error: "Validation Error" }, { status: 400 });
+    }
+
+    const hashedPassword = await bcrypt.hash(parsedData.data.password, 10);
 
     const exsistingUser = await db.query.users.findFirst({
-      where: eq(users.email, parsedData.email)
+      where: eq(users.email, parsedData.data.email)
     });
 
     if (exsistingUser) {
       return NextResponse.json({ error: "Email Already in use. Kindly Login!" }, { status: 409 });
     };
 
-    const addUser = await db.insert(users).values({ ...parsedData, password: hashedPassword });
+    const data: MySqlInsertValue<typeof users> = {
+      email: parsedData.data.email,
+      password: hashedPassword,
+      firstName: parsedData.data.first_name,
+      lastName: parsedData.data.last_name,
+      isAdmin: parsedData.data.is_admin ? 1 : 0
+    };
 
-    if (addUser) {
-      return NextResponse.json({ msg: 'Account Registered Sucessfully. Kindly Login!' }, { status: 200 });
-    } else {
-      return NextResponse.json({ error: "Account Registration failed" }, { status: 500 });
-    }
+    await db.insert(users).values(data);
 
-  } catch (error: any) {
+    return NextResponse.json({ data: 'Account Created Successfully' }, { status: 201 });
 
-    if (error instanceof ZodError) {
-
-      const errorDetails = error.issues.map((issue) => ({
-        field: issue.path.join("."),
-        message: issue.message,
-      }));
-
-      return NextResponse.json({ error: "Validation error for -", details: errorDetails }, { status: 400 });
-    }
-    else {
-      return NextResponse.json({ error: "Invalid request", details: error.message }, { status: 400 });
-    }
+  } catch (error) {
+    console.error('Error while Registration Account: ', error);
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
-
 };
