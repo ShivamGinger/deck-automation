@@ -1,14 +1,22 @@
-import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db";
 import { Groups, groups } from "@/db/schema";
 import { getAllGroups, getGroupByName, grp } from "@/lib/groups";
 import { createGroupSchema } from "@/utils/bodyValidationSchemas";
 import { MySqlInsertValue } from "drizzle-orm/mysql-core";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
     try {
         const groups: grp[] = await getAllGroups();
-        return NextResponse.json({ "groups": groups }, { status: 200 });
+        return NextResponse.json({
+            data: groups.map(group => ({
+                ...group,
+                can_create: group.can_create === 1 ? true : false,
+                can_delete: group.can_delete === 1 ? true : false,
+                can_edit: group.can_edit === 1 ? true : false,
+                can_read: group.can_read === 1 ? true : false,
+            }))
+        }, { status: 200 });
 
     } catch (error: any) {
         console.error('Error fetching groups:', error);
