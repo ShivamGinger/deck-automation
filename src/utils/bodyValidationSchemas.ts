@@ -63,7 +63,7 @@ export const createCandidateSchema = z.object({
         candidate_reject_reason: z.string().nullable(),
       }).nullable(),
       candidate_parameter_scores: z.array(
-        z.object({ 
+        z.object({
           parameter_id: z.number(),
           parameter_score: z.number(),
         })
@@ -123,7 +123,7 @@ export const updateOrphanCandidateSchema = z.object({
 
 export const updateCandidateScoreSchema = z.object({
   candidate_parameter_scores: z.array(
-    z.object({ 
+    z.object({
       parameter_id: z.number(),
       parameter_score: z.number(),
     })
@@ -192,7 +192,7 @@ export const userRegistrationSchema = z.object({
   last_name: z.string(),
   email: z.string().email(),
   password: z.string().min(6),
-  is_admin: z.boolean()
+  is_admin: z.number().min(0).max(1)
 });
 
 export const createGroupSchema = z.object({

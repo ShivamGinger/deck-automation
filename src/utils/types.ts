@@ -1,3 +1,27 @@
+export interface UserDetails {
+  email: string,
+  first_name: string | null,
+  last_name: string | null,
+};
+
+export interface GroupDetails {
+  group_id: number,
+  can_create: boolean,
+  can_delete: boolean,
+  can_edit: boolean,
+  can_read: boolean,
+  group_name: string
+};
+
+export interface UserGroupDetail extends UserDetails {
+  group_name: string,
+  user_id: number
+};
+
+export interface AddUserGroudDetails extends UserDetails {
+  user_id: number
+};
+
 export interface CompanyDetails {
   company_id: number,
   company_name: string,
