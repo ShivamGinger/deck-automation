@@ -47,9 +47,11 @@ const Allusers = () => {
       if (session?.user.can_create && session.user.can_read) {
         getData();
 
-      } else { }
-      router.replace('/');
-      return;
+      } else {
+        router.replace('/');
+        return;
+      }
+
     }
   }, [router, session?.user]);
 
