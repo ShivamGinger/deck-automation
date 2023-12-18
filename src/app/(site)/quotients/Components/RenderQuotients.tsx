@@ -61,7 +61,7 @@ const RenderQuotients = ({
                       <div className='flex gap-2'>
                         <span>{detail.quotient_name}</span>
                         {
-                          session?.user.can_edit &&
+                          session?.user.all_quotients_can_edit &&
                           <span className=''>
                             <Link href={`/quotients/edit/${detail.quotient_id}`} prefetch={false} rel='noopener noreferrer'>
                               <Image width={20} height={20} src={'/images/edit.png'} alt="edit-icon" className="cursor-pointer" />
@@ -86,7 +86,7 @@ const RenderQuotients = ({
             </tbody>
           </table>
           {
-            session?.user.can_create &&
+            session?.user.all_quotients_can_create &&
             <div className='p-4'>
               Add Quotient? <Link href={'/quotients/addQuotient'} className='underline text-blue-500' prefetch={false} rel='noopener noreferrer'>Click here</Link>
             </div>

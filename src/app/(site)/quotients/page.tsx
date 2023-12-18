@@ -11,7 +11,6 @@ import Loading from '../Components/Loading';
 import RenderQuotients from './Components/RenderQuotients';
 
 const AllQuotients = () => {
-
   const [loading, setLoading] = useState(true);
 
   const [quotientWeightageFactors, setQuotientWeightageFactors] = useState<QuotientFactorsCount[]>([]);
@@ -44,7 +43,7 @@ const AllQuotients = () => {
     };
 
     if (session?.user) {
-      if (session.user.can_read) {
+      if (session.user.all_quotients_can_read) {
         getData();
 
       } else {
@@ -68,7 +67,7 @@ const AllQuotients = () => {
                   <>
                     {responseDetails}
                     {
-                      session?.user.can_create &&
+                      session?.user.all_quotients_can_create &&
                       <div className='overflow-x-auto bg-white p-2'>
                         Add Quotient? <Link href={'/quotients/addQuotient'} className='underline text-blue-500' prefetch={false} rel='noopener noreferrer'>Click here</Link>
                       </div>
