@@ -4,15 +4,20 @@ import Link from 'next/link';
 import React, { useLayoutEffect, useState } from 'react';
 
 import { CompleteCandidateInformation } from '@/utils/types';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import Loading from '../Components/Loading';
 import RenderCandidatesForTracking from './Components/RenderCandidatesForTracking';
 
 const CandidateListing = () => {
   const [candidates, setCandidates] = useState<CompleteCandidateInformation[]>([]);
 
+  const router = useRouter();
   const [loading, setLoading] = useState(true);
 
   const [responseDetails, setResponseDetails] = useState<string | null>(null);
+
+  const { data: session } = useSession();
 
   useLayoutEffect(() => {
     const getData = async () => {
@@ -40,8 +45,17 @@ const CandidateListing = () => {
         setLoading(false);
       }
     };
-    getData();
-  }, []);
+
+    if (session?.user) {
+      if (session.user.can_read) {
+        getData();
+
+      } else {
+        router.replace('/');
+        return;
+      }
+    };
+  }, [router, session?.user]);
 
   return (
     <>
@@ -56,9 +70,12 @@ const CandidateListing = () => {
                 {responseDetails || candidates.length === 0 ?
                   <>
                     {responseDetails}
-                    <div className='overflow-x-auto bg-white p-2'>
-                      Add Candidate? <Link href={`/candidate-tracking/addCandidate`} className='underline text-blue-500' prefetch={false} rel='noopener noreferrer'>Click here</Link>
-                    </div>
+                    {
+                      session?.user.can_create &&
+                      <div className='overflow-x-auto bg-white p-2'>
+                        Add Candidate? <Link href={`/candidate-tracking/addCandidate`} className='underline text-blue-500' prefetch={false} rel='noopener noreferrer'>Click here</Link>
+                      </div>
+                    }
                   </>
                   :
                   <RenderCandidatesForTracking

@@ -6,6 +6,8 @@ import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
 
 import Input from '@/app/(site)/Components/Input';
+import Loading from '@/app/(site)/Components/Loading';
+import { useSession } from 'next-auth/react';
 
 const EditRole = () => {
   const router = useRouter();
@@ -16,6 +18,9 @@ const EditRole = () => {
 
   const [error, setError] = useState(false);
   const [errorDeatils, setErrorDetails] = useState<string | null>('');
+  const [loading, setLoading] = useState(true);
+
+  const { data: session } = useSession();
 
   useLayoutEffect(() => {
     const getData = async () => {
@@ -36,10 +41,21 @@ const EditRole = () => {
         }
       } catch (err) {
         console.log(err);
+      } finally {
+        setLoading(false);
       }
     };
-    getData();
-  }, [companyID, roleID]);
+
+    if (session?.user) {
+      if (session?.user.can_edit && session.user.can_read) {
+        getData();
+
+      } else {
+        router.replace('/');
+        return;
+      }
+    }
+  }, [companyID, roleID, router, session?.user]);
 
   const handleSubmit = async () => {
     setErrorDetails(null);
@@ -91,25 +107,29 @@ const EditRole = () => {
             </div>
           }
           <div className="space-y-12 flex flex-col">
-            <Input
-              name='Company Name'
-              id='company_name'
-              placeholder={roleName}
-              required={true}
-              type='text'
-              moveLabel={roleName != ''}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => setRoleName(e.target.value)}
-            />
+            {loading ?
+              <Loading /> :
+              <>
+                <Input
+                  name='Company Name'
+                  id='company_name'
+                  placeholder={roleName}
+                  required={true}
+                  type='text'
+                  moveLabel={roleName != ''}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => setRoleName(e.target.value)}
+                />
 
-            <button
-              onClick={handleSubmit}
-              disabled={!roleName || error}
-              className={`${!roleName || error ? 'cursor-not-allowed opacity-50' : ''} font-semibold py-2 px-8 uppercase bg-[#B06500] text-white rounded-lg border-[#B06500]`}
-            >
-              Update
-            </button>
+                <button
+                  onClick={handleSubmit}
+                  disabled={!roleName || error}
+                  className={`${!roleName || error ? 'cursor-not-allowed opacity-50' : ''} font-semibold py-2 px-8 uppercase bg-[#B06500] text-white rounded-lg border-[#B06500]`}
+                >
+                  Update
+                </button>
+              </>
+            }
           </div>
-
         </div>
       </div>
     </section>

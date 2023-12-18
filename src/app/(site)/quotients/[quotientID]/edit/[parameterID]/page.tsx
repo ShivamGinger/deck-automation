@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
 
 import Input from '@/app/(site)/Components/Input';
+import { useSession } from 'next-auth/react';
 
 const EditParameter = () => {
   const { quotientID, parameterID } = useParams();
@@ -15,6 +16,8 @@ const EditParameter = () => {
 
   const [error, setError] = useState(false);
   const [errorDeatils, setErrorDetails] = useState<string | null>('');
+
+  const { data: session } = useSession();
 
   useLayoutEffect(() => {
     const getData = async () => {
@@ -37,8 +40,17 @@ const EditParameter = () => {
         console.log(err);
       };
     };
-    getData();
-  }, [parameterID, quotientID]);
+
+    if (session?.user) {
+      if (session?.user.can_edit && session.user.can_read) {
+        getData();
+
+      } else {
+        router.replace('/');
+        return;
+      }
+    }
+  }, [parameterID, quotientID, router, session?.user]);
 
   const handleSubmit = async () => {
     setErrorDetails(null);

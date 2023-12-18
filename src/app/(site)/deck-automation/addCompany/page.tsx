@@ -1,11 +1,12 @@
 "use client";
 
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, useEffect, useLayoutEffect, useState } from 'react';
 
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
 import Input from '@/app/(site)/Components/Input';
+import { useSession } from 'next-auth/react';
 
 const AddCompany = () => {
   const router = useRouter();
@@ -14,6 +15,17 @@ const AddCompany = () => {
 
   const [error, setError] = useState(false);
   const [errorDeatils, setErrorDetails] = useState<string | null>('');
+
+  const { data: session } = useSession();
+
+  useLayoutEffect(() => {
+    if (session?.user) {
+      if (!session?.user.can_create || !session.user.can_read) {
+        router.replace('/');
+        return;
+      }
+    }
+  }, [router, session?.user]);
 
   useEffect(() => {
     if (error) {
@@ -25,9 +37,9 @@ const AddCompany = () => {
           behavior: 'smooth',
         });
       }
-
     }
   }, [error]);
+
 
   const handleSubmit = async () => {
     setErrorDetails(null);

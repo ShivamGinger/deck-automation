@@ -10,6 +10,7 @@ import RenderRolesUnderCompany from './Components/RenderRolesUnderCompany';
 import { useParams } from 'next/navigation';
 
 import { RoleDetails } from '@/utils/types';
+import { useSession } from 'next-auth/react';
 import Loading from '../../Components/Loading';
 
 const RolesUnderCompany = () => {
@@ -23,6 +24,8 @@ const RolesUnderCompany = () => {
   const [companyName, setCompanyName] = useState('');
 
   const [responseDetails, setResponseDetails] = useState<string | null>(null);
+
+  const { data: session } = useSession();
 
   useLayoutEffect(() => {
     const getData = async () => {
@@ -49,8 +52,17 @@ const RolesUnderCompany = () => {
         setLoading(false);
       }
     }
-    getData();
-  }, [companyID, router]);
+
+    if (session?.user) {
+      if (session.user.can_read) {
+        getData();
+
+      } else {
+        router.replace('/');
+        return;
+      }
+    };
+  }, [companyID, router, session?.user]);
 
   return (
     <section className='mt-12'>
@@ -62,9 +74,12 @@ const RolesUnderCompany = () => {
               {responseDetails || rolesUnderCompany?.length === 0 ?
                 <>
                   {responseDetails}
-                  <div className='overflow-x-auto bg-white p-2'>
-                    Add Role? <Link href={`/deck-automation/${companyID}/addRole`} className='underline text-blue-500' prefetch={false} rel='noopener noreferrer'>Click here</Link>
-                  </div>
+                  {
+                    session?.user.can_create &&
+                    <div className='overflow-x-auto bg-white p-2'>
+                      Add Role? <Link href={`/deck-automation/${companyID}/addRole`} className='underline text-blue-500' prefetch={false} rel='noopener noreferrer'>Click here</Link>
+                    </div>
+                  }
                 </>
                 :
                 <RenderRolesUnderCompany

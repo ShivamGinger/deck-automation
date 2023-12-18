@@ -9,6 +9,7 @@ import ReactPaginate from 'react-paginate';
 
 import { ITEMS_PER_PAGE } from '@/utils/constants';
 import { CompanyDetailsRoleCount } from '@/utils/types';
+import { useSession } from 'next-auth/react';
 
 const RenderCompanies = ({
   companies
@@ -28,6 +29,8 @@ const RenderCompanies = ({
   const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, totalItems);
 
   const currentData = companies?.slice(startIndex, endIndex);
+
+  const { data: session } = useSession();
 
   return (
     <>
@@ -57,11 +60,14 @@ const RenderCompanies = ({
                     <div className='flex justify-center'>
                       <div className='flex gap-2'>
                         <span>{detail.company_name}</span>
-                        <span className=''>
-                          <Link href={`/deck-automation/edit/${detail.company_id}`} prefetch={false} rel='noopener noreferrer'>
-                            <Image width={20} height={20} src={'/images/edit.png'} alt="edit-icon" className="cursor-pointer" />
-                          </Link>
-                        </span>
+                        {
+                          session?.user.can_edit &&
+                          <span className=''>
+                            <Link href={`/deck-automation/edit/${detail.company_id}`} prefetch={false} rel='noopener noreferrer'>
+                              <Image width={20} height={20} src={'/images/edit.png'} alt="edit-icon" className="cursor-pointer" />
+                            </Link>
+                          </span>
+                        }
                       </div>
                     </div>
                   </td>
@@ -79,9 +85,12 @@ const RenderCompanies = ({
               ))}
             </tbody>
           </table>
-          <div className='p-4'>
-            Add Company? <Link href={'/deck-automation/addCompany'} className='underline text-blue-500' prefetch={false} rel='noopener noreferrer'>Click here</Link>
-          </div>
+          {
+            session?.user.can_create &&
+            <div className='p-4'>
+              Add Company? <Link href={'/deck-automation/addCompany'} className='underline text-blue-500' prefetch={false} rel='noopener noreferrer'>Click here</Link>
+            </div>
+          }
         </div>
       </div>
 

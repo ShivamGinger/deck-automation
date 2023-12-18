@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { boolean, z } from "zod";
 
 // Define all the schemas for body parsing here
 
@@ -63,7 +63,7 @@ export const createCandidateSchema = z.object({
         candidate_reject_reason: z.string().nullable(),
       }).nullable(),
       candidate_parameter_scores: z.array(
-        z.object({ 
+        z.object({
           parameter_id: z.number(),
           parameter_score: z.number(),
         })
@@ -123,7 +123,7 @@ export const updateOrphanCandidateSchema = z.object({
 
 export const updateCandidateScoreSchema = z.object({
   candidate_parameter_scores: z.array(
-    z.object({ 
+    z.object({
       parameter_id: z.number(),
       parameter_score: z.number(),
     })
@@ -188,6 +188,33 @@ export const updateParameterSchema = z.object({
 });
 
 export const userRegistrationSchema = z.object({
+  first_name: z.string(),
+  last_name: z.string(),
   email: z.string().email(),
-  password: z.string().min(6)
+  password: z.string().min(6),
+  is_admin: z.number().min(0).max(1)
+});
+
+export const createGroupSchema = z.object({
+  group_name: z.string(),
+  can_read: z.number().min(0).max(1),
+  can_edit: z.number().min(0).max(1),
+  can_create: z.number().min(0).max(1),
+  can_delete: z.number().min(0).max(1)
+});
+
+export const updateGroupSchema = z.object({
+  group_name: z.string(),
+  can_read: z.number().min(0).max(1),
+  can_edit: z.number().min(0).max(1),
+  can_create: z.number().min(0).max(1),
+  can_delete: z.number().min(0).max(1)
+});
+
+export const addUserToGroupSchema = z.object({
+  user_id: z.number()
+});
+
+export const updateUserGroupSchema = z.object({
+  group_id: z.number()
 });

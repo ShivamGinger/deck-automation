@@ -7,9 +7,10 @@ import { useParams, useRouter } from 'next/navigation';
 
 import Loading from '@/app/(site)/Components/Loading';
 import { EditCandidateTrackingInformation } from '@/utils/types';
+import { useSession } from 'next-auth/react';
 import EditCandidate from './Components/EditCandidate';
 
-const AddCandidateTracking = () => {
+const EditCandidateTracking = () => {
   const router = useRouter();
 
   const { candidateID } = useParams();
@@ -17,26 +18,43 @@ const AddCandidateTracking = () => {
   const [candidateInfo, setCandidateInfo] = useState<EditCandidateTrackingInformation>()
 
   const [responseDetails, setResponseDetails] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  const { data: session } = useSession();
 
   useLayoutEffect(() => {
     const getData = async () => {
-      const response = await fetch(`/api/candidates/${candidateID}`, {
-        method: 'GET'
-      });
+      try {
+        const response = await fetch(`/api/candidates/${candidateID}`, {
+          method: 'GET'
+        });
 
-      if (response.ok) {
-        const data = await response.json();
+        if (response.ok) {
+          const data = await response.json();
 
-        setCandidateInfo(data.data[0]);
+          setCandidateInfo(data.data[0]);
 
-      } else {
-        const data = await response.json();
-        setResponseDetails(data.error);
+        } else {
+          const data = await response.json();
+          setResponseDetails(data.error);
+        }
+      } catch (err) {
+        console.log(err);
+      } finally {
+        setLoading(false);
       }
     };
 
-    getData();
-  }, [candidateID]);
+    if (session?.user) {
+      if (session.user.can_edit) {
+        getData();
+
+      } else {
+        router.replace('/');
+        return;
+      }
+    };
+  }, [candidateID, router, session?.user]);
 
   return <>
     <section className='bg-[#FEFAEF] '>
@@ -51,7 +69,7 @@ const AddCandidateTracking = () => {
           {responseDetails}
 
           <div className="space-y-12 flex flex-col">
-            {candidateInfo ?
+            {candidateInfo && !loading ?
               <EditCandidate
                 candidates={candidateInfo}
               />
@@ -66,4 +84,4 @@ const AddCandidateTracking = () => {
   </>
 }
 
-export default AddCandidateTracking
+export default EditCandidateTracking

@@ -14,6 +14,7 @@ import { CompleteCandidateInformation, QuotientFactorsWeightage } from '@/utils/
 import { saveAs } from 'file-saver';
 import CanAddCandidate from './CanAddCandidate';
 
+import { useSession } from 'next-auth/react';
 import { CloseButtonProps, ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -54,6 +55,8 @@ const RenderCandidatesUnderRole = ({
   const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, totalItems);
 
   const currentData = candidateDetailsUnderRole?.slice(startIndex, endIndex);
+
+  const { data: session } = useSession();
 
   const customCloseButton = ({ closeToast }: CloseButtonProps) => (
     <div onClick={closeToast}>X</div>
@@ -344,9 +347,13 @@ const RenderCandidatesUnderRole = ({
             </tbody>
           </table>
 
-          <div className='p-4'>
-            Add Candidates? <Link href={`/deck-automation/${companyID}/${roleID}/candidates/addCandidate`} className='underline text-blue-500' prefetch={false} rel='noopener noreferrer'>Click here</Link>
-          </div>
+          {
+            session?.user.can_create &&
+            <div className='p-4'>
+              Add Candidates? <Link href={`/deck-automation/${companyID}/${roleID}/candidates/addCandidate`} className='underline text-blue-500' prefetch={false} rel='noopener noreferrer'>Click here</Link>
+            </div>
+          }
+
           <div className='p-4 pt-0'>
             View Quotients? <Link href={`/deck-automation/${companyID}/${roleID}/quotients`} className='underline text-blue-500' prefetch={false} rel='noopener noreferrer'>Click here</Link>
           </div>

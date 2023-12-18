@@ -2,6 +2,8 @@
 
 import React, { ChangeEvent, useLayoutEffect, useState } from 'react';
 
+import { useSession } from 'next-auth/react';
+
 import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
 
@@ -16,6 +18,8 @@ const EditQuotient = () => {
 
   const [error, setError] = useState(false);
   const [errorDeatils, setErrorDetails] = useState<string | null>('');
+
+  const { data: session } = useSession();
 
   useLayoutEffect(() => {
     const getData = async () => {
@@ -38,8 +42,17 @@ const EditQuotient = () => {
         console.log(err);
       }
     };
-    getData();
-  }, [quotientID]);
+
+    if (session?.user) {
+      if (session.user.can_edit && session.user.can_read) {
+        getData();
+
+      } else {
+        router.replace('/');
+        return;
+      }
+    };
+  }, [quotientID, router, session?.user]);
 
   const handleSubmit = async () => {
     setErrorDetails(null);

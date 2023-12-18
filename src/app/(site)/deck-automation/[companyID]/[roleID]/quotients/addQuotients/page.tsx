@@ -7,6 +7,7 @@ import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
 
 import Loading from '@/app/(site)/Components/Loading';
+import { useSession } from 'next-auth/react';
 import AddQuotientWeightage from './Components/AddQuotientWeightage';
 
 const QuotientAddPage = () => {
@@ -15,6 +16,8 @@ const QuotientAddPage = () => {
   const router = useRouter();
 
   const [loading, setLoading] = useState(true);
+
+  const { data: session } = useSession();
 
   useLayoutEffect(() => {
     const getData = async () => {
@@ -36,8 +39,16 @@ const QuotientAddPage = () => {
         setLoading(false);
       }
     };
-    getData();
-  }, [companyID, roleID, router]);
+
+    if (session?.user) {
+      if (session?.user.can_create && session.user.can_read) {
+        getData();
+      } else {
+        router.replace('/');
+        return;
+      }
+    }
+  }, [companyID, roleID, router, session?.user]);
 
   return (
     <section className='mt-12'>

@@ -8,6 +8,7 @@ import { useParams, useRouter } from 'next/navigation';
 import Loading from '@/app/(site)/Components/Loading';
 import { ParametersQuotientFactorsValue, QuotientFactorsWeightage } from '@/utils/types';
 import AddCandidate from './Components/AddCandidate';
+import { useSession } from 'next-auth/react';
 
 const CheckAddCandidate = () => {
   const { roleID, companyID } = useParams();
@@ -20,7 +21,14 @@ const CheckAddCandidate = () => {
 
   const [parametersUnderQuotients, setParameterUnderQuotient] = useState<ParametersQuotientFactorsValue[]>([]);
 
+  const { data: session } = useSession();
+
   useLayoutEffect(() => {
+    if (!session?.user.can_create) {
+      router.replace('/');
+      return;
+    }
+
     const getQuotientsDetails = async () => {
       try {
         const response = await fetch(`/api/companies/${companyID}/roles/${roleID}/quotients`, {
@@ -43,7 +51,7 @@ const CheckAddCandidate = () => {
 
     getQuotientsDetails();
 
-  }, [companyID, roleID, router]);
+  }, [companyID, roleID, router, session?.user.can_create]);
 
   useEffect(() => {
     const makeAPICalls = async () => {

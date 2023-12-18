@@ -5,11 +5,14 @@ import React, { useLayoutEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 
 import Loading from '@/app/(site)/Components/Loading';
+import { useSession } from 'next-auth/react';
 
 const DisplayQuotientsUnderRoles = () => {
   const { roleID, companyID } = useParams();
 
   const router = useRouter();
+
+  const { data: session } = useSession();
 
   useLayoutEffect(() => {
     const getData = async () => {
@@ -21,7 +24,7 @@ const DisplayQuotientsUnderRoles = () => {
         if (response.ok) {
           const data = await response.json();
 
-          if (data.data.length === 0) {
+          if (data.data.length === 0 && session?.user.can_create) {
             router.replace(`/deck-automation/${companyID}/${roleID}/quotients/addQuotients`);
 
           } else {
@@ -32,8 +35,17 @@ const DisplayQuotientsUnderRoles = () => {
         console.log(err);
       }
     };
-    getData();
-  }, [companyID, roleID, router]);
+
+    if (session?.user) {
+      if (session.user.can_read) {
+        getData();
+
+      } else {
+        router.replace('/');
+        return;
+      }
+    };
+  }, [companyID, roleID, router, session?.user]);
 
   return (
     <section className='mt-12'>

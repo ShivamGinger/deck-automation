@@ -1,10 +1,11 @@
 'use client';
 
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import React, { useLayoutEffect, useState } from 'react';
 
 import { ParameterFactors } from '@/utils/types';
+import { useSession } from 'next-auth/react';
 import Loading from '../../Components/Loading';
 import RenderParameters from './Components/RenderParameters';
 
@@ -18,6 +19,9 @@ const RenderParameter = () => {
   const [loading, setLoading] = useState(true);
 
   const [responseDetails, setResponseDetails] = useState<string | null>(null);
+
+  const { data: session } = useSession();
+  const router = useRouter();
 
   useLayoutEffect(() => {
     const getData = async () => {
@@ -41,8 +45,17 @@ const RenderParameter = () => {
         setLoading(false);
       }
     };
-    getData();
-  }, [quotientID]);
+
+    if (session?.user) {
+      if (session.user.can_read) {
+        getData();
+
+      } else {
+        router.replace('/');
+        return;
+      }
+    };
+  }, [quotientID, router, session?.user]);
 
   return (
     <>
@@ -57,9 +70,12 @@ const RenderParameter = () => {
                 {responseDetails || parameters.length == 0 ?
                   <>
                     {responseDetails}
-                    <div className='overflow-x-auto bg-white p-2'>
-                      Add Parameter? <Link href={`/quotients/${quotientID}/addParameter`} className='underline text-blue-500' prefetch={false}>Click here</Link>
-                    </div>
+                    {
+                      session?.user.can_create && session.user.can_read &&
+                      <div className='overflow-x-auto bg-white p-2'>
+                        Add Parameter? <Link href={`/quotients/${quotientID}/addParameter`} className='underline text-blue-500' prefetch={false}>Click here</Link>
+                      </div>
+                    }
                   </>
                   :
                   <RenderParameters

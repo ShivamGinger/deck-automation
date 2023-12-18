@@ -6,9 +6,19 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
 import AddCandidate from './Components/AddCandidate';
+import { useSession } from 'next-auth/react';
 
 const EditCandidateTracking = () => {
   const router = useRouter();
+
+  const { data: session } = useSession();
+
+  if (session?.user) {
+    if (!session.user.can_create) {
+      router.replace('/');
+      return;
+    }
+  }
 
   return <>
     <section className='bg-[#FEFAEF] '>

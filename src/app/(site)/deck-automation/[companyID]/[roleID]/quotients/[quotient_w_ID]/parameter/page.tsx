@@ -7,6 +7,7 @@ import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
 
 import Loading from '@/app/(site)/Components/Loading';
+import { useSession } from 'next-auth/react';
 import AddParameterUnderQuotient from './Components/AddParameterUnderQuotients';
 
 const QuotientAddPage = () => {
@@ -15,6 +16,8 @@ const QuotientAddPage = () => {
   const router = useRouter();
 
   const [loading, setLoading] = useState(true);
+
+  const { data: session } = useSession();
 
   useLayoutEffect(() => {
     const getData = async () => {
@@ -36,8 +39,17 @@ const QuotientAddPage = () => {
         setLoading(false);
       }
     };
+    if (session?.user) {
+      if (session.user.can_create && session.user.can_read) {
+        getData();
+
+      } else {
+        router.replace('/');
+        return;
+      }
+    };
     getData();
-  }, [companyID, roleID, router, quotient_w_ID]);
+  }, [companyID, roleID, router, quotient_w_ID, session?.user]);
 
   return (
     <section className='mt-12'>

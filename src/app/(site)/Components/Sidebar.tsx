@@ -6,6 +6,7 @@ import React from 'react';
 import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
+import Loading from './Loading';
 
 const Sidebar = () => {
   const path = usePathname();
@@ -15,7 +16,7 @@ const Sidebar = () => {
 
   if (status === 'unauthenticated') {
     router.replace('/login');
-  }
+  };
 
   return (
     <div className='w-80 bg-white flex justify-between flex-col shadow-2xl pr-2 border-r'>
@@ -24,20 +25,49 @@ const Sidebar = () => {
           <Link href={'/'} prefetch={false} rel='noopener noreferrer'>
             <Image width={150} height={150} src={'/images/Ginger Partners_Logo with tagline.png'} alt="profile pic" className="rounded-xl " priority />
           </Link>
-          <span className='font-semibold tracking-wide'>
-            {session?.user?.email}
+          <span className='font-semibold tracking-wide flex flex-col items-center'>
+            <span>
+              {session?.user?.first_name} {session?.user?.last_name}
+            </span>
+            <span>
+              {session?.user?.email}
+            </span>
           </span>
         </div>
         <div className='p-2 flex flex-col gap-4'>
-          <Link href={'/candidate-tracking'} className={`${path.split('/')[1] === 'candidate-tracking' ? 'custom-brown-btn' : 'custom-brown-btn-bg-transparent hover:bg-[#B06500] hover:text-white hover:border-[#B06500] transition ease-in-out'} text-center`} prefetch={false} rel='noopener noreferrer'>
-            Candidates Tracking
-          </Link>
-          <Link href={'/deck-automation'} className={`${path.split('/')[1] === 'deck-automation' ? 'custom-brown-btn' : 'custom-brown-btn-bg-transparent hover:bg-[#B06500] hover:text-white hover:border-[#B06500] transition ease-in-out'} text-center`} prefetch={false} rel='noopener noreferrer'>
-            Deck Automation
-          </Link>
-          <Link href={'/quotients'} className={`${path.split('/')[1] === 'quotients' ? 'custom-brown-btn' : 'custom-brown-btn-bg-transparent hover:bg-[#B06500] hover:text-white hover:border-[#B06500] transition ease-in-out'} text-center`} prefetch={false} rel='noopener noreferrer'>
-            All Quotients
-          </Link>
+          {
+            session?.user ?
+              <>
+                {
+                  session.user.can_read &&
+                  <>
+                    <Link href={'/candidate-tracking'} className={`${path.split('/')[1] === 'candidate-tracking' ? 'custom-brown-btn' : 'custom-brown-btn-bg-transparent hover:bg-[#B06500] hover:text-white hover:border-[#B06500] transition ease-in-out'} text-center`} prefetch={false} rel='noopener noreferrer'>
+                      Candidates Tracking
+                    </Link>
+                    <Link href={'/deck-automation'} className={`${path.split('/')[1] === 'deck-automation' ? 'custom-brown-btn' : 'custom-brown-btn-bg-transparent hover:bg-[#B06500] hover:text-white hover:border-[#B06500] transition ease-in-out'} text-center`} prefetch={false} rel='noopener noreferrer'>
+                      Deck Automation
+                    </Link>
+                    <Link href={'/quotients'} className={`${path.split('/')[1] === 'quotients' ? 'custom-brown-btn' : 'custom-brown-btn-bg-transparent hover:bg-[#B06500] hover:text-white hover:border-[#B06500] transition ease-in-out'} text-center`} prefetch={false} rel='noopener noreferrer'>
+                      All Quotients
+                    </Link>
+                  </>
+                }
+
+                {
+                  session?.user.can_create && session.user.can_read &&
+                  <>
+                    <Link href={'/users'} className={`${path.split('/')[1] === 'users' ? 'custom-brown-btn' : 'custom-brown-btn-bg-transparent hover:bg-[#B06500] hover:text-white hover:border-[#B06500] transition ease-in-out'} text-center`} prefetch={false} rel='noopener noreferrer'>
+                      Users
+                    </Link>
+                    <Link href={'/groups'} className={`${path.split('/')[1] === 'groups' ? 'custom-brown-btn' : 'custom-brown-btn-bg-transparent hover:bg-[#B06500] hover:text-white hover:border-[#B06500] transition ease-in-out'} text-center`} prefetch={false} rel='noopener noreferrer'>
+                      Groups
+                    </Link>
+                  </>
+                }
+              </>
+              :
+              <Loading />
+          }
         </div>
       </div>
       <div className='p-2' onClick={() => signOut()}>

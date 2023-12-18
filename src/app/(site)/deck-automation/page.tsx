@@ -7,6 +7,8 @@ import Link from 'next/link';
 import { CompanyDetailsRoleCount } from '@/utils/types';
 import Loading from '../Components/Loading';
 import RenderCompanies from './Components/RenderCompanies';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 const Companies = () => {
 
@@ -15,6 +17,9 @@ const Companies = () => {
   const [loading, setLoading] = useState(true);
 
   const [responseDetails, setResponseDetails] = useState<string | null>(null);
+
+  const { data: session } = useSession();
+  const router = useRouter();
 
   useLayoutEffect(() => {
     const getData = async () => {
@@ -37,8 +42,17 @@ const Companies = () => {
         setLoading(false);
       }
     };
-    getData();
-  }, []);
+
+    if (session?.user) {
+      if (session.user.can_read) {
+        getData();
+
+      } else {
+        router.replace('/');
+        return;
+      }
+    };
+  }, [session?.user, router]);
 
   return (
     <section className='mt-12'>
@@ -52,9 +66,12 @@ const Companies = () => {
               {responseDetails || companies.length === 0 ?
                 <>
                   {responseDetails}
-                  <div className='overflow-x-auto bg-white p-2'>
-                    Add Company? <Link href={'/deck-automation/addCompany'} className='underline text-blue-500' prefetch={false} rel='noopener noreferrer'>Click here</Link>
-                  </div>
+                  {
+                    session?.user.can_create &&
+                    <div className='overflow-x-auto bg-white p-2'>
+                      Add Company? <Link href={'/deck-automation/addCompany'} className='underline text-blue-500' prefetch={false} rel='noopener noreferrer'>Click here</Link>
+                    </div>
+                  }
                 </>
                 :
                 <RenderCompanies companies={companies} />
