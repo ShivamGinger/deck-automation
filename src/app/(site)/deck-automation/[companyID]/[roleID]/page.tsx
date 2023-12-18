@@ -24,7 +24,7 @@ const DisplayQuotientsUnderRoles = () => {
         if (response.ok) {
           const data = await response.json();
 
-          if (data.data.length === 0 && session?.user.can_create) {
+          if (data.data.length === 0 && session?.user.deck_automation_can_create) {
             router.replace(`/deck-automation/${companyID}/${roleID}/quotients/addQuotients`);
 
           } else {
@@ -37,7 +37,7 @@ const DisplayQuotientsUnderRoles = () => {
     };
 
     if (session?.user) {
-      if (session.user.can_read) {
+      if (session.user.deck_automation_can_read) {
         getData();
 
       } else {

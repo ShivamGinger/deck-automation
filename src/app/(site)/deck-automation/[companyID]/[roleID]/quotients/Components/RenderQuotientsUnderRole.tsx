@@ -11,6 +11,7 @@ import ReactPaginate from 'react-paginate';
 
 import { ITEMS_PER_PAGE } from '@/utils/constants';
 import { QuotientFactorsWeightage } from '@/utils/types';
+import { useSession } from 'next-auth/react';
 
 const RenderQuotientsUnderRole = ({
   roleName,
@@ -38,6 +39,7 @@ const RenderQuotientsUnderRole = ({
   const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, totalItems);
 
   const currentData = quotientsUnderRole?.slice(startIndex, endIndex);
+  const { data: session } = useSession();
 
   return (
     <>
@@ -76,16 +78,19 @@ const RenderQuotientsUnderRole = ({
 
                   <td className="">
                     <Link href={`/deck-automation/${companyID}/${roleID}/quotients/${detail.quotient_weightage_id}?qid=${detail.quotient_id}`} prefetch={false} rel='noopener noreferrer'>
-                      <Image width={20} height={20} src={'/images/plus.png'} alt="edit-icon" className="cursor-pointer" />
+                      <Image width={20} height={20} src={'/images/plus.png'} alt="view-more-icon" className="cursor-pointer" />
                     </Link>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
-          <div className='p-4'>
-            View Candidates? <Link href={`/deck-automation/${companyID}/${roleID}/candidates`} className='underline text-blue-500' prefetch={false} rel='noopener noreferrer'>Click here</Link>
-          </div>
+          {
+            session?.user.deck_automation_can_read &&
+            <div className='p-4'>
+              View Candidates? <Link href={`/deck-automation/${companyID}/${roleID}/candidates`} className='underline text-blue-500' prefetch={false} rel='noopener noreferrer'>Click here</Link>
+            </div>
+          }
         </div>
       </div>
 

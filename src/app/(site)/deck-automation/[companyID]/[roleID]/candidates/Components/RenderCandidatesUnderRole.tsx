@@ -40,8 +40,6 @@ const RenderCandidatesUnderRole = ({
 
   const [selectedCandidates, setSelectedCandidates] = useState<number[]>([]);
 
-  const [isHovered, setIsHovered] = useState(false);
-
   const [currentPage, setCurrentPage] = useState(0);
 
   const handlePageChange = (selectedPage: { selected: number }) => {
@@ -348,7 +346,7 @@ const RenderCandidatesUnderRole = ({
           </table>
 
           {
-            session?.user.can_create &&
+            session?.user.deck_automation_can_create &&
             <div className='p-4'>
               Add Candidates? <Link href={`/deck-automation/${companyID}/${roleID}/candidates/addCandidate`} className='underline text-blue-500' prefetch={false} rel='noopener noreferrer'>Click here</Link>
             </div>

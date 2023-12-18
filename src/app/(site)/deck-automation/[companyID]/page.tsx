@@ -54,7 +54,7 @@ const RolesUnderCompany = () => {
     }
 
     if (session?.user) {
-      if (session.user.can_read) {
+      if (session.user.deck_automation_can_read) {
         getData();
 
       } else {
@@ -75,7 +75,7 @@ const RolesUnderCompany = () => {
                 <>
                   {responseDetails}
                   {
-                    session?.user.can_create &&
+                    session?.user.deck_automation_can_create &&
                     <div className='overflow-x-auto bg-white p-2'>
                       Add Role? <Link href={`/deck-automation/${companyID}/addRole`} className='underline text-blue-500' prefetch={false} rel='noopener noreferrer'>Click here</Link>
                     </div>

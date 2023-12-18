@@ -70,7 +70,7 @@ const RenderRolesUnderCompany = ({
                       <div className='flex gap-2'>
                         <span>{detail.role_name}</span>
                         {
-                          session?.user.can_edit &&
+                          session?.user.deck_automation_can_edit &&
                           <span className=''>
                             <Link href={`/deck-automation/${companyID}/edit/${detail.role_id}`} prefetch={false} rel='noopener noreferrer'>
                               <Image width={20} height={20} src={'/images/edit.png'} alt="edit-icon" className="cursor-pointer" />
@@ -83,7 +83,7 @@ const RenderRolesUnderCompany = ({
 
                   <td className="">
                     <Link href={`/deck-automation/${companyID}/${detail.role_id}`} prefetch={false} rel='noopener noreferrer'>
-                      <Image width={20} height={20} src={'/images/plus.png'} alt="edit-icon" className="cursor-pointer" />
+                      <Image width={20} height={20} src={'/images/plus.png'} alt="view-more-icon" className="cursor-pointer" />
                     </Link>
                   </td>
                 </tr>
@@ -91,7 +91,7 @@ const RenderRolesUnderCompany = ({
             </tbody>
           </table>
           {
-            session?.user.can_create &&
+            session?.user.deck_automation_can_create &&
             <div className='p-4'>
               Add Role? <Link href={`/deck-automation/${companyID}/addRole`} className='underline text-blue-500' prefetch={false} rel='noopener noreferrer'>Click here</Link>
             </div>
