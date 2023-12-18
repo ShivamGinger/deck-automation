@@ -5,39 +5,46 @@ import React, { useLayoutEffect, useState } from 'react';
 
 import { CompleteCandidateInformation } from '@/utils/types';
 import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Loading from '../Components/Loading';
+import NoCandidateComponent from './Components/NoCandidateComponent';
 import RenderCandidatesForTracking from './Components/RenderCandidatesForTracking';
 
 const CandidateListing = () => {
   const [candidates, setCandidates] = useState<CompleteCandidateInformation[]>([]);
-
-  const router = useRouter();
   const [loading, setLoading] = useState(true);
-
   const [responseDetails, setResponseDetails] = useState<string | null>(null);
+  const [specialQueryError, setspecialQueryError] = useState(false);
+
+  const searchParams = useSearchParams();
+  const query = searchParams.get('query');
+  const router = useRouter();
 
   const { data: session } = useSession();
 
   useLayoutEffect(() => {
     const getData = async () => {
+      setCandidates([]);
+      setLoading(true);
+      setspecialQueryError(false);
+
       try {
-        const response = await fetch(`/api/candidates`, {
+        const response = await fetch(`/api/candidates?query=${query}`, {
           method: 'GET'
         });
 
         if (response.ok) {
           const data = await response.json();
 
-          setCandidates(data.data.sort((a: CompleteCandidateInformation, b: CompleteCandidateInformation) => {
-            const dateA = new Date(a.created_at).getTime();
-            const dateB = new Date(b.created_at).getTime();
-
-            return dateA - dateB;
-          }));
+          setCandidates(data.data);
         } else {
           const data = await response.json();
-          setResponseDetails(data.error);
+
+          if (data.specialQueryError) {
+            setspecialQueryError(true);
+          } else {
+            setResponseDetails(data.error);
+          }
         }
       } catch (err) {
         console.log(err);
@@ -55,7 +62,7 @@ const CandidateListing = () => {
         return;
       }
     };
-  }, [router, session?.user]);
+  }, [router, session?.user, query]);
 
   return (
     <>
@@ -67,7 +74,7 @@ const CandidateListing = () => {
                 <Loading />
               </> :
               <>
-                {responseDetails || candidates.length === 0 ?
+                {responseDetails ?
                   <>
                     {responseDetails}
                     {
@@ -78,9 +85,16 @@ const CandidateListing = () => {
                     }
                   </>
                   :
-                  <RenderCandidatesForTracking
-                    candidates={candidates}
-                  />
+                  <>
+                    {
+                      specialQueryError ?
+                        <NoCandidateComponent />
+                        :
+                        <RenderCandidatesForTracking
+                          candidates={candidates}
+                        />
+                    }
+                  </>
                 }
               </>
           }

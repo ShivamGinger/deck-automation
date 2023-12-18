@@ -1,7 +1,7 @@
 import { db } from '@/db';
 
 import { Candidates, CandidatesStatus, candidateStatus, candidates, companies, parameterScores, parameters, quotientScores, quotients, roles, statusHistory } from '@/db/schema';
-import { and, eq } from 'drizzle-orm';
+import { and, eq, like } from 'drizzle-orm';
 import { getCompanyRoleCandidate } from './roles';
 
 export type CandidateStatusType = "yet_to_share" | "joined" | "negotiation" | "in_process" | "on_hold" | "feedback_pending" | "dropped_out" | "rejected"
@@ -322,4 +322,44 @@ export const processCandidatePDF = async (company_id: number, role_id: number, c
     top5AttributesString,
     quotientScoresString
   };
+};
+
+export async function getCandidateWStatusWQuery(query: string): Promise<candidate[]> {
+  const result: candidate[] = await db.select({
+    candidate_id: candidates.id,
+    candidate_name: candidates.name,
+    key_points: candidates.keyPoints,
+    profile_pic: candidates.profilePic,
+    social: candidates.social,
+    company_id: candidates.companyId,
+    company_name: companies.name,
+    role_id: candidates.roleId,
+    role_name: roles.name,
+    email: candidates.email,
+    current_position: candidates.currPos,
+    current_location: candidates.currLoc,
+    experience: candidates.experience,
+    phone_number: candidates.phNum,
+    fixed_lpa: candidates.fixedLpa,
+    variable_lpa: candidates.varLpa,
+    expected_ctc: candidates.expectedCtc,
+    notice_period: candidates.noticePeriod,
+    description: candidates.description,
+    achievement: candidates.achievement,
+    gender: candidates.gender,
+    current_company: candidates.currCmp,
+    esop_rsu: candidates.esopRsu,
+    candidate_profile_share_date: candidateStatus.profileShrDate,
+    candidate_status: candidateStatus.status,
+    candidate_round_completed: candidateStatus.roundDone,
+    candidate_reject_reason: candidateStatus.reasonReject,
+    created_at: candidates.createdAt
+  })
+    .from(candidates)
+    .leftJoin(companies, eq(candidates.companyId, companies.id))
+    .leftJoin(roles, eq(candidates.roleId, roles.id))
+    .leftJoin(candidateStatus, eq(candidateStatus.candidateId, candidates.id))
+    .where(like(candidates.name, `%${query}%`));
+
+  return result;
 };

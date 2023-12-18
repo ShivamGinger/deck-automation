@@ -436,7 +436,6 @@ const AddCandidate = () => {
                   </div>
                 </>
               }
-
             </div>
           </div>
         </div>
@@ -485,7 +484,7 @@ const AddCandidate = () => {
       });
 
       if (response.ok) {
-        router.replace('/candidate-tracking');
+        router.replace('/candidate-tracking?query=');
 
       } else {
         const errorData = await response.json();

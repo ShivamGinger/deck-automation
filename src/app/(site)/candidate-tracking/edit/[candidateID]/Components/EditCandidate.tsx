@@ -153,7 +153,7 @@ const EditCandidate = ({
       });
 
       if (response.ok) {
-        router.replace('/candidate-tracking');
+        router.replace('/candidate-tracking?query=');
 
       } else {
         const errorData = await response.json();

@@ -40,7 +40,7 @@ const Sidebar = () => {
               <>
                 {
                   session.user.candidate_tracking_can_read &&
-                  <Link href={'/candidate-tracking'} className={`${path.split('/')[1] === 'candidate-tracking' ? 'custom-brown-btn' : 'custom-brown-btn-bg-transparent hover:bg-[#B06500] hover:text-white hover:border-[#B06500] transition ease-in-out'} text-center`} prefetch={false} rel='noopener noreferrer'>
+                  <Link href={'/candidate-tracking?query='} className={`${path.split('/')[1] === 'candidate-tracking' ? 'custom-brown-btn' : 'custom-brown-btn-bg-transparent hover:bg-[#B06500] hover:text-white hover:border-[#B06500] transition ease-in-out'} text-center`} prefetch={false} rel='noopener noreferrer'>
                     Candidates Tracking
                   </Link>
                 }
