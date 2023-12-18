@@ -60,7 +60,7 @@ const authOptions: AuthOptions = {
           .innerJoin(users, eq(users.id, userGroups.userId))
           .where(eq(userGroups.userId, Number(user.id)));
 
-        if (userGroup) {
+        if (userGroup && userGroup.length > 0) {
           const hasReadPermission = userGroup.some(user => user.can_read === 1);
           const hasEditPermission = userGroup.some(user => user.can_edit === 1);
           const hasCreatePermission = userGroup.some(user => user.can_create === 1);
