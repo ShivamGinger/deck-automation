@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
 
 import Input from '@/app/(site)/Components/Input';
+import Loading from '@/app/(site)/Components/Loading';
 import { useSession } from 'next-auth/react';
 
 const EditCompany = () => {
@@ -17,12 +18,11 @@ const EditCompany = () => {
 
   const [error, setError] = useState(false);
   const [errorDeatils, setErrorDetails] = useState<string | null>('');
+  const [loading, setLoading] = useState(true);
 
   const { data: session } = useSession();
 
   useLayoutEffect(() => {
-
-
     const getData = async () => {
       try {
         const response = await fetch(`/api/companies/${companyID}`, {
@@ -33,7 +33,6 @@ const EditCompany = () => {
           const data = await response.json();
 
           setCompanyName(data.data[0]?.name);
-
         } else {
           const data = await response.json();
           setError(true);
@@ -41,12 +40,14 @@ const EditCompany = () => {
         }
       } catch (err) {
         console.log(err);
+      } finally {
+        setLoading(false);
       }
     };
 
     if (session?.user) {
-      if (session?.user.can_edit && session.user.can_read) {
-
+      if (session?.user.deck_automation_can_edit) {
+        getData();
       } else {
         router.replace('/');
         return;
@@ -94,7 +95,7 @@ const EditCompany = () => {
           {'<'}
         </div>
         <div className='flex justify-center py-12 flex-col items-center gap-12'>
-          <Image width={150} height={150} src={'/images/Ginger Partners_Logo with tagline.png'} alt="profile pic" className="rounded-xl " priority />
+          <Image width={150} height={150} src={'/images/Ginger Partners_Logo with tagline.png'} alt="ginger-partners-logo" className="rounded-xl " priority />
           <h1 className='text-xl font-bold uppercase'>Edit Company Name</h1>
 
           {error &&
@@ -104,25 +105,30 @@ const EditCompany = () => {
             </div>
           }
           <div className="space-y-12 flex flex-col">
-            <Input
-              name='Company Name'
-              id='company_name'
-              placeholder={companyName}
-              required={true}
-              type='text'
-              moveLabel={companyName != ''}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => setCompanyName(e.target.value)}
-            />
+            {
+              loading ?
+                <Loading /> :
+                <>
+                  <Input
+                    name='Company Name'
+                    id='company_name'
+                    placeholder={companyName}
+                    required={true}
+                    type='text'
+                    moveLabel={companyName != ''}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => setCompanyName(e.target.value)}
+                  />
 
-            <button
-              onClick={handleSubmit}
-              disabled={!companyName || error}
-              className={`${!companyName || error ? 'cursor-not-allowed opacity-50' : ''} font-semibold py-2 px-8 uppercase bg-[#B06500] text-white rounded-lg border-[#B06500]`}
-            >
-              Update
-            </button>
+                  <button
+                    onClick={handleSubmit}
+                    disabled={!companyName || error}
+                    className={`${!companyName || error ? 'cursor-not-allowed opacity-50' : ''} font-semibold py-2 px-8 uppercase bg-[#B06500] text-white rounded-lg border-[#B06500]`}
+                  >
+                    Update
+                  </button>
+                </>
+            }
           </div>
-
         </div>
       </div>
     </section>

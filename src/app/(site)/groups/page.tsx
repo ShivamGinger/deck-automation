@@ -44,7 +44,7 @@ const Allgroups = () => {
     };
 
     if (session?.user) {
-      if (session?.user.can_create) {
+      if (session?.user.groups_can_read) {
         getData();
 
       } else {
@@ -68,7 +68,7 @@ const Allgroups = () => {
                   <>
                     {responseDetails}
                     {
-                      session?.user.can_create &&
+                      session?.user.groups_can_create &&
                       <div className='p-4'>
                         Add Group? <Link href={'/groups/addGroup'} className='underline text-blue-500' prefetch={false} rel='noopener noreferrer'>Click here</Link>
                       </div>

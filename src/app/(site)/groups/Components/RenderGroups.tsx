@@ -47,10 +47,11 @@ const RenderGroups = ({
               <tr className='gap-x-4'>
                 <th className="table-headings">S.No.</th>
                 <th className="table-headings">Group Name</th>
-                <th className="table-headings">Can Read</th>
-                <th className="table-headings">Can Create</th>
-                <th className="table-headings">Can Edit</th>
-                <th className="table-headings">Can Delete</th>
+                <th className="table-headings">Candidate Tracking</th>
+                <th className="table-headings">Deck Automation</th>
+                <th className="table-headings">All Quotients</th>
+                <th className="table-headings">Users</th>
+                <th className="table-headings">Groups</th>
               </tr>
             </thead>
             <tbody className="">
@@ -64,7 +65,7 @@ const RenderGroups = ({
                       <div className='flex gap-2'>
                         <span>{detail.group_name}</span>
                         {
-                          session?.user.can_edit &&
+                          session?.user.groups_can_edit &&
                           <span className=''>
                             <Link href={`/groups/${detail.group_id}/edit`} prefetch={false} rel='noopener noreferrer'>
                               <Image width={20} height={20} src={'/images/edit.png'} alt="edit-icon" className="cursor-pointer" />
@@ -75,20 +76,54 @@ const RenderGroups = ({
                     </div>
                   </td>
                   <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
-                    {detail.can_read ? 'True' : 'False'}
+                    <div className='flex justify-center items-center'>
+                      <div className='flex flex-col text-start gap-2'>
+                        <span>Can Read: {detail.candidate_tracking_can_read ? 'True' : 'False'}</span>
+                        <span>Can Edit: {detail.candidate_tracking_can_edit ? 'True' : 'False'}</span>
+                        <span>Can Create: {detail.candidate_tracking_can_create ? 'True' : 'False'}</span>
+                      </div>
+                    </div>
                   </td>
                   <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
-                    {detail.can_create ? 'True' : 'False'}
+                    <div className='flex justify-center items-center'>
+                      <div className='flex flex-col text-start gap-2'>
+                        <span>Can Read: {detail.deck_automation_can_read ? 'True' : 'False'}</span>
+                        <span>Can Edit: {detail.deck_automation_can_edit ? 'True' : 'False'}</span>
+                        <span>Can Create: {detail.deck_automation_can_create ? 'True' : 'False'}</span>
+                      </div>
+                    </div>
                   </td>
                   <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
-                    {detail.can_edit ? 'True' : 'False'}
+                    <div className='flex justify-center items-center'>
+                      <div className='flex flex-col text-start gap-2'>
+                        <span>Can Read: {detail.all_quotients_can_read ? 'True' : 'False'}</span>
+                        <span>Can Edit: {detail.all_quotients_can_edit ? 'True' : 'False'}</span>
+                        <span>Can Create: {detail.all_quotients_can_create ? 'True' : 'False'}</span>
+                      </div>
+                    </div>
                   </td>
                   <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
-                    {detail.can_delete ? 'True' : 'False'}
+                    <div className='flex justify-center items-center'>
+                      <div className='flex flex-col text-start gap-2'>
+                        <span>Can Read: {detail.users_can_read ? 'True' : 'False'}</span>
+                        <span>Can Create: {detail.users_can_create ? 'True' : 'False'}</span>
+                        <span>Can Delete: {detail.users_can_delete ? 'True' : 'False'}</span>
+                      </div>
+                    </div>
+                  </td>
+                  <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
+                    <div className='flex justify-center items-center'>
+                      <div className='flex flex-col text-start gap-2'>
+                        <span>Can Read: {detail.groups_can_read ? 'True' : 'False'}</span>
+                        <span>Can Edit: {detail.groups_can_edit ? 'True' : 'False'}</span>
+                        <span>Can Create: {detail.groups_can_create ? 'True' : 'False'}</span>
+                        <span>Can Delete: {detail.groups_can_delete ? 'True' : 'False'}</span>
+                      </div>
+                    </div>
                   </td>
                   <td className="">
                     <Link href={`/groups/${detail.group_id}/users`} prefetch={false} rel='noopener noreferrer'>
-                      <Image width={20} height={20} src={'/images/plus.png'} alt="edit-icon" className="cursor-pointer" />
+                      <Image width={20} height={20} src={'/images/plus.png'} alt="view-more-icon" className="cursor-pointer" />
                     </Link>
                   </td>
                 </tr>
@@ -96,7 +131,7 @@ const RenderGroups = ({
             </tbody>
           </table>
           {
-            session?.user.can_create &&
+            session?.user.groups_can_create &&
             <div className='p-4'>
               Add Group? <Link href={'/groups/addGroup'} className='underline text-blue-500' prefetch={false} rel='noopener noreferrer'>Click here</Link>
             </div>

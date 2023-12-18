@@ -41,7 +41,7 @@ const QuotientAddPage = () => {
     };
 
     if (session?.user) {
-      if (session?.user.can_create && session.user.can_read) {
+      if (session?.user.all_quotients_can_create) {
         getData();
       } else {
         router.replace('/');
@@ -60,7 +60,7 @@ const QuotientAddPage = () => {
               <section className='bg-[#FEFAEF] '>
                 <div className='max-w-screen-2xl mx-auto bg-white shadow-2xl px-4 md:px-0 md:mt-10 rounded-xl '>
                   <div className='flex py-12 flex-col items-center gap-12'>
-                    <Image width={150} height={150} src={'/images/Ginger Partners_Logo with tagline.png'} alt="profile pic" className="rounded-xl " priority />
+                    <Image width={150} height={150} src={'/images/Ginger Partners_Logo with tagline.png'} alt="ginger-partners-logo" className="rounded-xl " priority />
 
                     <div>
                       <AddQuotientWeightage />

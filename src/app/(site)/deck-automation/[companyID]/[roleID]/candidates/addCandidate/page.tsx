@@ -7,8 +7,8 @@ import { useParams, useRouter } from 'next/navigation';
 
 import Loading from '@/app/(site)/Components/Loading';
 import { ParametersQuotientFactorsValue, QuotientFactorsWeightage } from '@/utils/types';
-import AddCandidate from './Components/AddCandidate';
 import { useSession } from 'next-auth/react';
+import AddCandidate from './Components/AddCandidate';
 
 const CheckAddCandidate = () => {
   const { roleID, companyID } = useParams();
@@ -24,11 +24,6 @@ const CheckAddCandidate = () => {
   const { data: session } = useSession();
 
   useLayoutEffect(() => {
-    if (!session?.user.can_create) {
-      router.replace('/');
-      return;
-    }
-
     const getQuotientsDetails = async () => {
       try {
         const response = await fetch(`/api/companies/${companyID}/roles/${roleID}/quotients`, {
@@ -36,8 +31,8 @@ const CheckAddCandidate = () => {
         });
         if (response.ok) {
           const data = await response.json();
-
-          if (data.data.length === 0) {
+          
+          if (data.data.length === 0 && session?.user.all_quotients_can_create) {
             router.replace(`/deck-automation/${companyID}/${roleID}/quotients/addQuotients`);
 
           } else {
@@ -49,9 +44,16 @@ const CheckAddCandidate = () => {
       }
     };
 
-    getQuotientsDetails();
+    if (session?.user) {
+      if (session.user.deck_automation_can_create) {
+        getQuotientsDetails();
+      } else {
+        router.replace('/');
+        return;
+      }
+    }
 
-  }, [companyID, roleID, router, session?.user.can_create]);
+  }, [companyID, roleID, router, session?.user]);
 
   useEffect(() => {
     const makeAPICalls = async () => {
@@ -59,7 +61,6 @@ const CheckAddCandidate = () => {
 
       for (const quotient of quotientsDetailsUnderRole) {
         try {
-
           const response = await fetch(`/api/companies/${companyID}/roles/${roleID}/quotients/${quotient.quotient_weightage_id}/parameters`, {
             method: 'GET'
           });
@@ -106,7 +107,7 @@ const CheckAddCandidate = () => {
               {'<'}
             </div>
             <div className='flex justify-center py-12 flex-col items-center gap-12'>
-              <Image width={150} height={150} src={'/images/Ginger Partners_Logo with tagline.png'} alt="profile pic" className="rounded-xl " priority />
+              <Image width={150} height={150} src={'/images/Ginger Partners_Logo with tagline.png'} alt="ginger-partners-logo" className="rounded-xl " priority />
 
               <div>
                 <AddCandidate

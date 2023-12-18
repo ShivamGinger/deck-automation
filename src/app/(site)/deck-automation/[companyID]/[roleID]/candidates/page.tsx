@@ -48,7 +48,7 @@ const DisplayCandidatesUnderRoles = () => {
         if (response.ok) {
           const data = await response.json();
 
-          if (data.data.length === 0 && session?.user.can_create) {
+          if (data.data.length === 0 && session?.user.deck_automation_can_create) {
             router.replace(`/deck-automation/${companyID}/${roleID}/quotients/addQuotients`);
 
           } else if (data.data.length > 0) {
@@ -64,7 +64,7 @@ const DisplayCandidatesUnderRoles = () => {
       }
     };
     getQuotientsDetails();
-  }, [companyID, roleID, router, session?.user.can_create]);
+  }, [companyID, roleID, router, session?.user]);
 
   useLayoutEffect(() => {
     const getCandidateDetails = async () => {
@@ -106,15 +106,18 @@ const DisplayCandidatesUnderRoles = () => {
                     {errorDeatils}
 
                     {
-                      session?.user.can_create &&
+                      session?.user.deck_automation_can_create &&
                       <CanAddCandidate
                         quotientsDetailsUnderRole={quotientsDetailsUnderRole}
                       />
                     }
 
-                    <div className='p-4 pt-0'>
-                      View Quotients? <Link href={`/deck-automation/${companyID}/${roleID}/quotients`} className='underline text-blue-500' prefetch={false} rel='noopener noreferrer'>Click here</Link>
-                    </div>
+                    {
+                      session?.user.all_quotients_can_read &&
+                      <div className='p-4 pt-0'>
+                        View Quotients? <Link href={`/deck-automation/${companyID}/${roleID}/quotients`} className='underline text-blue-500' prefetch={false} rel='noopener noreferrer'>Click here</Link>
+                      </div>
+                    }
                   </div>
                 </>
               }

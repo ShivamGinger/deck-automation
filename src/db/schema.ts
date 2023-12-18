@@ -1,5 +1,5 @@
-import { mysqlTable, mysqlSchema, AnyMySqlColumn, index, primaryKey, unique, bigint, date, mysqlEnum, tinyint, varchar, json, text, timestamp, decimal } from "drizzle-orm/mysql-core"
-import { InferSelectModel, sql } from "drizzle-orm"
+import { InferSelectModel, sql } from "drizzle-orm";
+import { AnyMySqlColumn, bigint, date, decimal, index, json, mysqlEnum, mysqlSchema, mysqlTable, primaryKey, text, timestamp, tinyint, unique, varchar } from "drizzle-orm/mysql-core";
 
 
 export const candidateStatus = mysqlTable("candidate_status", {
@@ -7,17 +7,17 @@ export const candidateStatus = mysqlTable("candidate_status", {
 	candidateId: bigint("candidate_id", { mode: "number" }).notNull(),
 	// you can use { mode: 'date' }, if you want to have Date as type for this column
 	profileShrDate: date("profile_shr_date", { mode: 'string' }),
-	status: mysqlEnum("status", ['yet_to_share','joined','negotiation','on_hold','feedback_pending','dropped_out','rejected','in_process']).notNull(),
+	status: mysqlEnum("status", ['yet_to_share', 'joined', 'negotiation', 'on_hold', 'feedback_pending', 'dropped_out', 'rejected', 'in_process']).notNull(),
 	roundDone: tinyint("round_done"),
 	reasonReject: varchar("reason_reject", { length: 255 }),
 },
-(table) => {
-	return {
-		candidateIdIdx: index("candidate_id_idx").on(table.candidateId),
-		candidateStatusId: primaryKey(table.id),
-		candidateId: unique("candidate_id").on(table.candidateId),
-	}
-});
+	(table) => {
+		return {
+			candidateIdIdx: index("candidate_id_idx").on(table.candidateId),
+			candidateStatusId: primaryKey(table.id),
+			candidateId: unique("candidate_id").on(table.candidateId),
+		}
+	});
 
 export const candidates = mysqlTable("candidates", {
 	id: bigint("id", { mode: "number" }).autoincrement().notNull(),
@@ -39,29 +39,29 @@ export const candidates = mysqlTable("candidates", {
 	noticePeriod: varchar("notice_period", { length: 255 }),
 	description: varchar("description", { length: 255 }),
 	achievement: json("achievement"),
-	gender: mysqlEnum("gender", ['male','female','other']),
+	gender: mysqlEnum("gender", ['male', 'female', 'other']),
 	currCmp: varchar("curr_cmp", { length: 255 }),
 	esopRsu: decimal("esop_rsu", { precision: 5, scale: 2 }),
 },
-(table) => {
-	return {
-		companyIdIdx: index("company_id_idx").on(table.companyId),
-		roleIdIdx: index("role_id_idx").on(table.roleId),
-		candidatesId: primaryKey(table.id),
-	}
-});
+	(table) => {
+		return {
+			companyIdIdx: index("company_id_idx").on(table.companyId),
+			roleIdIdx: index("role_id_idx").on(table.roleId),
+			candidatesId: primaryKey(table.id),
+		}
+	});
 
 export const companies = mysqlTable("companies", {
 	id: bigint("id", { mode: "number" }).autoincrement().notNull(),
 	name: varchar("name", { length: 255 }).notNull(),
 	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
 },
-(table) => {
-	return {
-		companiesId: primaryKey(table.id),
-		name: unique("name").on(table.name),
-	}
-});
+	(table) => {
+		return {
+			companiesId: primaryKey(table.id),
+			name: unique("name").on(table.name),
+		}
+	});
 
 export const groupPermissions = mysqlTable("group_permissions", {
 	id: bigint("id", { mode: "number" }).autoincrement().notNull(),
@@ -70,27 +70,39 @@ export const groupPermissions = mysqlTable("group_permissions", {
 	permissionValue: tinyint("permission_value").notNull(),
 	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull()
 },
-(table) => {
-	return {
-		groupIdIdx: index("group_id_idx").on(table.groupId),
-		groupPermissionsId: primaryKey(table.id),
-	}
-});
+	(table) => {
+		return {
+			groupIdIdx: index("group_id_idx").on(table.groupId),
+			groupPermissionsId: primaryKey(table.id),
+		}
+	});
 
 export const groups = mysqlTable("groups", {
 	id: bigint("id", { mode: "number" }).autoincrement().notNull(),
 	groupName: varchar("group_name", { length: 255 }).notNull(),
-	canRead: tinyint("can_read").default(1),
-	canEdit: tinyint("can_edit").default(0),
-	canCreate: tinyint("can_create").default(0),
-	canDelete: tinyint("can_delete").default(0),
+	candidateTrackingCanRead: tinyint("candidate_tracking_can_read").default(0),
+	candidateTrackingCanEdit: tinyint("candidate_tracking_can_edit").default(0),
+	candidateTrackingCanCreate: tinyint("candidate_tracking_can_create").default(0),
+	deckAutomationCanRead: tinyint("deck_automation_can_read").default(0),
+	deckAutomationCanEdit: tinyint("deck_automation_can_edit").default(0),
+	deckAutomationCanCreate: tinyint("deck_automation_can_create").default(0),
+	allQuotientsCanRead: tinyint("all_quotients_can_read").default(0),
+	allQuotientsCanEdit: tinyint("all_quotients_can_edit").default(0),
+	allQuotientsCanCreate: tinyint("all_quotients_can_create").default(0),
+	usersCanRead: tinyint("users_can_read").default(0),
+	usersCanCreate: tinyint("users_can_create").default(0),
+	usersCanDelete: tinyint("users_can_delete").default(0),
+	groupsCanRead: tinyint("groups_can_read").default(0),
+	groupsCanEdit: tinyint("groups_can_edit").default(0),
+	groupsCanCreate: tinyint("groups_can_create").default(0),
+	groupsCanDelete: tinyint("groups_can_delete").default(0),
 	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull()
 },
-(table) => {
-	return {
-		groupsId: primaryKey(table.id),
-	}
-});
+	(table) => {
+		return {
+			groupsId: primaryKey(table.id),
+		}
+	});
 
 export const parameterScores = mysqlTable("parameter_scores", {
 	id: bigint("id", { mode: "number" }).autoincrement().notNull(),
@@ -99,13 +111,13 @@ export const parameterScores = mysqlTable("parameter_scores", {
 	score: tinyint("score").notNull(),
 	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
 },
-(table) => {
-	return {
-		candidateIdIdx: index("candidate_id_idx").on(table.candidateId),
-		parameterIdIdx: index("parameter_id_idx").on(table.parameterId),
-		parameterScoresId: primaryKey(table.id),
-	}
-});
+	(table) => {
+		return {
+			candidateIdIdx: index("candidate_id_idx").on(table.candidateId),
+			parameterIdIdx: index("parameter_id_idx").on(table.parameterId),
+			parameterScoresId: primaryKey(table.id),
+		}
+	});
 
 export const parameterWeightages = mysqlTable("parameter_weightages", {
 	id: bigint("id", { mode: "number" }).autoincrement().notNull(),
@@ -115,14 +127,14 @@ export const parameterWeightages = mysqlTable("parameter_weightages", {
 	roleId: bigint("role_id", { mode: "number" }).notNull(),
 	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
 },
-(table) => {
-	return {
-		companyIdIdx: index("company_id_idx").on(table.companyId),
-		parameterIdIdx: index("parameter_id_idx").on(table.parameterId),
-		roleIdIdx: index("role_id_idx").on(table.roleId),
-		parameterWeightagesId: primaryKey(table.id),
-	}
-});
+	(table) => {
+		return {
+			companyIdIdx: index("company_id_idx").on(table.companyId),
+			parameterIdIdx: index("parameter_id_idx").on(table.parameterId),
+			roleIdIdx: index("role_id_idx").on(table.roleId),
+			parameterWeightagesId: primaryKey(table.id),
+		}
+	});
 
 export const parameters = mysqlTable("parameters", {
 	id: bigint("id", { mode: "number" }).autoincrement().notNull(),
@@ -130,12 +142,12 @@ export const parameters = mysqlTable("parameters", {
 	quotientId: bigint("quotient_id", { mode: "number" }).notNull(),
 	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
 },
-(table) => {
-	return {
-		quotientIdIdx: index("quotient_id_idx").on(table.quotientId),
-		parametersId: primaryKey(table.id),
-	}
-});
+	(table) => {
+		return {
+			quotientIdIdx: index("quotient_id_idx").on(table.quotientId),
+			parametersId: primaryKey(table.id),
+		}
+	});
 
 export const quotientScores = mysqlTable("quotient_scores", {
 	id: bigint("id", { mode: "number" }).autoincrement().notNull(),
@@ -144,13 +156,13 @@ export const quotientScores = mysqlTable("quotient_scores", {
 	totalScore: decimal("total_score", { precision: 4, scale: 2 }).notNull(),
 	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
 },
-(table) => {
-	return {
-		candidateIdIdx: index("candidate_id_idx").on(table.candidateId),
-		quotientIdIdx: index("quotient_id_idx").on(table.quotientId),
-		quotientScoresId: primaryKey(table.id),
-	}
-});
+	(table) => {
+		return {
+			candidateIdIdx: index("candidate_id_idx").on(table.candidateId),
+			quotientIdIdx: index("quotient_id_idx").on(table.quotientId),
+			quotientScoresId: primaryKey(table.id),
+		}
+	});
 
 export const quotientWeightages = mysqlTable("quotient_weightages", {
 	id: bigint("id", { mode: "number" }).autoincrement().notNull(),
@@ -160,26 +172,26 @@ export const quotientWeightages = mysqlTable("quotient_weightages", {
 	roleId: bigint("role_id", { mode: "number" }).notNull(),
 	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
 },
-(table) => {
-	return {
-		companyIdIdx: index("company_id_idx").on(table.companyId),
-		quotientIdIdx: index("quotient_id_idx").on(table.quotientId),
-		roleIdIdx: index("role_id_idx").on(table.roleId),
-		quotientWeightagesId: primaryKey(table.id),
-	}
-});
+	(table) => {
+		return {
+			companyIdIdx: index("company_id_idx").on(table.companyId),
+			quotientIdIdx: index("quotient_id_idx").on(table.quotientId),
+			roleIdIdx: index("role_id_idx").on(table.roleId),
+			quotientWeightagesId: primaryKey(table.id),
+		}
+	});
 
 export const quotients = mysqlTable("quotients", {
 	id: bigint("id", { mode: "number" }).autoincrement().notNull(),
 	quotient: varchar("quotient", { length: 150 }).notNull(),
 	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
 },
-(table) => {
-	return {
-		quotientsId: primaryKey(table.id),
-		quotient: unique("quotient").on(table.quotient),
-	}
-});
+	(table) => {
+		return {
+			quotientsId: primaryKey(table.id),
+			quotient: unique("quotient").on(table.quotient),
+		}
+	});
 
 export const roles = mysqlTable("roles", {
 	id: bigint("id", { mode: "number" }).autoincrement().notNull(),
@@ -187,41 +199,41 @@ export const roles = mysqlTable("roles", {
 	companyId: bigint("company_id", { mode: "number" }).notNull(),
 	createdAt: timestamp("created_at", { mode: 'string' }).default(sql`CURRENT_TIMESTAMP`),
 },
-(table) => {
-	return {
-		companyIdIdx: index("company_id_idx").on(table.companyId),
-		rolesId: primaryKey(table.id),
-	}
-});
+	(table) => {
+		return {
+			companyIdIdx: index("company_id_idx").on(table.companyId),
+			rolesId: primaryKey(table.id),
+		}
+	});
 
 export const statusHistory = mysqlTable("status_history", {
 	id: bigint("id", { mode: "number" }).autoincrement().notNull(),
 	candidateId: bigint("candidate_id", { mode: "number" }).notNull(),
 	// you can use { mode: 'date' }, if you want to have Date as type for this column
 	profileShrDate: date("profile_shr_date", { mode: 'string' }),
-	status: mysqlEnum("status", ['yet_to_share','joined','negotiation','on_hold','feedback_pending','dropped_out','rejected','in_process']).notNull(),
+	status: mysqlEnum("status", ['yet_to_share', 'joined', 'negotiation', 'on_hold', 'feedback_pending', 'dropped_out', 'rejected', 'in_process']).notNull(),
 	roundDone: tinyint("round_done"),
 	reasonReject: varchar("reason_reject", { length: 255 }),
 	updatedAt: timestamp("updated_at", { mode: 'string' }).default(sql`CURRENT_TIMESTAMP`),
 },
-(table) => {
-	return {
-		statusHistoryId: primaryKey(table.id),
-	}
-});
+	(table) => {
+		return {
+			statusHistoryId: primaryKey(table.id),
+		}
+	});
 
 export const userGroups = mysqlTable("user_groups", {
 	id: bigint("id", { mode: "number" }).autoincrement().notNull(),
 	userId: bigint("user_id", { mode: "number" }).notNull(),
 	groupId: bigint("group_id", { mode: "number" }).notNull(),
 },
-(table) => {
-	return {
-		groupIdIdx: index("group_id_idx").on(table.groupId),
-		userIdIdx: index("user_id_idx").on(table.userId),
-		userGroupsId: primaryKey(table.id),
-	}
-});
+	(table) => {
+		return {
+			groupIdIdx: index("group_id_idx").on(table.groupId),
+			userIdIdx: index("user_id_idx").on(table.userId),
+			userGroupsId: primaryKey(table.id),
+		}
+	});
 
 export const users = mysqlTable("users", {
 	id: bigint("id", { mode: "number" }).autoincrement().notNull(),
@@ -232,13 +244,13 @@ export const users = mysqlTable("users", {
 	lastName: varchar("last_name", { length: 200 }),
 	isAdmin: tinyint("is_admin").default(0),
 },
-(table) => {
-	return {
-		userEmailIdx: index("user_email_idx").on(table.email),
-		usersId: primaryKey(table.id),
-		usersEmailUnique: unique("users_email_unique").on(table.email),
-	}
-});
+	(table) => {
+		return {
+			userEmailIdx: index("user_email_idx").on(table.email),
+			usersId: primaryKey(table.id),
+			usersEmailUnique: unique("users_email_unique").on(table.email),
+		}
+	});
 
 export type Candidates = InferSelectModel<typeof candidates>;
 export type CandidatesStatus = InferSelectModel<typeof candidateStatus>;

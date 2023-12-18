@@ -61,7 +61,7 @@ const RenderCompanies = ({
                       <div className='flex gap-2'>
                         <span>{detail.company_name}</span>
                         {
-                          session?.user.can_edit &&
+                          session?.user.deck_automation_can_edit &&
                           <span className=''>
                             <Link href={`/deck-automation/edit/${detail.company_id}`} prefetch={false} rel='noopener noreferrer'>
                               <Image width={20} height={20} src={'/images/edit.png'} alt="edit-icon" className="cursor-pointer" />
@@ -78,7 +78,7 @@ const RenderCompanies = ({
 
                   <td className="">
                     <Link href={`/deck-automation/${detail.company_id}`} prefetch={false} rel='noopener noreferrer'>
-                      <Image width={20} height={20} src={'/images/plus.png'} alt="edit-icon" className="cursor-pointer" />
+                      <Image width={20} height={20} src={'/images/plus.png'} alt="view-more-icon" className="cursor-pointer" />
                     </Link>
                   </td>
                 </tr>
@@ -86,7 +86,7 @@ const RenderCompanies = ({
             </tbody>
           </table>
           {
-            session?.user.can_create &&
+            session?.user.deck_automation_can_create &&
             <div className='p-4'>
               Add Company? <Link href={'/deck-automation/addCompany'} className='underline text-blue-500' prefetch={false} rel='noopener noreferrer'>Click here</Link>
             </div>

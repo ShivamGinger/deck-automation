@@ -49,7 +49,7 @@ const UsersUnderGroups = () => {
     };
 
     if (session?.user) {
-      if (session?.user.can_create && session.user.can_read) {
+      if (session?.user.groups_can_create) {
         getData();
 
       } else {
@@ -77,7 +77,7 @@ const UsersUnderGroups = () => {
                       </div>
                       {responseDetails}
                       {
-                        session?.user.can_create && session.user.can_read &&
+                        session?.user.users_can_create &&
                         <div className='p-4'>
                           Add User? <Link href={`/groups/${groupID}/users/addUser`} className='underline text-blue-500' prefetch={false} rel='noopener noreferrer'>Click here</Link>
                         </div>

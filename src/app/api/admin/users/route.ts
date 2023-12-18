@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
     });
 
     if (exsistingUser) {
-      return NextResponse.json({ error: "Email Already in use. Kindly Login!" }, { status: 409 });
+      return NextResponse.json({ error: "Account already added!" }, { status: 409 });
     };
 
     const data: MySqlInsertValue<typeof users> = {
@@ -53,7 +53,7 @@ export async function POST(request: NextRequest) {
     const user = await db.insert(users).values(data);
 
     if (user) {
-      const data = await resend.emails.send({
+      await resend.emails.send({
         from: 'onboarding@resend.dev',
         to: ['shivam.t@gingerpartners.co'],
         subject: 'Account Created',

@@ -44,7 +44,7 @@ const EditQuotient = () => {
     };
 
     if (session?.user) {
-      if (session.user.can_edit && session.user.can_read) {
+      if (session.user.all_quotients_can_edit) {
         getData();
 
       } else {

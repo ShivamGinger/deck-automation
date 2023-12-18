@@ -49,7 +49,7 @@ const AddUser = () => {
     };
 
     if (session?.user) {
-      if (session?.user.can_create && session.user.can_read) {
+      if (session?.user.users_can_create) {
         getData();
       } else {
         router.replace('/');
@@ -100,29 +100,34 @@ const AddUser = () => {
           }
           <div className="space-y-12 flex flex-col relative">
             {
-              loading ?
+              loading || error ?
                 <Loading />
                 :
                 <>
-                  <CustomSelectUser
-                    id={`candidate_company_choose`}
-                    value={users.filter(prev => prev.user_id === selectedUserID)[0]?.email}
-                    options={users}
-                    onChange={(e: ChangeEvent<HTMLSelectElement>) => setSelectedUserID(parseInt(e.target.value))}
-                    required
-                  />
+                  {users.length > 0 ?
+                    <>
+                      <CustomSelectUser
+                        id={`candidate_company_choose`}
+                        value={users.filter(prev => prev.user_id === selectedUserID)[0]?.email}
+                        options={users}
+                        onChange={(e: ChangeEvent<HTMLSelectElement>) => setSelectedUserID(parseInt(e.target.value))}
+                        required
+                      />
 
-                  <button
-                    onClick={handleSubmit}
-                    disabled={error}
-                    className={`${error ? 'cursor-not-allowed opacity-50' : ''} font-semibold py-2 px-8 uppercase bg-[#B06500] text-white rounded-lg border-[#B06500]`}
-                  >
-                    Submit
-                  </button>
+                      <button
+                        onClick={handleSubmit}
+                        disabled={error}
+                        className={`${error ? 'cursor-not-allowed opacity-50' : ''} font-semibold py-2 px-8 uppercase bg-[#B06500] text-white rounded-lg border-[#B06500]`}
+                      >
+                        Submit
+                      </button>
+                    </>
+                    :
+                    <Loading />
+                  }
                 </>
             }
           </div>
-
         </div>
       </div>
     </section>

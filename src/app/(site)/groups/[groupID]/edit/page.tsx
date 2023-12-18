@@ -8,6 +8,7 @@ import { useParams, useRouter } from 'next/navigation';
 import Input from '@/app/(site)/Components/Input';
 import Loading from '@/app/(site)/Components/Loading';
 import Select from '@/app/(site)/Components/Select';
+import { Group } from '@/utils/types';
 import { useSession } from 'next-auth/react';
 
 const EditGroup = () => {
@@ -15,12 +16,24 @@ const EditGroup = () => {
 
   const { groupID } = useParams();
 
-  const [groupDetails, setGroupDetails] = useState({
+  const [groupDetails, setGroupDetails] = useState<Group>({
     group_name: '',
-    can_read: 'true',
-    can_edit: 'true',
-    can_create: 'true',
-    can_delete: 'true'
+    candidate_tracking_can_read: 'true',
+    candidate_tracking_can_edit: 'true',
+    candidate_tracking_can_create: 'true',
+    deck_automation_can_read: 'true',
+    deck_automation_can_edit: 'true',
+    deck_automation_can_create: 'true',
+    all_quotients_can_read: 'true',
+    all_quotients_can_edit: 'true',
+    all_quotients_can_create: 'true',
+    users_can_read: 'true',
+    users_can_create: 'true',
+    users_can_delete: 'true',
+    groups_can_read: 'true',
+    groups_can_edit: 'true',
+    groups_can_create: 'true',
+    groups_can_delete: 'true',
   });
 
   const [loading, setLoading] = useState(true);
@@ -39,13 +52,25 @@ const EditGroup = () => {
 
         if (response.ok) {
           const data = await response.json();
-
+          console.log(data.data)
           setGroupDetails({
             group_name: data.data[0].group_name,
-            can_read: 'true',
-            can_edit: 'true',
-            can_create: 'true',
-            can_delete: 'true'
+            candidate_tracking_can_read: 'true',
+            candidate_tracking_can_edit: 'true',
+            candidate_tracking_can_create: 'true',
+            deck_automation_can_read: 'true',
+            deck_automation_can_edit: 'true',
+            deck_automation_can_create: 'true',
+            all_quotients_can_read: 'true',
+            all_quotients_can_edit: 'true',
+            all_quotients_can_create: 'true',
+            users_can_read: 'true',
+            users_can_create: 'true',
+            users_can_delete: 'true',
+            groups_can_read: 'true',
+            groups_can_edit: 'true',
+            groups_can_create: 'true',
+            groups_can_delete: 'true',
           })
 
         } else {
@@ -61,7 +86,7 @@ const EditGroup = () => {
     };
 
     if (session?.user) {
-      if (session?.user.can_edit && session.user.can_read) {
+      if (session?.user.groups_can_edit) {
         getData();
 
       } else {
@@ -92,10 +117,22 @@ const EditGroup = () => {
       },
       body: JSON.stringify({
         group_name: groupDetails.group_name,
-        can_read: groupDetails.can_read === 'true' ? 1 : 0,
-        can_edit: groupDetails.can_edit === 'true' ? 1 : 0,
-        can_create: groupDetails.can_create === 'true' ? 1 : 0,
-        can_delete: groupDetails.can_delete === 'true' ? 1 : 0
+        candidate_tracking_can_read: groupDetails.candidate_tracking_can_read === 'true' ? 1 : 0,
+        candidate_tracking_can_edit: groupDetails.candidate_tracking_can_edit === 'true' ? 1 : 0,
+        candidate_tracking_can_create: groupDetails.candidate_tracking_can_create === 'true' ? 1 : 0,
+        deck_automation_can_read: groupDetails.deck_automation_can_read === 'true' ? 1 : 0,
+        deck_automation_can_edit: groupDetails.deck_automation_can_edit === 'true' ? 1 : 0,
+        deck_automation_can_create: groupDetails.deck_automation_can_create === 'true' ? 1 : 0,
+        all_quotients_can_read: groupDetails.all_quotients_can_read === 'true' ? 1 : 0,
+        all_quotients_can_edit: groupDetails.all_quotients_can_edit === 'true' ? 1 : 0,
+        all_quotients_can_create: groupDetails.all_quotients_can_create === 'true' ? 1 : 0,
+        users_can_read: groupDetails.users_can_read === 'true' ? 1 : 0,
+        users_can_create: groupDetails.users_can_create === 'true' ? 1 : 0,
+        users_can_delete: groupDetails.users_can_delete === 'true' ? 1 : 0,
+        groups_can_read: groupDetails.groups_can_read === 'true' ? 1 : 0,
+        groups_can_edit: groupDetails.groups_can_edit === 'true' ? 1 : 0,
+        groups_can_create: groupDetails.groups_can_create === 'true' ? 1 : 0,
+        groups_can_delete: groupDetails.groups_can_delete === 'true' ? 1 : 0,
       }),
       credentials: 'include',
     });
@@ -161,37 +198,147 @@ const EditGroup = () => {
                     onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(e.target.value, 'group_name')}
                   />
 
-                  <Select
-                    title='Can Edit'
-                    id={`can_edit`}
-                    options={[{ value: 'true', text: 'True' }, { value: 'false', text: 'False' }]}
-                    onChange={(e: ChangeEvent<HTMLSelectElement>) => handleInputChange(e.target.value, 'can_edit')}
-                    required
-                  />
+                  <div className='flex flex-col'>
+                    <p className='text-[16px] leading-tight font-semibold'>
+                      Update Candidate Tracking permissions
+                    </p>
+                    <Select
+                      title='Can Read'
+                      id={`candidate_tracking_can_read`}
+                      options={[{ value: 'true', text: 'True' }, { value: 'false', text: 'False' }]}
+                      onChange={(e: ChangeEvent<HTMLSelectElement>) => handleInputChange(e.target.value, 'candidate_tracking_can_read')}
+                      required
+                    />
+                    <Select
+                      title='Can Edit'
+                      id={`candidate_tracking_can_edit`}
+                      options={[{ value: 'true', text: 'True' }, { value: 'false', text: 'False' }]}
+                      onChange={(e: ChangeEvent<HTMLSelectElement>) => handleInputChange(e.target.value, 'candidate_tracking_can_edit')}
+                      required
+                    />
+                    <Select
+                      title='Can Create'
+                      id={`candidate_tracking_can_create`}
+                      options={[{ value: 'true', text: 'True' }, { value: 'false', text: 'False' }]}
+                      onChange={(e: ChangeEvent<HTMLSelectElement>) => handleInputChange(e.target.value, 'candidate_tracking_can_create')}
+                      required
+                    />
+                  </div>
 
-                  <Select
-                    title='Can Read'
-                    id={`can_read`}
-                    options={[{ value: 'true', text: 'True' }, { value: 'false', text: 'False' }]}
-                    onChange={(e: ChangeEvent<HTMLSelectElement>) => handleInputChange(e.target.value, 'can_read')}
-                    required
-                  />
+                  <div className='flex flex-col'>
+                    <p className='text-[16px] leading-tight font-semibold'>
+                      Update Deck Automation permissions
+                    </p>
+                    <Select
+                      title='Can Read'
+                      id={`deck_automation_can_read`}
+                      options={[{ value: 'true', text: 'True' }, { value: 'false', text: 'False' }]}
+                      onChange={(e: ChangeEvent<HTMLSelectElement>) => handleInputChange(e.target.value, 'deck_automation_can_read')}
+                      required
+                    />
+                    <Select
+                      title='Can Edit'
+                      id={`deck_automation_can_edit`}
+                      options={[{ value: 'true', text: 'True' }, { value: 'false', text: 'False' }]}
+                      onChange={(e: ChangeEvent<HTMLSelectElement>) => handleInputChange(e.target.value, 'deck_automation_can_edit')}
+                      required
+                    />
+                    <Select
+                      title='Can Create'
+                      id={`deck_automation_can_create`}
+                      options={[{ value: 'true', text: 'True' }, { value: 'false', text: 'False' }]}
+                      onChange={(e: ChangeEvent<HTMLSelectElement>) => handleInputChange(e.target.value, 'deck_automation_can_create')}
+                      required
+                    />
+                  </div>
 
-                  <Select
-                    title='Can Create'
-                    id={`can_create`}
-                    options={[{ value: 'true', text: 'True' }, { value: 'false', text: 'False' }]}
-                    onChange={(e: ChangeEvent<HTMLSelectElement>) => handleInputChange(e.target.value, 'can_create')}
-                    required
-                  />
+                  <div className='flex flex-col'>
+                    <p className='text-[16px] leading-tight font-semibold'>
+                      Update All Quotients permissions
+                    </p>
+                    <Select
+                      title='Can Read'
+                      id={`all_quotients_can_read`}
+                      options={[{ value: 'true', text: 'True' }, { value: 'false', text: 'False' }]}
+                      onChange={(e: ChangeEvent<HTMLSelectElement>) => handleInputChange(e.target.value, 'all_quotients_can_read')}
+                      required
+                    />
+                    <Select
+                      title='Can Edit'
+                      id={`all_quotients_can_edit`}
+                      options={[{ value: 'true', text: 'True' }, { value: 'false', text: 'False' }]}
+                      onChange={(e: ChangeEvent<HTMLSelectElement>) => handleInputChange(e.target.value, 'all_quotients_can_edit')}
+                      required
+                    />
+                    <Select
+                      title='Can Create'
+                      id={`all_quotients_can_create`}
+                      options={[{ value: 'true', text: 'True' }, { value: 'false', text: 'False' }]}
+                      onChange={(e: ChangeEvent<HTMLSelectElement>) => handleInputChange(e.target.value, 'all_quotients_can_create')}
+                      required
+                    />
+                  </div>
 
-                  <Select
-                    title='Can Delete'
-                    id={`can_delete`}
-                    options={[{ value: 'true', text: 'True' }, { value: 'false', text: 'False' }]}
-                    onChange={(e: ChangeEvent<HTMLSelectElement>) => handleInputChange(e.target.value, 'can_delete')}
-                    required
-                  />
+                  <div className='flex flex-col'>
+                    <p className='text-[16px] leading-tight font-semibold'>
+                      Update Users permissions
+                    </p>
+                    <Select
+                      title='Can Read'
+                      id={`users_can_read`}
+                      options={[{ value: 'true', text: 'True' }, { value: 'false', text: 'False' }]}
+                      onChange={(e: ChangeEvent<HTMLSelectElement>) => handleInputChange(e.target.value, 'users_can_read')}
+                      required
+                    />
+                    <Select
+                      title='Can Create'
+                      id={`users_can_create`}
+                      options={[{ value: 'true', text: 'True' }, { value: 'false', text: 'False' }]}
+                      onChange={(e: ChangeEvent<HTMLSelectElement>) => handleInputChange(e.target.value, 'users_can_create')}
+                      required
+                    />
+                    <Select
+                      title='Can Delete'
+                      id={`users_can_delete`}
+                      options={[{ value: 'true', text: 'True' }, { value: 'false', text: 'False' }]}
+                      onChange={(e: ChangeEvent<HTMLSelectElement>) => handleInputChange(e.target.value, 'users_can_delete')}
+                      required
+                    />
+                  </div>
+
+                  <div className='flex flex-col'>
+                    <p className='text-[16px] leading-tight font-semibold'>
+                      Update Groups permissions
+                    </p>
+                    <Select
+                      title='Can Read'
+                      id={`groups_can_read`}
+                      options={[{ value: 'true', text: 'True' }, { value: 'false', text: 'False' }]}
+                      onChange={(e: ChangeEvent<HTMLSelectElement>) => handleInputChange(e.target.value, 'groups_can_read')}
+                      required
+                    />
+                    <Select
+                      title='Can Edit'
+                      id={`groups_can_edit`}
+                      options={[{ value: 'true', text: 'True' }, { value: 'false', text: 'False' }]}
+                      onChange={(e: ChangeEvent<HTMLSelectElement>) => handleInputChange(e.target.value, 'groups_can_edit')}
+                      required
+                    />
+                    <Select
+                      title='Can Create'
+                      id={`groups_can_create`}
+                      options={[{ value: 'true', text: 'True' }, { value: 'false', text: 'False' }]}
+                      onChange={(e: ChangeEvent<HTMLSelectElement>) => handleInputChange(e.target.value, 'groups_can_create')}
+                      required
+                    />
+                    <Select
+                      title='Can Delete'
+                      id={`groups_can_delete`}
+                      options={[{ value: 'true', text: 'True' }, { value: 'false', text: 'False' }]}
+                      onChange={(e: ChangeEvent<HTMLSelectElement>) => handleInputChange(e.target.value, 'groups_can_delete')}
+                      required
+                    />
+                  </div>
 
                   <button
                     onClick={handleSubmit}
@@ -201,7 +348,7 @@ const EditGroup = () => {
                     Update
                   </button>
                   {
-                    session?.user.can_delete &&
+                    session?.user.groups_can_delete &&
                     <div>
                       <h1 className='text-lg font-medium border-b-2 border-red-500 '>Danger Zone</h1>
                       <div className='flex flex-col py-4'>

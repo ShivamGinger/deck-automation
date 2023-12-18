@@ -1,5 +1,6 @@
 import { db } from "@/db";
 import { User as DBUser, groups, userGroups, users } from "@/db/schema";
+import { hasPermission } from "@/lib/users";
 import bcrypt from 'bcrypt';
 import { eq } from "drizzle-orm";
 import NextAuth, { AuthOptions, User as NextUser } from "next-auth";
@@ -48,29 +49,50 @@ const authOptions: AuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         const userGroup = await db.select({
-          can_read: groups.canRead,
-          can_edit: groups.canEdit,
-          can_create: groups.canCreate,
-          can_delete: groups.canDelete,
+          candidate_tracking_can_read: groups.candidateTrackingCanRead,
+          candidate_tracking_can_edit: groups.candidateTrackingCanEdit,
+          candidate_tracking_can_create: groups.candidateTrackingCanCreate,
+          deck_automation_can_read: groups.deckAutomationCanRead,
+          deck_automation_can_edit: groups.deckAutomationCanEdit,
+          deck_automation_can_create: groups.deckAutomationCanCreate,
+          all_quotients_can_read: groups.allQuotientsCanRead,
+          all_quotients_can_edit: groups.allQuotientsCanEdit,
+          all_quotients_can_create: groups.allQuotientsCanCreate,
+          users_can_read: groups.usersCanRead,
+          users_can_create: groups.usersCanCreate,
+          users_can_delete: groups.usersCanDelete,
+          groups_can_read: groups.groupsCanRead,
+          groups_can_edit: groups.groupsCanEdit,
+          groups_can_create: groups.groupsCanCreate,
+          groups_can_delete: groups.groupsCanDelete,
           first_name: users.firstName,
           last_name: users.lastName,
-          email: users.email
+          email: users.email,
+          user_id: users.id
         }).from(userGroups)
           .innerJoin(groups, eq(groups.id, userGroups.groupId))
           .innerJoin(users, eq(users.id, userGroups.userId))
           .where(eq(userGroups.userId, Number(user.id)));
 
         if (userGroup && userGroup.length > 0) {
-          const hasReadPermission = userGroup.some(user => user.can_read === 1);
-          const hasEditPermission = userGroup.some(user => user.can_edit === 1);
-          const hasCreatePermission = userGroup.some(user => user.can_create === 1);
-          const hasDeletePermission = userGroup.some(user => user.can_delete === 1);
 
           token.user = {
-            can_read: hasReadPermission,
-            can_create: hasCreatePermission,
-            can_edit: hasEditPermission,
-            can_delete: hasDeletePermission,
+            candidate_tracking_can_read: hasPermission(userGroup, 'candidate_tracking_can_read'),
+            candidate_tracking_can_edit: hasPermission(userGroup, 'candidate_tracking_can_edit'),
+            candidate_tracking_can_create: hasPermission(userGroup, 'candidate_tracking_can_create'),
+            deck_automation_can_read: hasPermission(userGroup, 'deck_automation_can_read'),
+            deck_automation_can_edit: hasPermission(userGroup, 'deck_automation_can_edit'),
+            deck_automation_can_create: hasPermission(userGroup, 'deck_automation_can_create'),
+            all_quotients_can_read: hasPermission(userGroup, 'all_quotients_can_read'),
+            all_quotients_can_edit: hasPermission(userGroup, 'all_quotients_can_edit'),
+            all_quotients_can_create: hasPermission(userGroup, 'all_quotients_can_create'),
+            users_can_read: hasPermission(userGroup, 'users_can_read'),
+            users_can_create: hasPermission(userGroup, 'users_can_create'),
+            users_can_delete: hasPermission(userGroup, 'users_can_delete'),
+            groups_can_read: hasPermission(userGroup, 'groups_can_read'),
+            groups_can_edit: hasPermission(userGroup, 'groups_can_edit'),
+            groups_can_create: hasPermission(userGroup, 'groups_can_create'),
+            groups_can_delete: hasPermission(userGroup, 'groups_can_delete'),
             first_name: userGroup[0].first_name,
             last_name: userGroup[0].last_name,
             email: userGroup[0].email
@@ -85,10 +107,22 @@ const authOptions: AuthOptions = {
           const { first_name, last_name, email } = userData[0];
 
           token.user = {
-            can_read: false,
-            can_create: false,
-            can_edit: false,
-            can_delete: false,
+            candidate_tracking_can_read: false,
+            candidate_tracking_can_edit: false,
+            candidate_tracking_can_create: false,
+            deck_automation_can_read: false,
+            deck_automation_can_edit: false,
+            deck_automation_can_create: false,
+            all_quotients_can_read: false,
+            all_quotients_can_edit: false,
+            all_quotients_can_create: false,
+            users_can_read: false,
+            users_can_create: false,
+            users_can_delete: false,
+            groups_can_read: false,
+            groups_can_edit: false,
+            groups_can_create: false,
+            groups_can_delete: false,
             first_name,
             last_name,
             email
@@ -101,10 +135,22 @@ const authOptions: AuthOptions = {
     async session({ session, token }) {
 
       session.user = token.user as {
-        can_read: boolean,
-        can_create: boolean,
-        can_edit: boolean,
-        can_delete: boolean,
+        candidate_tracking_can_read: boolean,
+        candidate_tracking_can_edit: boolean,
+        candidate_tracking_can_create: boolean,
+        deck_automation_can_read: boolean,
+        deck_automation_can_edit: boolean,
+        deck_automation_can_create: boolean,
+        all_quotients_can_read: boolean,
+        all_quotients_can_edit: boolean,
+        all_quotients_can_create: boolean,
+        users_can_read: boolean,
+        users_can_create: boolean,
+        users_can_delete: boolean,
+        groups_can_read: boolean,
+        groups_can_edit: boolean,
+        groups_can_create: boolean,
+        groups_can_delete: boolean,
         first_name: string | null,
         last_name: string | null
         email: string;
