@@ -67,7 +67,8 @@ const authOptions: AuthOptions = {
           groups_can_delete: groups.groupsCanDelete,
           first_name: users.firstName,
           last_name: users.lastName,
-          email: users.email
+          email: users.email,
+          user_id: users.id
         }).from(userGroups)
           .innerJoin(groups, eq(groups.id, userGroups.groupId))
           .innerJoin(users, eq(users.id, userGroups.userId))
