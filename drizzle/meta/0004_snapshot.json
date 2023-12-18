@@ -1,0 +1,1191 @@
+{
+  "version": "5",
+  "dialect": "mysql",
+  "id": "f15cdc04-9133-4212-bf33-0cf423549a08",
+  "prevId": "8870b6fc-ae81-4ece-9d9f-6c477b2955ba",
+  "tables": {
+    "candidate_status": {
+      "name": "candidate_status",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "candidate_id": {
+          "name": "candidate_id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "profile_shr_date": {
+          "name": "profile_shr_date",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "status": {
+          "name": "status",
+          "type": "enum('yet_to_share','joined','negotiation','on_hold','feedback_pending','dropped_out','rejected','in_process')",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "round_done": {
+          "name": "round_done",
+          "type": "tinyint",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "reason_reject": {
+          "name": "reason_reject",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "candidate_id_idx": {
+          "name": "candidate_id_idx",
+          "columns": [
+            "candidate_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "candidate_status_id": {
+          "name": "candidate_status_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {
+        "candidate_id": {
+          "name": "candidate_id",
+          "columns": [
+            "candidate_id"
+          ]
+        }
+      }
+    },
+    "candidates": {
+      "name": "candidates",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "key_points": {
+          "name": "key_points",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "profile_pic": {
+          "name": "profile_pic",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "social": {
+          "name": "social",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "company_id": {
+          "name": "company_id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "role_id": {
+          "name": "role_id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(now())"
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "curr_pos": {
+          "name": "curr_pos",
+          "type": "varchar(200)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "curr_loc": {
+          "name": "curr_loc",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "experience": {
+          "name": "experience",
+          "type": "varchar(30)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "ph_num": {
+          "name": "ph_num",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "fixed_lpa": {
+          "name": "fixed_lpa",
+          "type": "decimal(5,2)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "var_lpa": {
+          "name": "var_lpa",
+          "type": "decimal(5,2)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "expected_ctc": {
+          "name": "expected_ctc",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "notice_period": {
+          "name": "notice_period",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "description": {
+          "name": "description",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "achievement": {
+          "name": "achievement",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "gender": {
+          "name": "gender",
+          "type": "enum('male','female','other')",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "curr_cmp": {
+          "name": "curr_cmp",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "esop_rsu": {
+          "name": "esop_rsu",
+          "type": "decimal(5,2)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "company_id_idx": {
+          "name": "company_id_idx",
+          "columns": [
+            "company_id"
+          ],
+          "isUnique": false
+        },
+        "role_id_idx": {
+          "name": "role_id_idx",
+          "columns": [
+            "role_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "candidates_id": {
+          "name": "candidates_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "companies": {
+      "name": "companies",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(now())"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "companies_id": {
+          "name": "companies_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {
+        "name": {
+          "name": "name",
+          "columns": [
+            "name"
+          ]
+        }
+      }
+    },
+    "group_permissions": {
+      "name": "group_permissions",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "group_id": {
+          "name": "group_id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "permission_type": {
+          "name": "permission_type",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "permission_value": {
+          "name": "permission_value",
+          "type": "tinyint",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(now())"
+        }
+      },
+      "indexes": {
+        "group_id_idx": {
+          "name": "group_id_idx",
+          "columns": [
+            "group_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "group_permissions_id": {
+          "name": "group_permissions_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "groups": {
+      "name": "groups",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "group_name": {
+          "name": "group_name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "candidate_tracking_can_read": {
+          "name": "candidate_tracking_can_read",
+          "type": "tinyint",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": 0
+        },
+        "candidate_tracking_can_edit": {
+          "name": "candidate_tracking_can_edit",
+          "type": "tinyint",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": 0
+        },
+        "candidate_tracking_can_create": {
+          "name": "candidate_tracking_can_create",
+          "type": "tinyint",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": 0
+        },
+        "deck_automation_can_read": {
+          "name": "deck_automation_can_read",
+          "type": "tinyint",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": 0
+        },
+        "deck_automation_can_edit": {
+          "name": "deck_automation_can_edit",
+          "type": "tinyint",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": 0
+        },
+        "deck_automation_can_create": {
+          "name": "deck_automation_can_create",
+          "type": "tinyint",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": 0
+        },
+        "all_quotients_can_read": {
+          "name": "all_quotients_can_read",
+          "type": "tinyint",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": 0
+        },
+        "all_quotients_can_edit": {
+          "name": "all_quotients_can_edit",
+          "type": "tinyint",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": 0
+        },
+        "all_quotients_can_create": {
+          "name": "all_quotients_can_create",
+          "type": "tinyint",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": 0
+        },
+        "users_can_read": {
+          "name": "users_can_read",
+          "type": "tinyint",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": 0
+        },
+        "users_can_create": {
+          "name": "users_can_create",
+          "type": "tinyint",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": 0
+        },
+        "users_can_delete": {
+          "name": "users_can_delete",
+          "type": "tinyint",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": 0
+        },
+        "groups_can_read": {
+          "name": "groups_can_read",
+          "type": "tinyint",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": 0
+        },
+        "groups_can_edit": {
+          "name": "groups_can_edit",
+          "type": "tinyint",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": 0
+        },
+        "groups_can_create": {
+          "name": "groups_can_create",
+          "type": "tinyint",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": 0
+        },
+        "groups_can_delete": {
+          "name": "groups_can_delete",
+          "type": "tinyint",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": 0
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(now())"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "groups_id": {
+          "name": "groups_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "parameter_scores": {
+      "name": "parameter_scores",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "candidate_id": {
+          "name": "candidate_id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "parameter_id": {
+          "name": "parameter_id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "score": {
+          "name": "score",
+          "type": "tinyint",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(now())"
+        }
+      },
+      "indexes": {
+        "candidate_id_idx": {
+          "name": "candidate_id_idx",
+          "columns": [
+            "candidate_id"
+          ],
+          "isUnique": false
+        },
+        "parameter_id_idx": {
+          "name": "parameter_id_idx",
+          "columns": [
+            "parameter_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "parameter_scores_id": {
+          "name": "parameter_scores_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "parameter_weightages": {
+      "name": "parameter_weightages",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "p_weightage": {
+          "name": "p_weightage",
+          "type": "tinyint",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "parameter_id": {
+          "name": "parameter_id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "company_id": {
+          "name": "company_id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "role_id": {
+          "name": "role_id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(now())"
+        }
+      },
+      "indexes": {
+        "company_id_idx": {
+          "name": "company_id_idx",
+          "columns": [
+            "company_id"
+          ],
+          "isUnique": false
+        },
+        "parameter_id_idx": {
+          "name": "parameter_id_idx",
+          "columns": [
+            "parameter_id"
+          ],
+          "isUnique": false
+        },
+        "role_id_idx": {
+          "name": "role_id_idx",
+          "columns": [
+            "role_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "parameter_weightages_id": {
+          "name": "parameter_weightages_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "parameters": {
+      "name": "parameters",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "parameter": {
+          "name": "parameter",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "quotient_id": {
+          "name": "quotient_id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(now())"
+        }
+      },
+      "indexes": {
+        "quotient_id_idx": {
+          "name": "quotient_id_idx",
+          "columns": [
+            "quotient_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "parameters_id": {
+          "name": "parameters_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "quotient_scores": {
+      "name": "quotient_scores",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "candidate_id": {
+          "name": "candidate_id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "quotient_id": {
+          "name": "quotient_id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "total_score": {
+          "name": "total_score",
+          "type": "decimal(4,2)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(now())"
+        }
+      },
+      "indexes": {
+        "candidate_id_idx": {
+          "name": "candidate_id_idx",
+          "columns": [
+            "candidate_id"
+          ],
+          "isUnique": false
+        },
+        "quotient_id_idx": {
+          "name": "quotient_id_idx",
+          "columns": [
+            "quotient_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "quotient_scores_id": {
+          "name": "quotient_scores_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "quotient_weightages": {
+      "name": "quotient_weightages",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "q_weightage": {
+          "name": "q_weightage",
+          "type": "tinyint",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "quotient_id": {
+          "name": "quotient_id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "company_id": {
+          "name": "company_id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "role_id": {
+          "name": "role_id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(now())"
+        }
+      },
+      "indexes": {
+        "company_id_idx": {
+          "name": "company_id_idx",
+          "columns": [
+            "company_id"
+          ],
+          "isUnique": false
+        },
+        "quotient_id_idx": {
+          "name": "quotient_id_idx",
+          "columns": [
+            "quotient_id"
+          ],
+          "isUnique": false
+        },
+        "role_id_idx": {
+          "name": "role_id_idx",
+          "columns": [
+            "role_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "quotient_weightages_id": {
+          "name": "quotient_weightages_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "quotients": {
+      "name": "quotients",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "quotient": {
+          "name": "quotient",
+          "type": "varchar(150)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(now())"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "quotients_id": {
+          "name": "quotients_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {
+        "quotient": {
+          "name": "quotient",
+          "columns": [
+            "quotient"
+          ]
+        }
+      }
+    },
+    "roles": {
+      "name": "roles",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "company_id": {
+          "name": "company_id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "CURRENT_TIMESTAMP"
+        }
+      },
+      "indexes": {
+        "company_id_idx": {
+          "name": "company_id_idx",
+          "columns": [
+            "company_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "roles_id": {
+          "name": "roles_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "status_history": {
+      "name": "status_history",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "candidate_id": {
+          "name": "candidate_id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "profile_shr_date": {
+          "name": "profile_shr_date",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "status": {
+          "name": "status",
+          "type": "enum('yet_to_share','joined','negotiation','on_hold','feedback_pending','dropped_out','rejected','in_process')",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "round_done": {
+          "name": "round_done",
+          "type": "tinyint",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "reason_reject": {
+          "name": "reason_reject",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "CURRENT_TIMESTAMP"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "status_history_id": {
+          "name": "status_history_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "user_groups": {
+      "name": "user_groups",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "group_id": {
+          "name": "group_id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "group_id_idx": {
+          "name": "group_id_idx",
+          "columns": [
+            "group_id"
+          ],
+          "isUnique": false
+        },
+        "user_id_idx": {
+          "name": "user_id_idx",
+          "columns": [
+            "user_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "user_groups_id": {
+          "name": "user_groups_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "users": {
+      "name": "users",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "password": {
+          "name": "password",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(now())"
+        },
+        "first_name": {
+          "name": "first_name",
+          "type": "varchar(200)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "last_name": {
+          "name": "last_name",
+          "type": "varchar(200)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "is_admin": {
+          "name": "is_admin",
+          "type": "tinyint",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": 0
+        }
+      },
+      "indexes": {
+        "user_email_idx": {
+          "name": "user_email_idx",
+          "columns": [
+            "email"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "users_id": {
+          "name": "users_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {
+        "users_email_unique": {
+          "name": "users_email_unique",
+          "columns": [
+            "email"
+          ]
+        }
+      }
+    }
+  },
+  "schemas": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  }
+}

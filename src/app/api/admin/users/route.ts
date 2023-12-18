@@ -53,7 +53,7 @@ export async function POST(request: NextRequest) {
     const user = await db.insert(users).values(data);
 
     if (user) {
-      const data = await resend.emails.send({
+      await resend.emails.send({
         from: 'onboarding@resend.dev',
         to: ['shivam.t@gingerpartners.co'],
         subject: 'Account Created',

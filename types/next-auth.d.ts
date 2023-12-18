@@ -6,11 +6,23 @@ declare module "next-auth" {
    */
   interface Session {
     user: {
-      email: string;
-      can_read: boolean,
-      can_create: boolean,
-      can_edit: boolean,
-      can_delete: boolean,
+      candidate_tracking_can_read: boolean,
+      candidate_tracking_can_edit: boolean,
+      candidate_tracking_can_create: boolean,
+      deck_automation_can_read: boolean,
+      deck_automation_can_edit: boolean,
+      deck_automation_can_create: boolean,
+      all_quotients_can_read: boolean,
+      all_quotients_can_edit: boolean,
+      all_quotients_can_create: boolean,
+      users_can_read: boolean,
+      users_can_create: boolean,
+      users_can_delete: boolean,
+      groups_can_read: boolean,
+      groups_can_edit: boolean,
+      groups_can_create: boolean,
+      groups_can_delete: boolean,
+      email: string,
       first_name: string | null,
       last_name: string | null
     }

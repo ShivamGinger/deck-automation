@@ -197,18 +197,42 @@ export const userRegistrationSchema = z.object({
 
 export const createGroupSchema = z.object({
   group_name: z.string(),
-  can_read: z.number().min(0).max(1),
-  can_edit: z.number().min(0).max(1),
-  can_create: z.number().min(0).max(1),
-  can_delete: z.number().min(0).max(1)
+  candidate_tracking_can_read: z.number().min(0).max(1),
+  candidate_tracking_can_edit: z.number().min(0).max(1),
+  candidate_tracking_can_create: z.number().min(0).max(1),
+  deck_automation_can_read: z.number().min(0).max(1),
+  deck_automation_can_edit: z.number().min(0).max(1),
+  deck_automation_can_create: z.number().min(0).max(1),
+  all_quotients_can_read: z.number().min(0).max(1),
+  all_quotients_can_edit: z.number().min(0).max(1),
+  all_quotients_can_create: z.number().min(0).max(1),
+  users_can_read: z.number().min(0).max(1),
+  users_can_create: z.number().min(0).max(1),
+  users_can_delete: z.number().min(0).max(1),
+  groups_can_read: z.number().min(0).max(1),
+  groups_can_edit: z.number().min(0).max(1),
+  groups_can_create: z.number().min(0).max(1),
+  groups_can_delete: z.number().min(0).max(1),
 });
 
 export const updateGroupSchema = z.object({
   group_name: z.string(),
-  can_read: z.number().min(0).max(1),
-  can_edit: z.number().min(0).max(1),
-  can_create: z.number().min(0).max(1),
-  can_delete: z.number().min(0).max(1)
+  candidate_tracking_can_read: z.number().min(0).max(1),
+  candidate_tracking_can_edit: z.number().min(0).max(1),
+  candidate_tracking_can_create: z.number().min(0).max(1),
+  deck_automation_can_read: z.number().min(0).max(1),
+  deck_automation_can_edit: z.number().min(0).max(1),
+  deck_automation_can_create: z.number().min(0).max(1),
+  all_quotients_can_read: z.number().min(0).max(1),
+  all_quotients_can_edit: z.number().min(0).max(1),
+  all_quotients_can_create: z.number().min(0).max(1),
+  users_can_read: z.number().min(0).max(1),
+  users_can_create: z.number().min(0).max(1),
+  users_can_delete: z.number().min(0).max(1),
+  groups_can_read: z.number().min(0).max(1),
+  groups_can_edit: z.number().min(0).max(1),
+  groups_can_create: z.number().min(0).max(1),
+  groups_can_delete: z.number().min(0).max(1),
 });
 
 export const addUserToGroupSchema = z.object({
