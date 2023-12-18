@@ -47,7 +47,7 @@ const RenderParameter = () => {
     };
 
     if (session?.user) {
-      if (session.user.can_read) {
+      if (session.user.all_quotients_can_read) {
         getData();
 
       } else {
@@ -71,7 +71,7 @@ const RenderParameter = () => {
                   <>
                     {responseDetails}
                     {
-                      session?.user.can_create && session.user.can_read &&
+                      session?.user.all_quotients_can_create &&
                       <div className='overflow-x-auto bg-white p-2'>
                         Add Parameter? <Link href={`/quotients/${quotientID}/addParameter`} className='underline text-blue-500' prefetch={false}>Click here</Link>
                       </div>
