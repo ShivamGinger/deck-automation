@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import getAllCandidatesWStatus, { CandidateStatusType } from "@/lib/candidates";
+import getAllCandidatesWStatus, { CandidateStatusType, getCandidateWStatusWQuery } from "@/lib/candidates";
 
 import { db } from "@/db";
 import { candidateStatus, candidates, roles } from "@/db/schema";
@@ -15,7 +15,21 @@ export async function GET(request: NextRequest) {
     const candidates = await getAllCandidatesWStatus();
     if (candidates.length === 0) {
       return NextResponse.json({ error: 'No candidates found' }, { status: 404 });
+    };
+
+    const searchParams = request.nextUrl.searchParams;
+    const query = searchParams.get('query');
+
+    if (query !== null && query.trim() !== '') {
+      const candidate = await getCandidateWStatusWQuery(query);
+
+      if (candidate.length > 0) {
+        return NextResponse.json({ data: candidate }, { status: 200 });
+      } else {
+        return NextResponse.json({ error: 'Searched Candidate not found', specialQueryError: true }, { status: 404 });
+      }
     }
+
     return NextResponse.json({ data: candidates }, { status: 200 });
   } catch (error: any) {
     console.error('Error fetching candidate:', error);

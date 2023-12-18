@@ -11,6 +11,7 @@ import ReactPaginate from 'react-paginate';
 import { ITEMS_PER_PAGE } from '@/utils/constants';
 import { CompleteCandidateInformation } from '@/utils/types';
 import { useSession } from 'next-auth/react';
+import SearchComponent from './SearchComponent';
 import Status from './Status';
 
 const RenderCandidatesForTracking = ({
@@ -78,9 +79,9 @@ const RenderCandidatesForTracking = ({
           <div className='p-4 flex flex-row justify-between'>
             <h2 className='font-bold uppercase text-2xl text-[#542C06]'>Candidate Tracking</h2>
             <div className='p-2 flex items-center gap-4'>
-              {/* <div>
-                search ...
-              </div> */}
+              <div>
+                <SearchComponent />
+              </div>
               <CSVLink
                 headers={getHeader()}
                 data={getExtractedData()}
