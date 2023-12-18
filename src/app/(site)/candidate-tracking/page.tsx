@@ -47,7 +47,7 @@ const CandidateListing = () => {
     };
 
     if (session?.user) {
-      if (session.user.can_read) {
+      if (session.user.candidate_tracking_can_read) {
         getData();
 
       } else {
@@ -71,7 +71,7 @@ const CandidateListing = () => {
                   <>
                     {responseDetails}
                     {
-                      session?.user.can_create &&
+                      session?.user.candidate_tracking_can_create &&
                       <div className='overflow-x-auto bg-white p-2'>
                         Add Candidate? <Link href={`/candidate-tracking/addCandidate`} className='underline text-blue-500' prefetch={false} rel='noopener noreferrer'>Click here</Link>
                       </div>

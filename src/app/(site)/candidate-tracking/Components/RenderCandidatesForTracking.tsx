@@ -86,7 +86,7 @@ const RenderCandidatesForTracking = ({
                 data={getExtractedData()}
                 filename={getFileName()}
               >
-                <Image width={20} height={20} src={'/images/download.png'} alt="edit-icon" className="cursor-pointer" />
+                <Image width={20} height={20} src={'/images/download.png'} alt="download-icon" className="cursor-pointer" />
               </CSVLink>
             </div>
           </div>
@@ -95,7 +95,11 @@ const RenderCandidatesForTracking = ({
               <table className="w-full border-separate border-spacing-4 px-6 pt-2">
                 <thead className="">
                   <tr className='gap-x-4'>
-                    <th className="table-headings">S.No.</th>
+                    {
+                      session?.user.candidate_tracking_can_edit &&
+                      <th className="table-headings">Edit</th>
+                    }
+
                     <th className="table-headings">Candidate Name</th>
                     <th className="table-headings">Status</th>
                     <th className="table-headings">Candidate Email</th>
@@ -112,18 +116,21 @@ const RenderCandidatesForTracking = ({
                     <th className="table-headings">Notice Period</th>
                     <th className="table-headings">Linkedin</th>
                     <th className="table-headings">Key Observations</th>
-                    {
-                      session?.user.can_edit &&
-                      <th className="table-headings">Edit</th>
-                    }
                   </tr>
                 </thead>
                 <tbody className="">
                   {currentData?.map((detail, index) => (
                     <tr className={`${index % 2 === 0 ? 'bg-white' : ''}`} key={index}>
-                      <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
-                        {index + 1}
-                      </td>
+
+                      {
+                        session?.user.candidate_tracking_can_edit &&
+                        <td className="table-row-data">
+                          <Link href={`/candidate-tracking/edit/${detail.candidate_id}`} prefetch={false} rel='noopener noreferrer'>
+                            <Image width={20} height={20} src={'/images/edit.png'} alt="edit-icon" className="cursor-pointer" />
+                          </Link>
+                        </td>
+                      }
+
                       <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
                         {detail.candidate_name}
                       </td>
@@ -172,23 +179,14 @@ const RenderCandidatesForTracking = ({
                       <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
                         {detail.description}
                       </td>
-
-                      {
-                        session?.user.can_edit &&
-                        <td className=" ">
-                          <Link href={`/candidate-tracking/edit/${detail.candidate_id}`} prefetch={false} rel='noopener noreferrer'>
-                            <Image width={20} height={20} src={'/images/edit.png'} alt="edit-icon" className="cursor-pointer" />
-                          </Link>
-                        </td>
-                      }
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
-            <div className={`flex ${session?.user.can_create ? 'justify-between' : 'self-end'}`}>
+            <div className={`flex ${session?.user.candidate_tracking_can_create ? 'justify-between' : 'self-end'}`}>
               {
-                session?.user.can_create &&
+                session?.user.candidate_tracking_can_create &&
                 <div className='p-4 self-center'>
                   Add Candidate? <Link href={`/candidate-tracking/addCandidate`} className='underline text-blue-500' prefetch={false} rel='noopener noreferrer'>Click here</Link>
                 </div>
@@ -220,11 +218,8 @@ const RenderCandidatesForTracking = ({
               </div>
             </div>
           </div>
-
         </div>
       </div>
-
-
     </>
   )
 }
