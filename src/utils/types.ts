@@ -6,11 +6,43 @@ export interface UserDetails {
 
 export interface GroupDetails {
   group_id: number,
-  can_create: boolean,
-  can_delete: boolean,
-  can_edit: boolean,
-  can_read: boolean,
+  candidate_tracking_can_read: boolean,
+  candidate_tracking_can_edit: boolean,
+  candidate_tracking_can_create: boolean,
+  deck_automation_can_read: boolean,
+  deck_automation_can_edit: boolean,
+  deck_automation_can_create: boolean,
+  all_quotients_can_read: boolean,
+  all_quotients_can_edit: boolean,
+  all_quotients_can_create: boolean,
+  users_can_read: boolean,
+  users_can_create: boolean,
+  users_can_delete: boolean,
+  groups_can_read: boolean,
+  groups_can_edit: boolean,
+  groups_can_create: boolean,
+  groups_can_delete: boolean,
   group_name: string
+};
+
+export interface Group {
+  group_name: string,
+  candidate_tracking_can_read: string,
+  candidate_tracking_can_edit: string,
+  candidate_tracking_can_create: string,
+  deck_automation_can_read: string,
+  deck_automation_can_edit: string,
+  deck_automation_can_create: string,
+  all_quotients_can_read: string,
+  all_quotients_can_edit: string,
+  all_quotients_can_create: string,
+  users_can_read: string,
+  users_can_create: string,
+  users_can_delete: string,
+  groups_can_read: string,
+  groups_can_edit: string,
+  groups_can_create: string,
+  groups_can_delete: string,
 };
 
 export interface UserGroupDetail extends UserDetails {

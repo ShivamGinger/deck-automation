@@ -97,13 +97,13 @@ const RenderUsersUnderGroup = ({
                     {detail.email}
                   </td>
                   {
-                    session?.user.can_delete &&
+                    session?.user.users_can_delete &&
                     <td>
                       <button
                         onClick={() => handleDelete(detail.user_id)}
                         className='font-semibold py-2 px-6 uppercase bg-transparent rounded-lg border-[#B06500] border-2 text-red-500 hover:bg-red-500 hover:border-red-500 hover:text-white transition ease-in-out'
                       >
-                        Delete
+                        Remove
                       </button>
                     </td>
                   }
@@ -112,7 +112,7 @@ const RenderUsersUnderGroup = ({
             </tbody>
           </table>
           {
-            session?.user.can_create &&
+            session?.user.users_can_create &&
             <div className='p-4'>
               Add User? <Link href={`/groups/${groupID}/users/addUser`} className='underline text-blue-500' prefetch={false} rel='noopener noreferrer'>Click here</Link>
             </div>
