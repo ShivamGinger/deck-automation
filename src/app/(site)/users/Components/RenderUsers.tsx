@@ -7,14 +7,16 @@ import Link from 'next/link';
 import ReactPaginate from 'react-paginate';
 
 import { ITEMS_PER_PAGE } from '@/utils/constants';
-import { UserDetails } from '@/utils/types';
+import { User, UserDetails } from '@/utils/types';
 import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 const RenderUsers = ({
   users
 }: {
-  users: UserDetails[]
+  users: User[]
 }) => {
+  const router = useRouter();
   const [currentPage, setCurrentPage] = useState(0);
 
   const handlePageChange = (selectedPage: { selected: number }) => {
@@ -31,6 +33,25 @@ const RenderUsers = ({
 
   const { data: session } = useSession();
 
+  const handleDelete = async (userID: number) => {
+    const confirmed = window.confirm('Are you sure you want to delete this user?');
+
+    if (!confirmed) {
+      return;
+    };
+
+    const response = await fetch(`/api/admin/users/${userID}`, {
+      method: 'DELETE',
+    });
+
+    if (response.ok) {
+      router.replace('/');
+
+    } else {
+      const data = await response.json();
+      alert(data.error);
+    }
+  };
   return (
     <>
       <div className='flex flex-col'>
@@ -65,12 +86,23 @@ const RenderUsers = ({
                   <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
                     {detail.last_name}
                   </td>
+                  {
+                    session?.user.users_can_delete &&
+                    <td>
+                      <button
+                        onClick={() => handleDelete(detail.user_id)}
+                        className='font-semibold py-2 px-6 uppercase bg-transparent rounded-lg border-[#B06500] border-2 text-red-500 hover:bg-red-500 hover:border-red-500 hover:text-white transition ease-in-out'
+                      >
+                        Remove
+                      </button>
+                    </td>
+                  }
                 </tr>
               ))}
             </tbody>
           </table>
           {
-            session?.user.can_create &&
+            session?.user.users_can_create &&
             <div className='p-4'>
               Add User? <Link href={'/users/addUser'} className='underline text-blue-500' prefetch={false} rel='noopener noreferrer'>Click here</Link>
             </div>

@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
     });
 
     if (exsistingUser) {
-      return NextResponse.json({ error: "Email Already in use. Kindly Login!" }, { status: 409 });
+      return NextResponse.json({ error: "Account already added!" }, { status: 409 });
     };
 
     const data: MySqlInsertValue<typeof users> = {

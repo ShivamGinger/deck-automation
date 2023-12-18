@@ -4,6 +4,10 @@ export interface UserDetails {
   last_name: string | null,
 };
 
+export interface User extends UserDetails {
+  user_id: number
+};
+
 export interface GroupDetails {
   group_id: number,
   candidate_tracking_can_read: boolean,

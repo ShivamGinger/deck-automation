@@ -5,7 +5,7 @@ import React, { useLayoutEffect, useState } from 'react';
 
 import { useSession } from 'next-auth/react';
 
-import { QuotientFactorsCount, UserDetails } from '@/utils/types';
+import { QuotientFactorsCount, User, UserDetails } from '@/utils/types';
 import { useRouter } from 'next/navigation';
 import Loading from '../Components/Loading';
 import RenderUsers from './Components/RenderUsers';
@@ -15,7 +15,7 @@ const Allusers = () => {
 
   const [loading, setLoading] = useState(true);
 
-  const [users, setUsers] = useState<UserDetails[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
 
   const [responseDetails, setResponseDetails] = useState<string | null>(null);
 
@@ -44,7 +44,7 @@ const Allusers = () => {
     };
 
     if (session?.user) {
-      if (session?.user.can_create && session.user.can_read) {
+      if (session?.user.users_can_read) {
         getData();
 
       } else {
@@ -69,7 +69,7 @@ const Allusers = () => {
                   <>
                     {responseDetails}
                     {
-                      session?.user.can_create &&
+                      session?.user.users_can_create &&
                       <div className='overflow-x-auto bg-white p-2'>
                         Add User? <Link href={'/quotients/addQuotient'} className='underline text-blue-500' prefetch={false} rel='noopener noreferrer'>Click here</Link>
                       </div>

@@ -3,6 +3,7 @@ import { userGroups, users } from "@/db/schema";
 import { and, eq, isNull, not } from "drizzle-orm";
 
 export interface user {
+  user_id: number,
   email: string,
   first_name: string | null,
   last_name: string | null,
@@ -29,6 +30,7 @@ interface UserGroup extends user {
 
 export async function getAllUsers(): Promise<user[]> {
   const userAll = await db.select({
+    user_id: users.id,
     email: users.email,
     first_name: users.firstName,
     last_name: users.lastName,
