@@ -25,14 +25,6 @@ const Sidebar = () => {
           <Link href={'/'} prefetch={false} rel='noopener noreferrer'>
             <Image width={150} height={150} src={'/images/Ginger Partners_Logo with tagline.png'} alt="ginger-partners-logo" className="rounded-xl " priority />
           </Link>
-          <span className='font-semibold tracking-wide flex flex-col items-center'>
-            <span>
-              {session?.user?.first_name} {session?.user?.last_name}
-            </span>
-            <span>
-              {session?.user?.email}
-            </span>
-          </span>
         </div>
         <div className='p-2 flex flex-col gap-4'>
           {
