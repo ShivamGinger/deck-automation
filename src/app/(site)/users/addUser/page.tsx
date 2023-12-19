@@ -118,6 +118,16 @@ const AddUser = () => {
               onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
             />
 
+            <Input
+              name='Password'
+              id='password'
+              placeholder={password}
+              required={true}
+              moveLabel={password != ''}
+              type='text'
+              aria-disabled={true}
+            />
+
             <button
               onClick={handleSubmit}
               disabled={!email || !firstName || !lastName || !password || error}

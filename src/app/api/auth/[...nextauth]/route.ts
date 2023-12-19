@@ -95,16 +95,18 @@ const authOptions: AuthOptions = {
             groups_can_delete: hasPermission(userGroup, 'groups_can_delete'),
             first_name: userGroup[0].first_name,
             last_name: userGroup[0].last_name,
-            email: userGroup[0].email
+            email: userGroup[0].email,
+            user_id: userGroup[0].user_id
           };
         } else {
           const userData = await db.select({
             first_name: users.firstName,
             last_name: users.lastName,
-            email: users.email
+            email: users.email,
+            user_id: users.id
           }).from(users).where(eq(users.id, Number(user.id)))
 
-          const { first_name, last_name, email } = userData[0];
+          const { first_name, last_name, email, user_id } = userData[0];
 
           token.user = {
             candidate_tracking_can_read: false,
@@ -125,7 +127,8 @@ const authOptions: AuthOptions = {
             groups_can_delete: false,
             first_name,
             last_name,
-            email
+            email,
+            user_id
           };
         }
       }
@@ -153,7 +156,8 @@ const authOptions: AuthOptions = {
         groups_can_delete: boolean,
         first_name: string | null,
         last_name: string | null
-        email: string;
+        email: string,
+        user_id: number
       };
 
       return Promise.resolve(session)

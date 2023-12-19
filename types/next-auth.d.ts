@@ -24,7 +24,8 @@ declare module "next-auth" {
       groups_can_delete: boolean,
       email: string,
       first_name: string | null,
-      last_name: string | null
+      last_name: string | null,
+      user_id: number
     }
   }
 }

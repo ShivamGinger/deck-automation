@@ -195,6 +195,14 @@ export const userRegistrationSchema = z.object({
   is_admin: z.number().min(0).max(1)
 });
 
+export const updateUserDetailsSchema = z.object({
+  first_name: z.string(),
+  last_name: z.string(),
+  old_password: z.string(),
+  new_password: z.string().min(6),
+  confirm_new_password: z.string().min(6),
+});
+
 export const createGroupSchema = z.object({
   group_name: z.string(),
   candidate_tracking_can_read: z.number().min(0).max(1),
