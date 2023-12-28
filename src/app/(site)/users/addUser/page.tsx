@@ -118,7 +118,7 @@ const AddUser = () => {
               onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
             />
 
-            <Input
+            {/* <Input
               name='Password'
               id='password'
               placeholder={password}
@@ -126,7 +126,7 @@ const AddUser = () => {
               moveLabel={password != ''}
               type='text'
               aria-disabled={true}
-            />
+            /> */}
 
             <button
               onClick={handleSubmit}
