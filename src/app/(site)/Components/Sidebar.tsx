@@ -66,7 +66,7 @@ const Sidebar = () => {
           }
         </div>
       </div>
-      <div className='p-2' onClick={() => signOut()}>
+      <div className='p-2' onClick={() => signOut({ callbackUrl: process.env.NEXT_PUBLIC_SIGN_OUT_URL })}>
         <Image width={28} height={28} src={'/images/logout.png'} alt="logout-icon" className="rounded-xl cursor-pointer" />
       </div>
     </div>
