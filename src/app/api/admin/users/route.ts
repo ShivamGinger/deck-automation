@@ -1,14 +1,15 @@
 import { db } from "@/db";
 import { users } from "@/db/schema";
 import { getAllUsers, user } from "@/lib/users";
+import { EmailTemplate } from "@/utils/EmailTemplate";
 import { createGroupSchema, userRegistrationSchema } from "@/utils/bodyValidationSchemas";
 import bcrypt from 'bcrypt';
 import { eq } from "drizzle-orm";
 import { MySqlInsertValue } from "drizzle-orm/mysql-core";
 import { NextRequest, NextResponse } from "next/server";
-// import { Resend } from 'resend';
-// const resend = new Resend(process.env.RESEND_API_KEY);
-// import { EmailTemplate } from "@/utils/EmailTemplate";
+import { Resend } from 'resend';
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function GET(request: NextRequest) {
   try {
@@ -51,18 +52,18 @@ export async function POST(request: NextRequest) {
 
     const user = await db.insert(users).values(data);
 
-    // if (user) {
-    //   await resend.emails.send({
-    //     from: 'onboarding@resend.dev',
-    //     to: ['shivam.t@gingerpartners.co'],
-    //     subject: 'Account Created',
-    //     react: EmailTemplate({
-    //       first_name: parsedData.data.first_name,
-    //       email: parsedData.data.email,
-    //       password: parsedData.data.password
-    //     }),
-    //   });
-    // }
+    if (user) {
+      await resend.emails.send({
+        from: 'Ginger Partners <email@houseofconsultants.co>',
+        to: ['directors@gingerpartners.co'],
+        subject: 'Account Created',
+        react: EmailTemplate({
+          first_name: parsedData.data.first_name,
+          email: parsedData.data.email,
+          password: parsedData.data.password
+        }),
+      });
+    }
 
     return NextResponse.json({ data: 'Account Created Successfully' }, { status: 201 });
 
