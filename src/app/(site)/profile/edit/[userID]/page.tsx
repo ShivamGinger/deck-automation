@@ -66,7 +66,7 @@ const EditProfilePage = () => {
       });
 
       if (response.ok) {
-        signOut();
+        signOut({ callbackUrl: process.env.NEXT_PUBLIC_SIGN_OUT_URL });
       } else {
         const data = await response.json();
         setError(true);
