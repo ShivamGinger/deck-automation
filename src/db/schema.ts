@@ -1,5 +1,5 @@
 import { InferSelectModel, sql } from "drizzle-orm";
-import { AnyMySqlColumn, bigint, date, decimal, index, json, mysqlEnum, mysqlSchema, mysqlTable, primaryKey, text, timestamp, tinyint, unique, varchar } from "drizzle-orm/mysql-core";
+import { AnyMySqlColumn, bigint, date, decimal, index, json, longtext, mysqlEnum, mysqlSchema, mysqlTable, primaryKey, text, timestamp, tinyint, unique, varchar } from "drizzle-orm/mysql-core";
 
 
 export const candidateStatus = mysqlTable("candidate_status", {
@@ -37,7 +37,7 @@ export const candidates = mysqlTable("candidates", {
 	varLpa: decimal("var_lpa", { precision: 5, scale: 2 }),
 	expectedCtc: varchar("expected_ctc", { length: 255 }),
 	noticePeriod: varchar("notice_period", { length: 255 }),
-	description: varchar("description", { length: 255 }),
+	description: longtext("description"),
 	achievement: json("achievement"),
 	gender: mysqlEnum("gender", ['male', 'female', 'other']),
 	currCmp: varchar("curr_cmp", { length: 255 }),
