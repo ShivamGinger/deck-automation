@@ -201,7 +201,7 @@ const SingleCandidate = ({
           <div className="pb-6">
             <div id="gp-score" className="bg-[#542C06] text-white p-4 text-3xl font-bold rounded-2xl w-60 flex justify-center">
               <span>
-                GP Score- {gpScore && parseFloat(gpScore)}
+                GP Score- {gpScore && parseFloat(gpScore).toFixed(1)}
               </span>
             </div>
           </div>

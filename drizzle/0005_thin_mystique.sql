@@ -1,0 +1,1 @@
+ALTER TABLE `candidates` MODIFY COLUMN `description` longtext;
