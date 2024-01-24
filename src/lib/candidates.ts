@@ -260,7 +260,7 @@ export const processCandidatePDF = async (company_id: number, role_id: number, c
   const candidateParamScore = await candidateParamScoreList(candidate_id);
   const candidateQuoScore = await candidateQuoScoreList(candidate_id);
 
-  const top5Attributes = candidateParamScore.slice(0, 5).map((obj, index) => ({
+  const top5Attributes = candidateParamScore.sort((a, b) => b.parameter_score - a.parameter_score).slice(0, 5).map((obj, index) => ({
     id: index + 1,
     title: obj.parameter_name,
     value: obj.parameter_score
