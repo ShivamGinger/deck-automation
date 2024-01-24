@@ -332,8 +332,7 @@ const SingleCandidate = ({
           </div>
 
           <div className="mt-8 " id="notes">
-            <p className="italic text-lg">Note(s)- IQ- Intelligence Quotiend; EQ- Emotional Quotient; SQ- Social Quotient; AQ-
-              Adversity Quotient</p>
+            <p className="italic text-lg">Note(s)- IQ- Intelligence Quotiend; EQ- Emotional Quotient; SQ- Social Quotient; AQ- Adversity Factor</p>
           </div>
         </div>
       </div>

@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
     const candidateParamScore: paramScoreList[] = await candidateParamScoreList(candidate_id);
     const candidateQuoScore: quoScoreList[] = await candidateQuoScoreList(candidate_id);
 
-    const top5Attributes = candidateParamScore.slice(0, 5).map((obj, index) => ({
+    const top5Attributes = candidateParamScore.sort((a, b) => b.parameter_score - a.parameter_score).slice(0, 5).map((obj, index) => ({
       id: index + 1,
       title: obj.parameter_name,
       value: obj.parameter_score
@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
       let title;
 
       switch (obj.quotient_name) {
-        case 'Adversity Quotient':
+        case 'Adversity Factor':
           title = 'AQ';
           break;
         case 'Emotional Factor':

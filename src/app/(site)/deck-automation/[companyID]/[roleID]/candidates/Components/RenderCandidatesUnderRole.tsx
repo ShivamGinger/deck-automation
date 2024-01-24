@@ -337,8 +337,9 @@ const RenderCandidatesUnderRole = ({
                     {detail.description}
                   </td>
 
-                  <td className="" onClick={() => handleDownloadPdf(roleID, companyID, detail.candidate_id, detail.candidate_name)}>
-                    <Image width={20} height={20} src={'/images/download.png'} alt="edit-icon" className="cursor-pointer" />
+                  <td className="min-w-[3rem]" onClick={() => handleDownloadPdf(roleID, companyID, detail.candidate_id, detail.candidate_name)}>
+                    {/* sds */}
+                    <Image width={25} height={20} src={'/images/download.png'} alt="edit-icon" className="cursor-pointer" />
                   </td>
                 </tr>
               ))}
