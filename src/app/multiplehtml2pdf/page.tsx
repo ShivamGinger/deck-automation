@@ -98,7 +98,16 @@ const Page = () => {
                     </td>
 
                     <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
-                      {detail.description}
+                      {
+                        detail.description.length < 150 ?
+                          <span>{detail.description}</span>
+                          :
+                          <span className='text-start'>
+                            <span>{detail.description.substring(0, 130)}-</span>
+                            <br />
+                            <span>{detail.description.substring(130)}</span>
+                          </span>
+                      }
                     </td>
 
                   </tr>

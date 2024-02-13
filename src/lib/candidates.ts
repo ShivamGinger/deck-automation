@@ -270,7 +270,7 @@ export const processCandidatePDF = async (company_id: number, role_id: number, c
     let title;
 
     switch (obj.quotient_name) {
-      case 'Adversity Quotient':
+      case 'Adversity Factor':
         title = 'AQ';
         break;
       case 'Emotional Factor':
