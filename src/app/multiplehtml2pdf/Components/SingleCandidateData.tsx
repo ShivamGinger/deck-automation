@@ -102,7 +102,7 @@ const SingleCandidate = ({
 
   return (
     <>
-      <div className="flex h-screen">
+      <div className="flex h-screen" id={`candidate-${phoneNumber}`}>
         <div className="flex flex-col z-20 bg-white pt-12 px-8 ">
           <div className="">
             <Image width={120} height={120} src={'/images/Ginger Partners_Logo with tagline.png'} alt="profile pic" className="rounded-xl " priority />
@@ -115,7 +115,7 @@ const SingleCandidate = ({
                 width={0}
                 height={0}
                 priority
-                className="object-cover rounded-md h-32"
+                className="object-contain rounded-md h-32"
                 style={{ width: "100%" }}
                 alt={`Profile Pic for ${name}`}
                 sizes="(max-width: 600px) 100vw, 600px"
@@ -185,7 +185,7 @@ const SingleCandidate = ({
               <div className='flex flex-col gap-y-4 justify-center '>
                 <div>{phoneNumber}</div>
                 {email && email?.length > 18 ? <div className='text-xs'>{email}</div> : <div className=''>{email}</div>}
-                {social ? <Link href={social} target='_blank' prefetch={false} rel='noopener noreferrer'>Linkedin profile</Link> : <div>Linkedin profile</div>}
+                {social ? <a href={`http://${social}`} target='_blank' rel='noopener noreferrer' className='underline cursor-pointer'>Linkedin Profile</a> : <div>Linkedin profile</div>}
               </div>
             </div>
           </div>
@@ -305,11 +305,11 @@ const SingleCandidate = ({
             <div className="bg-white p-8 rounded-xl" id="top-attributes">
               <div className="flex flex-col">
                 <div className="font-bold uppercase pb-3" id="details-heading">top 5 attributes</div>
-                <div className="pl-12 pt-4">
-                  <div className="flex gap-5 ">
-                    <div className='flex flex-col gap-6 items-end'>
+                <div className="pt-4">
+                  <div className="flex gap-5">
+                    <div className='flex flex-col gap-6 items-start'>
                       {top5Attributes?.map((attribute) => (
-                        <p key={attribute.id}>{attribute.title}</p>
+                        <p key={attribute.id} className='line-clamp-1'>{attribute.title}</p>
                       ))}
                     </div>
 
@@ -332,7 +332,7 @@ const SingleCandidate = ({
           </div>
 
           <div className="mt-8 " id="notes">
-            <p className="italic text-lg">Note(s)- IQ- Intelligence Quotiend; EQ- Emotional Quotient; SQ- Social Quotient; AQ- Adversity Factor</p>
+            <p className="italic text-lg">Note(s)- IQ- Intelligence Quotient; EQ- Emotional Quotient; SQ- Social Quotient; AQ- Adversity Factor</p>
           </div>
         </div>
       </div>

@@ -5,6 +5,7 @@ import React from 'react';
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 
+import Link from 'next/link';
 import '../html2pdf/style.css';
 import SingleCandidate from './Components/SingleCandidateData';
 
@@ -27,6 +28,13 @@ const Page = () => {
     phoneNumber: string,
     top5AttributesString: string,
     quotientScoresString: string,
+    currentPosition: string,
+    currentCompany: string,
+    currentLocation: string,
+    variableCtc: string,
+    esopRsu: string,
+    expectedCtc: string,
+    noticePeriod: string,
   }[] = [];
   if (listIndividualCandidateDataString) {
     listIndividualCandidateData = JSON.parse(decodeURIComponent(listIndividualCandidateDataString));
@@ -36,80 +44,93 @@ const Page = () => {
 
   const roleName = searchParams.get('roleName');
 
+  const companyLogo = searchParams.get('companyLogo');
+
   return (
     <>
-      <div className='flex h-screen flex-col bg-[#FEFAEF] pt-12 '>
-        <div className='flex pl-8 gap-44 items-center'>
-          <Image width={150} height={150} src={'/images/Ginger Partners_Logo with tagline.png'} alt="profile pic" className="rounded-xl " priority />
-          <h2 className='font-bold uppercase text-2xl text-[#542C06]'>Executive Summary- {companyName}</h2>
+      <div className='flex h-screen flex-col bg-[#FEFAEF]'>
+        <div className='flex justify-between px-6 bg-white rounded-md py-4 shadow-md'>
+          <div className='flex flex-row items-center gap-12'>
+            {companyLogo ?
+              <Image width={150} height={150} src={companyLogo} alt="profile pic" className="rounded-xl " priority />
+              :
+              companyName
+            }
+            <h2 className='font-bold capitalize text-xl text-[#542C06]'>Executive Summary- Candidates for {companyName}- {roleName}</h2>
+          </div>
+          <div className='flex pl-8 gap-44 items-center'>
+            <Image width={150} height={150} src={'/images/Ginger Partners_Logo with tagline.png'} alt="profile pic" className="rounded-xl " priority />
+          </div>
+
         </div>
-        <div className='px-24 py-12 '>
-          <div className='bg-white rounded-lg custom-box-shadow'>
-            <table className="w-full border-separate border-spacing-4 px-6 pt-2">
-              <thead className="">
-                <tr className='gap-x-4'>
-                  <th className="table-headings">S.No.</th>
-                  <th className="table-headings">Candidate</th>
-                  <th className="table-headings">Candidate Name</th>
-                  <th className="table-headings">Role</th>
-                  <th className="table-headings">GP Score</th>
-                  <th className="table-headings">Key Observations</th>
+        <div className='px-6 py-12 '>
+          <div className='border '>
+            <table className="w-full px-6 pt-2">
+              <thead className="border border-[#542C06]">
+                <tr className='bg-[#F7CCA5] border border-[#542C06]'>
+                  <th className="p-3 border border-[#542C06]">S.No.</th>
+                  <th className="p-3 border border-[#542C06]">Candidate Name</th>
+                  <th className="p-3 border border-[#542C06]">Current Position</th>
+                  <th className="p-3 border border-[#542C06]">Current Company</th>
+                  <th className="p-3 border border-[#542C06]">GP Score (out of 5)</th>
+                  <th className="p-3 border border-[#542C06]">Current Location</th>
+                  <th className="p-3 border border-[#542C06]">Years of Experience</th>
+                  <th className="p-3 border border-[#542C06]">Phone Number</th>
+                  <th className="p-3 border border-[#542C06]">Linkedin</th>
+                  <th className="p-3 border border-[#542C06]">Fixed CTC in LPA</th>
+                  <th className="p-3 border border-[#542C06]">Variable CTC in LPA</th>
+                  <th className="p-3 border border-[#542C06]">ESOPS/RSU Per Year LPA</th>
+                  <th className="p-3 border border-[#542C06]">Expected CTC (LPA)</th>
+                  <th className="p-3 border border-[#542C06]">Notice Period (Days)</th>
                 </tr>
               </thead>
               <tbody className="">
-                {listIndividualCandidateData?.map((detail, index) => (
-                  <tr className={`${index % 2 === 0 ? 'bg-white' : ''}`} key={index}>
-                    <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
+                {listIndividualCandidateData?.sort((a, b) => parseFloat(b.gpScore) - parseFloat(a.gpScore)).map((detail, index) => (
+                  <tr key={index}>
+                    <td className={`table-row-data`}>
                       {index + 1}
                     </td>
-                    <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
-                      <>
-                        {detail.profilePic ?
-                          <div className='flex justify-center'>
-                            <Image
-                              src={detail.profilePic}
-                              width={150}
-                              height={0}
-                              priority
-                              // style={{ width: '150px' }}
-                              className="rounded-md h-32"
-                              alt={`Profile Pic for ${detail.candidateName}`}
-                              sizes="(max-width: 600px) 100vw, 600px"
-                            />
-                          </div>
-                          :
-                          <>
-                            No Profile Pic for {detail.candidateName}
-                          </>
-                        }
-                      </>
-                    </td>
-
-                    <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
+                    <td className={`table-row-data underline cursor-pointer`}
+                      onClick={() => document.querySelector(`#candidate-${detail.phoneNumber}`)?.scrollIntoView()}
+                    >
                       {detail.candidateName}
                     </td>
-
-                    <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
-                      {roleName}
+                    <td className={`table-row-data`}>
+                      {detail.currentPosition}
                     </td>
-
-                    <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
-                      {parseFloat(detail.gpScore).toFixed(2)}
+                    <td className={`table-row-data`}>
+                      {detail.currentCompany}
                     </td>
-
-                    <td className={`table-row-data ${index % 2 === 0 ? '' : 'bg-[#F7CCA5]'}`}>
-                      {
-                        detail.description.length < 150 ?
-                          <span>{detail.description}</span>
-                          :
-                          <span className='text-start'>
-                            <span>{detail.description.substring(0, 130)}-</span>
-                            <br />
-                            <span>{detail.description.substring(130)}</span>
-                          </span>
-                      }
+                    <td className={`table-row-data`}>
+                      {parseFloat(detail.gpScore).toFixed(1)}
                     </td>
-
+                    <td className={`table-row-data`}>
+                      {detail.currentLocation}
+                    </td>
+                    <td className={`table-row-data`}>
+                      {detail.experience}
+                    </td>
+                    <td className={`table-row-data`}>
+                      {detail.phoneNumber}
+                    </td>
+                    <td className={`table-row-data underline`}>
+                      <a href={`http://${detail.social}`} target='_blank' rel='noopener noreferrer' className='underline cursor-pointer'>Linkedin</a>
+                    </td>
+                    <td className={`table-row-data`}>
+                      {detail.fixedLpa}
+                    </td>
+                    <td className={`table-row-data`}>
+                      {detail.variableCtc}
+                    </td>
+                    <td className={`table-row-data`}>
+                      {detail.esopRsu}
+                    </td>
+                    <td className={`table-row-data`}>
+                      {detail.expectedCtc}
+                    </td>
+                    <td className={`table-row-data`}>
+                      {detail.noticePeriod}
+                    </td>
                   </tr>
                 ))}
               </tbody>

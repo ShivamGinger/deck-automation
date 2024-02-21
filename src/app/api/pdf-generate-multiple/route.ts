@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
 
     const origin = request.headers.get('origin');
 
-    const website_url = `${origin}/multiplehtml2pdf?roleName=${encodeURIComponent(roleIdExist[0]?.role_name)}&companyName=${encodeURIComponent(roleIdExist[0]?.company_name)}&listIndividualCandidateData=${encodeURIComponent(JSON.stringify(candidateIndividualResult))}`;
+    const website_url = `${origin}/multiplehtml2pdf?roleName=${encodeURIComponent(roleIdExist[0]?.role_name)}&companyName=${encodeURIComponent(roleIdExist[0]?.company_name)}&listIndividualCandidateData=${encodeURIComponent(JSON.stringify(candidateIndividualResult))}&companyLogo=${companyIdExist[0].companyPhoto ? encodeURIComponent(companyIdExist[0].companyPhoto) : ''}`;
 
     // console.log(website_url);
 
