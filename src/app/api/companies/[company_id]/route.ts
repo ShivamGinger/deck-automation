@@ -63,7 +63,8 @@ export async function PUT(request: NextRequest, { params }: { params: { company_
       };
 
       await db.update(companies).set({
-        name: parsedData.data.company_name
+        name: parsedData.data.company_name,
+        companyPhoto: parsedData.data.company_logo
       })
       .where(eq(companies.id, params.company_id));
 

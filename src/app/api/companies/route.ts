@@ -32,7 +32,8 @@ export async function POST(request: NextRequest) {
     };
 
     const addCompany = await db.insert(companies).values({
-      name: parsedData.data.company_name
+      name: parsedData.data.company_name,
+      companyPhoto: parsedData.data.company_logo ? parsedData.data.company_logo : null
     });
 
     return NextResponse.json({ status: 201 });
