@@ -58,15 +58,15 @@ export async function POST(request: NextRequest) {
           currLoc: data.current_location,
           experience: data.experience,
           phNum: data.phone_number,
-          fixedLpa: String(data.fixed_lpa),
-          varLpa: String(data.variable_lpa),
+          fixedLpa: data.fixed_lpa ? String(data.fixed_lpa) : null,
+          varLpa: data.variable_lpa ? String(data.variable_lpa) : null,
           expectedCtc: data.expected_ctc,
           noticePeriod: data.notice_period,
           description: data.description,
           achievement: data.achievement,
           gender: data.gender,
           currCmp: data.current_company,
-          esopRsu: String(data.esop_rsu)
+          esopRsu: data.esop_rsu ? String(data.esop_rsu) : null
         }
         await txn.insert(candidates).values(vals);
 
