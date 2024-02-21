@@ -41,6 +41,9 @@ export function validateTrackingCandidates(candidateInfo: AddCandidateTrackingIn
       gender,
       esop_rsu,
       share_candidate_status,
+      description,
+      key_points,
+      achievement,
       candidate_status: { candidate_profile_share_date, candidate_round_completed }
     } = candidate;
 
@@ -55,7 +58,10 @@ export function validateTrackingCandidates(candidateInfo: AddCandidateTrackingIn
         (esop_rsu && !isValidDecimalNumber(esop_rsu)) ||
         (fixed_lpa && !isValidDecimalNumber(fixed_lpa)) ||
         (variable_lpa && !isValidDecimalNumber(variable_lpa)) ||
-        (share_candidate_status && ((candidate_profile_share_date && !isValidDateFormat(candidate_profile_share_date)) || (candidate_round_completed && !isValidNumber(candidate_round_completed))))
+        (share_candidate_status && ((candidate_profile_share_date && !isValidDateFormat(candidate_profile_share_date)) || (candidate_round_completed && !isValidNumber(candidate_round_completed)))) ||
+        (description && description.length > 150) ||
+        (key_points && key_points.some(point => point.length > 110)) ||
+        (achievement && achievement.some(point => point.length > 200))
       ) {
         return false;
       }
@@ -74,7 +80,10 @@ export function validateEditTrackingCandidates(showAddStatus: boolean, candidate
     gender,
     esop_rsu,
     candidate_profile_share_date,
-    candidate_round_completed
+    candidate_round_completed,
+    description,
+    key_points,
+    achievement
   } = candidateInfo;
 
   if (
@@ -88,7 +97,10 @@ export function validateEditTrackingCandidates(showAddStatus: boolean, candidate
       (esop_rsu && !isValidDecimalNumber(esop_rsu)) ||
       (fixed_lpa && !isValidDecimalNumber(fixed_lpa)) ||
       (variable_lpa && !isValidDecimalNumber(variable_lpa)) ||
-      ((candidate_profile_share_date && !isValidDateFormat(candidate_profile_share_date)) || (candidate_round_completed && !isValidNumber(candidate_round_completed)))
+      ((candidate_profile_share_date && !isValidDateFormat(candidate_profile_share_date)) || (candidate_round_completed && !isValidNumber(candidate_round_completed))) ||
+      (description && description.length > 150) ||
+      (key_points && key_points.some(point => point.length > 110)) ||
+      (achievement && achievement.some(point => point.length > 200))
     ) {
       return false;
     }

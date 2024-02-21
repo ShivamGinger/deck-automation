@@ -1,6 +1,6 @@
 'use client';
 
-import React, { ChangeEvent, useLayoutEffect, useState } from 'react';
+import React, { ChangeEvent, useEffect, useLayoutEffect, useState } from 'react';
 
 import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
@@ -15,6 +15,8 @@ const EditCompany = () => {
   const { companyID } = useParams();
 
   const [companyName, setCompanyName] = useState('');
+  const [companyLogo, setCompanyLogo] = useState('');
+  const [fileUploaded, setFileUploaded] = useState(false);
 
   const [error, setError] = useState(false);
   const [errorDeatils, setErrorDetails] = useState<string | null>('');
@@ -22,7 +24,7 @@ const EditCompany = () => {
 
   const { data: session } = useSession();
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const getData = async () => {
       try {
         const response = await fetch(`/api/companies/${companyID}`, {
@@ -33,6 +35,8 @@ const EditCompany = () => {
           const data = await response.json();
 
           setCompanyName(data.data[0]?.name);
+          setFileUploaded(!!data.data[0]?.companyPhoto);
+          setCompanyLogo(data.data[0]?.companyPhoto);
         } else {
           const data = await response.json();
           setError(true);
@@ -55,6 +59,54 @@ const EditCompany = () => {
     }
   }, [companyID, router, session?.user]);
 
+  const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.currentTarget.files?.[0];
+    if (file) {
+      if (companyName) {
+        const formData = new FormData();
+
+        formData.append('profile-pic', file);
+        formData.append('candidate-name', companyName);
+
+        try {
+          const response = await fetch('/api/s3-upload', {
+            method: 'POST',
+            body: formData,
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+
+            setFileUploaded(true);
+
+            setCompanyLogo(data.imageUrl);
+          } else {
+            const data = await response.json();
+            setError(true);
+            setErrorDetails(data.error);
+
+            const fileInput = document.getElementById(`logo_for_${companyLogo}`) as HTMLInputElement;
+
+            if (fileInput) {
+              fileInput.value = '';
+            }
+          }
+        } catch (error) {
+          console.error('Network error', error);
+        }
+      } else {
+        setError(true);
+        setErrorDetails("Company Name Missing!");
+      }
+    }
+  };
+
+  const handleProfilePicRemove = () => {
+    setFileUploaded(false);
+
+    setCompanyLogo('');
+  };
+
   const handleSubmit = async () => {
     setErrorDetails(null);
     setError(false);
@@ -70,7 +122,8 @@ const EditCompany = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          company_name: companyName
+          company_name: companyName,
+          company_logo: companyLogo
         }),
         credentials: 'include',
       });
@@ -96,7 +149,7 @@ const EditCompany = () => {
         </div>
         <div className='flex justify-center py-12 flex-col items-center gap-12'>
           <Image width={150} height={150} src={'/images/Ginger Partners_Logo with tagline.png'} alt="ginger-partners-logo" className="rounded-xl " priority />
-          <h1 className='text-xl font-bold uppercase'>Edit Company Name</h1>
+          <h1 className='text-xl font-bold uppercase'>Edit Company</h1>
 
           {error &&
             <div className='bg-red-500 p-4 text-white font-semibold rounded-md flex justify-between '>
@@ -109,6 +162,39 @@ const EditCompany = () => {
               loading ?
                 <Loading /> :
                 <>
+                  {fileUploaded ?
+                    <>
+                      <div className='mt-6 flex flex-col w-72'>
+                        <div className='flex flex-row justify-between'>
+                          <label htmlFor={`profile_pic_upload_`} className='font-semibold pb-2'>Uploaded Company Logo: </label>
+                          <div className='pr-2 self-center cursor-pointer flex' onClick={handleProfilePicRemove}>
+                            <Image width={30} height={30} src={'/images/cross.png'} alt="edit-icon" className="opacity-80 " />
+                          </div>
+                        </div>
+                        {fileUploaded && companyLogo &&
+                          <>
+                            <Image
+                              src={companyLogo}
+                              width={0}
+                              height={0}
+                              priority
+                              className="object-contain rounded-md h-32"
+                              style={{ width: "100%" }}
+                              alt={`Logo for ${companyName}`}
+                              sizes="(max-width: 600px) 100vw, 600px"
+                            />
+                          </>
+                        }
+                      </div>
+                    </> :
+                    <div className='mt-6 flex flex-col w-72'>
+                      <div className='flex flex-row justify-between'>
+                        <label htmlFor={`profile_pic_upload_`} className='font-semibold pb-2'>Upload Company Logo</label>
+                      </div>
+                      <input type="file" accept='image/*' id={`logo_for_${companyName}`} onChange={handleFileChange} />
+                    </div>
+                  }
+                  
                   <Input
                     name='Company Name'
                     id='company_name'

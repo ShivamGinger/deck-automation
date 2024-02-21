@@ -12,7 +12,6 @@ const ExpAchiv = (
     setErrorDetails,
     setError,
     count,
-    placeholderData
   }:
     {
       handleInputChange: HandleCandidateInputChangeValue,
@@ -21,22 +20,15 @@ const ExpAchiv = (
       setErrorDetails: (details: string | null) => void,
       setError: (error: boolean) => void,
       count: number,
-      placeholderData: string[]
     }
 ) => {
   const [expAchivCount, setExpAchivCount] = useState(1);
-
-  const [placeholder, setPlaceholderData] = useState(placeholderData);
 
   const [expAchiv, setExpAchiv] = useState<string[]>(['']);
 
   useEffect(() => {
     setExpAchivCount(count);
   }, [count]);
-
-  useEffect(() => {
-    setPlaceholderData(placeholderData);
-  }, [placeholderData]);
 
   useEffect(() => {
     if (error) {
@@ -58,6 +50,13 @@ const ExpAchiv = (
     if (expAchivCount === 7) {
       setErrorDetails("Can't add more Experience & Achivements!");
       setError(true);
+      return;
+    }
+
+    if (expAchiv.some(point => point.length === 0)) {
+      setErrorDetails("Can't add more Experience & Achivements! Fill the empty first");
+      setError(true);
+
       return;
     }
 
@@ -108,9 +107,12 @@ const ExpAchiv = (
           type="text"
           name=""
           id=""
-          placeholder={placeholder[i - 1]}
+          maxLength={200}
+          placeholder={expAchiv && expAchiv[i - 1]}
+          value={expAchiv ? expAchiv[i - 1] : ''}
           className={`
-                  mt-2
+            ${expAchiv && expAchiv[i - 1].length > 200 ? 'border-2 border-red-500 focus:border-red-500 focus:text-red-500 text-red-500 font-bold' : ''}
+                    mt-2
                   h-full 
                   w-full 
                   rounded-[7px]

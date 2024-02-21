@@ -11,7 +11,6 @@ const EditKeyPoints = (
     setErrorDetails,
     setError,
     count,
-    placeholderData,
     keyPointsData
   }:
     {
@@ -20,23 +19,16 @@ const EditKeyPoints = (
       setErrorDetails: (details: string | null) => void,
       setError: (error: boolean) => void,
       count: number,
-      placeholderData: string[] | undefined,
       keyPointsData: string[]
     }
 ) => {
   const [keyPointsCount, setKeyPointsCount] = useState(count);
-
-  const [placeholder, setPlaceholderData] = useState(placeholderData);
 
   const [keyPoints, setKeyPoints] = useState<string[]>(keyPointsData);
 
   useEffect(() => {
     setKeyPointsCount(count);
   }, [count]);
-
-  useEffect(() => {
-    setPlaceholderData(placeholderData);
-  }, [placeholderData]);
 
   useEffect(() => {
     if (error) {
@@ -57,6 +49,13 @@ const EditKeyPoints = (
 
     if (keyPointsCount === 7) {
       setErrorDetails("Can't add more Key Points!");
+      setError(true);
+
+      return;
+    }
+
+    if (keyPoints.some(point => point.length === 0)) {
+      setErrorDetails("Can't add more Key Points! Fill the empty first");
       setError(true);
 
       return;
@@ -109,19 +108,22 @@ const EditKeyPoints = (
             type="text"
             name=""
             id=""
-            placeholder={placeholder && placeholder[i - 1]}
+            maxLength={110}
+            placeholder={keyPoints && keyPoints[i - 1]}
+            value={keyPoints ? keyPoints[i - 1] : ''}
             className={`
-                    mt-2
-                    h-full 
-                    w-full 
-                    rounded-[7px]
-                    bg-transparent           
-                    px-3 
-                    py-2.5 
-                    font-sans 
-                    text-base 
-                    border
-                    border-black
+            ${keyPoints && keyPoints[i - 1].length > 110 ? 'border-2 border-red-500 focus:border-red-500 focus:text-red-500 text-red-500 font-bold' : ''}
+            mt-2
+            h-full 
+            w-full 
+            rounded-[7px]
+            bg-transparent           
+            px-3 
+            py-2.5 
+            font-sans 
+            text-base 
+            border
+            border-black                    
                     `}
             onChange={(e: ChangeEvent<HTMLInputElement>) => handleKeyPointsChange(i, e.target.value)}
           />

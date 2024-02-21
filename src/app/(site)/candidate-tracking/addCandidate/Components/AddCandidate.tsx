@@ -196,6 +196,7 @@ const AddCandidate = () => {
                 required={false}
                 type='text'
                 moveLabel={candidateInfo[candidateNo - 1]?.description != ''}
+                error={candidateInfo[candidateNo - 1]?.description.length > 150}
                 onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(candidateNo, e.target.value, 'description')}
               />
 
@@ -342,7 +343,6 @@ const AddCandidate = () => {
               />
 
               <KeyPoints
-                placeholderData={candidateInfo[candidateNo - 1].key_points}
                 count={candidateInfo[candidateNo - 1].key_points.length}
                 handleInputChange={handleInputChange}
                 candidateNo={candidateNo}
@@ -352,7 +352,6 @@ const AddCandidate = () => {
               />
 
               <ExpAchiv
-                placeholderData={candidateInfo[candidateNo - 1].achievement}
                 count={candidateInfo[candidateNo - 1].achievement.length}
                 handleInputChange={handleInputChange}
                 candidateNo={candidateNo}

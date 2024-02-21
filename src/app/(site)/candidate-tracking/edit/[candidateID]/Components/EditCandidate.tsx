@@ -9,8 +9,6 @@ import Input from '@/app/(site)/Components/Input';
 import Select from '@/app/(site)/Components/Select';
 import { CandidateTrackingStatus, CompanyDetailsRoleCount, EditCandidateTrackingInformation, HandleEditCandidateInputChangeValue, RoleDetails } from '@/utils/types';
 import CustomSelect from '../../../addCandidate/Components/Components/CustomSelect';
-import AddExpAchiv from './AddExpAchiv';
-import AddKeyPoints from './AddKeyPoints';
 import EditCustomSelectCompany from './EditCustomSelectCompany';
 import EditCustomSelectRole from './EditCustomSelectRole';
 import EditExpAchiv from './EditExpAchiv';
@@ -41,7 +39,7 @@ const EditCandidate = ({
 
   const [rolesData, setRolesData] = useState<RoleDetails[]>([]);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const getData = async () => {
       try {
         const response = await fetch(`/api/companies`, {
@@ -167,7 +165,7 @@ const EditCandidate = ({
     }
   };
 
-  console.log(candidateInfo);
+  // console.log(candidateInfo.key_points.keyPoints)
 
   return <div>
     {error &&
@@ -203,6 +201,7 @@ const EditCandidate = ({
                     required={false}
                     type='text'
                     moveLabel={candidateInfo?.description != ''}
+                    error={candidateInfo?.description.length > 150}
                     onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(e.target.value, 'description')}
                   />
 
@@ -347,52 +346,26 @@ const EditCandidate = ({
                     onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(e.target.value, 'esop_rsu')}
                   />
 
-                  {Array.isArray(candidateInfo.key_points) ?
-                    <>
-                      <AddKeyPoints
-                        placeholderData={candidateInfo && candidateInfo?.key_points}
-                        count={candidateInfo && candidateInfo?.key_points.length}
-                        handleInputChange={handleInputChange}
-                        error={error}
-                        setError={setError}
-                        setErrorDetails={setErrorDetails}
-                      />
-                    </> :
-                    <>
-                      <EditKeyPoints
-                        keyPointsData={candidateInfo && candidateInfo?.key_points.keyPoints}
-                        placeholderData={candidateInfo && candidateInfo?.key_points.keyPoints}
-                        count={candidateInfo && candidateInfo?.key_points.keyPoints.length}
-                        handleInputChange={handleInputChange}
-                        error={error}
-                        setError={setError}
-                        setErrorDetails={setErrorDetails}
-                      />
-                    </>
+                  {Array.isArray(candidateInfo.key_points) &&
+                    <EditKeyPoints
+                      keyPointsData={candidateInfo.key_points}
+                      count={candidateInfo.key_points.length}
+                      handleInputChange={handleInputChange}
+                      error={error}
+                      setError={setError}
+                      setErrorDetails={setErrorDetails}
+                    />
                   }
 
-                  {Array.isArray(candidateInfo.achievement) ?
-                    <>
-                      <AddExpAchiv
-                        placeholderData={candidateInfo && candidateInfo?.achievement}
-                        count={candidateInfo && candidateInfo?.achievement.length}
-                        handleInputChange={handleInputChange}
-                        error={error}
-                        setError={setError}
-                        setErrorDetails={setErrorDetails}
-                      />
-                    </> :
-                    <>
-                      <EditExpAchiv
-                        expiAchivData={candidateInfo && candidateInfo?.achievement.achievement}
-                        placeholderData={candidateInfo && candidateInfo?.key_points.keyPoints}
-                        count={candidateInfo && candidateInfo?.key_points.keyPoints.length}
-                        handleInputChange={handleInputChange}
-                        error={error}
-                        setError={setError}
-                        setErrorDetails={setErrorDetails}
-                      />
-                    </>
+                  {Array.isArray(candidateInfo.achievement) &&
+                    <EditExpAchiv
+                      expiAchivData={candidateInfo?.achievement}
+                      count={candidateInfo.achievement.length}
+                      handleInputChange={handleInputChange}
+                      error={error}
+                      setError={setError}
+                      setErrorDetails={setErrorDetails}
+                    />
                   }
 
                   {

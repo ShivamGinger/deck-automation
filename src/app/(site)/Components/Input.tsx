@@ -20,7 +20,7 @@ const Input: FC<InputProps> = ({ id, name, required, moveLabel, error, type, ...
           <input
             type={type}
             {...(type === 'number' ? { min: 0, max: 100 } : {})}
-            value={props.placeholder}
+            value={props.placeholder ? props.placeholder : ''}
             {...props}
             className={`
             ${error ? 'border-2 border-red-500 focus:border-red-500 focus:text-red-500 text-red-500 font-bold' : ''}

@@ -14,11 +14,13 @@ const AddCompany = () => {
   const [companyName, setCompanyName] = useState('');
 
   const [error, setError] = useState(false);
+  const [companyLogo, setCompanyLogo] = useState('');
+  const [fileUploaded, setFileUploaded] = useState(false);
   const [errorDeatils, setErrorDetails] = useState<string | null>('');
 
   const { data: session } = useSession();
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (session?.user) {
       if (!session?.user.deck_automation_can_create) {
         router.replace('/');
@@ -57,7 +59,8 @@ const AddCompany = () => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        company_name: companyName
+        company_name: companyName,
+        company_logo: companyLogo
       }),
       credentials: 'include',
     });
@@ -69,6 +72,54 @@ const AddCompany = () => {
 
       setError(true);
       setErrorDetails(errorData.error);
+    }
+  };
+
+  const handleProfilePicRemove = () => {
+    setFileUploaded(false);
+
+    setCompanyLogo('');
+  };
+
+  const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.currentTarget.files?.[0];
+    if (file) {
+      if (companyName) {
+        const formData = new FormData();
+
+        formData.append('profile-pic', file);
+        formData.append('candidate-name', companyName);
+
+        try {
+          const response = await fetch('/api/s3-upload', {
+            method: 'POST',
+            body: formData,
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+
+            setFileUploaded(true);
+
+            setCompanyLogo(data.imageUrl);
+          } else {
+            const data = await response.json();
+            setError(true);
+            setErrorDetails(data.error);
+
+            const fileInput = document.getElementById(`logo_for_${companyLogo}`) as HTMLInputElement;
+
+            if (fileInput) {
+              fileInput.value = '';
+            }
+          }
+        } catch (error) {
+          console.error('Network error', error);
+        }
+      } else {
+        setError(true);
+        setErrorDetails("Company Name Missing!");
+      }
     }
   };
 
@@ -89,6 +140,39 @@ const AddCompany = () => {
               </div>
             }
             <div className="space-y-12">
+              {fileUploaded ?
+                <>
+                  <div className='mt-6 flex flex-col w-72'>
+                    <div className='flex flex-row justify-between'>
+                      <label htmlFor={`profile_pic_upload_`} className='font-semibold pb-2'>Uploaded Company Logo: </label>
+                      <div className='pr-2 self-center cursor-pointer flex' onClick={handleProfilePicRemove}>
+                        <Image width={30} height={30} src={'/images/cross.png'} alt="edit-icon" className="opacity-80 " />
+                      </div>
+                    </div>
+                    {fileUploaded && companyLogo &&
+                      <>
+                        <Image
+                          src={companyLogo}
+                          width={0}
+                          height={0}
+                          priority
+                          className="object-contain rounded-md h-32"
+                          style={{ width: "100%" }}
+                          alt={`Logo for ${companyName}`}
+                          sizes="(max-width: 600px) 100vw, 600px"
+                        />
+                      </>
+                    }
+                  </div>
+                </> :
+                <div className='mt-6 flex flex-col w-72'>
+                  <div className='flex flex-row justify-between'>
+                    <label htmlFor={`profile_pic_upload_`} className='font-semibold pb-2'>Upload Company Logo</label>
+                  </div>
+                  <input type="file" accept='image/*' id={`logo_for_${companyName}`} onChange={handleFileChange} />
+                </div>
+              }
+
               <Input
                 name='Company Name'
                 id='company_name'

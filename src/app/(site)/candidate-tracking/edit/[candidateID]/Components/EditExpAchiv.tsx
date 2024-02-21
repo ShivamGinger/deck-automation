@@ -11,7 +11,6 @@ const EditExpAchiv = (
     setErrorDetails,
     setError,
     count,
-    placeholderData,
     expiAchivData
   }:
     {
@@ -20,23 +19,16 @@ const EditExpAchiv = (
       setErrorDetails: (details: string | null) => void,
       setError: (error: boolean) => void,
       count: number,
-      placeholderData: string[] | undefined,
       expiAchivData: string[]
     }
 ) => {
   const [expAchivCount, setExpAchivCount] = useState(count);
-
-  const [placeholder, setPlaceholderData] = useState(placeholderData);
 
   const [expiAchiv, setExpiAchiv] = useState<string[]>(expiAchivData);
 
   useEffect(() => {
     setExpAchivCount(count);
   }, [count]);
-
-  useEffect(() => {
-    setPlaceholderData(placeholderData);
-  }, [placeholderData]);
 
   useEffect(() => {
     if (error) {
@@ -56,7 +48,14 @@ const EditExpAchiv = (
     setError(false);
 
     if (expAchivCount === 7) {
-      setErrorDetails("Can't add more Key Points!");
+      setErrorDetails("Can't add more Experience & Achivements!");
+      setError(true);
+
+      return;
+    }
+
+    if (expiAchiv.some(point => point.length === 0)) {
+      setErrorDetails("Can't add more Experience & Achivements! Fill the empty first");
       setError(true);
 
       return;
@@ -65,7 +64,7 @@ const EditExpAchiv = (
     setExpAchivCount(prevCount => prevCount + 1);
     const updatedExpAchiv = [...expiAchiv, ''];
 
-    handleInputChange(updatedExpAchiv, 'key_points');
+    handleInputChange(updatedExpAchiv, 'achievement');
 
     setExpiAchiv(updatedExpAchiv);
   };
@@ -77,14 +76,14 @@ const EditExpAchiv = (
 
     setExpiAchiv(updatedExpAchiv);
 
-    handleInputChange(updatedExpAchiv, 'key_points');
+    handleInputChange(updatedExpAchiv, 'achievement');
   };
 
   const handleRemoveExpAchiv = () => {
     setError(false);
 
     if (expAchivCount === 1) {
-      setErrorDetails("Can't remove Key Points!");
+      setErrorDetails("Can't remove Experience & Achivements!");
       setError(true);
 
       return;
@@ -96,7 +95,7 @@ const EditExpAchiv = (
 
     setExpiAchiv(updatedExpAchiv);
 
-    handleInputChange(updatedExpAchiv, 'key_points');
+    handleInputChange(updatedExpAchiv, 'achievement');
   };
 
   const elements = [];
@@ -109,8 +108,11 @@ const EditExpAchiv = (
             type="text"
             name=""
             id=""
-            placeholder={placeholder && placeholder[i - 1]}
+            maxLength={200}
+            placeholder={expiAchiv && expiAchiv[i - 1]}
+            value={expiAchiv ? expiAchiv[i - 1] : ''}
             className={`
+            ${expiAchiv && expiAchiv[i - 1].length > 200 ? 'border-2 border-red-500 focus:border-red-500 focus:text-red-500 text-red-500 font-bold' : ''}
                     mt-2
                     h-full 
                     w-full 

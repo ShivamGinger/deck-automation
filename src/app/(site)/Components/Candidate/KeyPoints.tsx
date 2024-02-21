@@ -12,7 +12,6 @@ const KeyPoints = (
     setErrorDetails,
     setError,
     count,
-    placeholderData
   }:
     {
       handleInputChange: HandleCandidateInputChangeValue,
@@ -21,22 +20,15 @@ const KeyPoints = (
       setErrorDetails: (details: string | null) => void,
       setError: (error: boolean) => void,
       count: number,
-      placeholderData: string[]
     }
 ) => {
   const [keyPointsCount, setKeyPointsCount] = useState(count);
-
-  const [placeholder, setPlaceholderData] = useState(placeholderData);
 
   const [keyPoints, setKeyPoints] = useState<string[]>(['']);
 
   useEffect(() => {
     setKeyPointsCount(count);
   }, [count]);
-
-  useEffect(() => {
-    setPlaceholderData(placeholderData);
-  }, [placeholderData]);
 
   useEffect(() => {
     if (error) {
@@ -57,6 +49,13 @@ const KeyPoints = (
 
     if (keyPointsCount === 7) {
       setErrorDetails("Can't add more Key Points!");
+      setError(true);
+
+      return;
+    }
+
+    if (keyPoints.some(point => point.length === 0)) {
+      setErrorDetails("Can't add more Key Points! Fill the empty first");
       setError(true);
 
       return;
@@ -112,9 +111,12 @@ const KeyPoints = (
           type="text"
           name=""
           id=""
-          placeholder={placeholder[i - 1]}
+          maxLength={110}
+          placeholder={keyPoints && keyPoints[i - 1]}
+          value={keyPoints ? keyPoints[i - 1] : ''}
           className={`
-                    mt-2
+            ${keyPoints && keyPoints[i - 1].length > 110 ? 'border-2 border-red-500 focus:border-red-500 focus:text-red-500 text-red-500 font-bold' : ''}
+            mt-2
                     h-full 
                     w-full 
                     rounded-[7px]

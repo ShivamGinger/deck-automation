@@ -39,7 +39,7 @@ export function validateCandidates(candidateInfo: AddCandidateInformation[]) {
       !variable_lpa || !isValidDecimalNumber(variable_lpa) ||
       !expected_ctc ||
       !notice_period ||
-      !description ||
+      !description || description.length > 150 ||
       (achievement.length > 1 && achievement.some(element => element === '')) ||
       !gender || !(['male', 'female', 'other'].includes(gender)) ||
       candidate_parameter_scores.some(param => param.parameter_score > 5 || param.parameter_score <= 0 || isNaN(param.parameter_score))

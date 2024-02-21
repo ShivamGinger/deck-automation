@@ -11,10 +11,10 @@ import Select from '@/app/(site)/Components/Select';
 import { isValidDecimalNumber, isValidEmail } from '@/app/(site)/Components/Candidate/validationFunctions';
 import { AddCandidateInformation, HandleCandidateInputChangeValue, ParametersQuotientFactorsValue, QuotientFactorsWeightage } from '@/utils/types';
 
+import ExpAchiv from '@/app/(site)/Components/Candidate/ExpAchiv';
+import KeyPoints from '@/app/(site)/Components/Candidate/KeyPoints';
 import ParameterQuotient from './ParameterQuotient';
 import { validateCandidates } from './validationFunctions';
-import KeyPoints from '@/app/(site)/Components/Candidate/KeyPoints';
-import ExpAchiv from '@/app/(site)/Components/Candidate/ExpAchiv';
 
 const AddCandidate = ({
   quotientsDetailsUnderRole,
@@ -32,8 +32,6 @@ const AddCandidate = ({
 
   const [error, setError] = useState(false);
   const [errorDeatils, setErrorDetails] = useState<string | null>('');
-
-  console.log(candidateInfo);
 
   useEffect(() => {
     if (error) {
@@ -162,7 +160,7 @@ const AddCandidate = ({
                 type='text'
                 moveLabel={candidateInfo[candidateNo - 1]?.description != ''}
                 onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(candidateNo, e.target.value, 'description')}
-                error={candidateInfo[candidateNo - 1]?.description === ''}
+                error={candidateInfo[candidateNo - 1]?.description === '' || candidateInfo[candidateNo - 1]?.description.length > 150}
               />
 
               <ProfilePic
