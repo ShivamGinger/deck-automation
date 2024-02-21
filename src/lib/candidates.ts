@@ -306,6 +306,14 @@ export const processCandidatePDF = async (company_id: number, role_id: number, c
   const top5AttributesString = JSON.stringify(top5Attributes);
   const quotientScoresString = JSON.stringify(quotientScores);
 
+  const currentPosition = rolesCandidate[0].current_position
+  const currentCompany = rolesCandidate[0].current_company
+  const currentLocation = rolesCandidate[0].current_location
+  const variableCtc = rolesCandidate[0].variable_lpa
+  const esopRsu = rolesCandidate[0].esop_rsu
+  const expectedCtc = rolesCandidate[0].expected_ctc
+  const noticePeriod = rolesCandidate[0].notice_period
+
   return {
     candidateName,
     profilePic,
@@ -320,7 +328,14 @@ export const processCandidatePDF = async (company_id: number, role_id: number, c
     fixedLpa,
     phoneNumber,
     top5AttributesString,
-    quotientScoresString
+    quotientScoresString,
+    currentPosition,
+    currentCompany,
+    currentLocation,
+    variableCtc,
+    esopRsu,
+    expectedCtc,
+    noticePeriod
   };
 };
 
