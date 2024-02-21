@@ -132,9 +132,11 @@ export const updateCandidateScoreSchema = z.object({
 
 export const createCompanySchema = z.object({
   company_name: z.string(),
+  company_logo: z.string(),
 });
 
 export const updateCompanySchema = z.object({
+  company_logo: z.string(),
   company_name: z.string(),
 });
 
