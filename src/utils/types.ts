@@ -150,12 +150,8 @@ export interface EditCandidateTrackingInformation extends BasicCandidateInformat
   candidate_status: CandidateTrackingStatus,
   candidate_reject_reason: string,
   candidate_round_completed: string, //- while sending convert to number,
-  achievement: {
-    achievement: string[]
-  },
-  key_points: {
-    keyPoints: string[]
-  },
+  achievement: string[],
+  key_points: string[],
   company_id: number,
   role_id: number,
 };
