@@ -20,18 +20,31 @@ export const createOrphanCandidateSchema = z.object({
       notice_period: z.string().nullable(),
       description: z.string().nullable(),
       achievement: z.array(z.string()).nullable(),
-      gender: z.enum(['male', 'female', 'other']),
+      gender: z.enum(["male", "female", "other"]),
       current_company: z.string().nullable(),
       esop_rsu: z.number().multipleOf(0.01).nullable(),
       share_candidate_status: z.boolean(),
-      candidate_status: z.object({
-        candidate_profile_share_date: z.string().nullable(),
-        candidate_status: z.enum(['yet_to_share', 'joined', 'negotiation', 'on_hold', 'feedback_pending', 'dropped_out', 'rejected', 'in_process']).nullable(),
-        candidate_round_completed: z.number().nullable(),
-        candidate_reject_reason: z.string().nullable(),
-      }).nullable()
+      candidate_status: z
+        .object({
+          candidate_profile_share_date: z.string().nullable(),
+          candidate_status: z
+            .enum([
+              "yet_to_share",
+              "joined",
+              "negotiation",
+              "on_hold",
+              "feedback_pending",
+              "dropped_out",
+              "rejected",
+              "in_process",
+            ])
+            .nullable(),
+          candidate_round_completed: z.number().nullable(),
+          candidate_reject_reason: z.string().nullable(),
+        })
+        .nullable(),
     })
-  )
+  ),
 });
 
 export const createCandidateSchema = z.object({
@@ -52,24 +65,37 @@ export const createCandidateSchema = z.object({
       notice_period: z.string().nullable(),
       description: z.string().nullable(),
       achievement: z.array(z.string()).nullable(),
-      gender: z.enum(['male', 'female', 'other']),
+      gender: z.enum(["male", "female", "other"]),
       current_company: z.string().nullable(),
       esop_rsu: z.number().multipleOf(0.01).nullable(),
       share_candidate_status: z.boolean(),
-      candidate_status: z.object({
-        candidate_profile_share_date: z.string().nullable(),
-        candidate_status: z.enum(['yet_to_share', 'joined', 'negotiation', 'on_hold', 'feedback_pending', 'dropped_out', 'rejected', 'in_process']).nullable(),
-        candidate_round_completed: z.number().nullable(),
-        candidate_reject_reason: z.string().nullable(),
-      }).nullable(),
+      candidate_status: z
+        .object({
+          candidate_profile_share_date: z.string().nullable(),
+          candidate_status: z
+            .enum([
+              "yet_to_share",
+              "joined",
+              "negotiation",
+              "on_hold",
+              "feedback_pending",
+              "dropped_out",
+              "rejected",
+              "in_process",
+            ])
+            .nullable(),
+          candidate_round_completed: z.number().nullable(),
+          candidate_reject_reason: z.string().nullable(),
+        })
+        .nullable(),
       candidate_parameter_scores: z.array(
         z.object({
           parameter_id: z.number(),
           parameter_score: z.number(),
         })
-      )
+      ),
     })
-  )
+  ),
 });
 
 export const updateCandidateSchema = z.object({
@@ -88,9 +114,9 @@ export const updateCandidateSchema = z.object({
   notice_period: z.string().nullable(),
   description: z.string().nullable(),
   achievement: z.array(z.string()).nullable(),
-  gender: z.enum(['male', 'female', 'other']),
+  gender: z.enum(["male", "female", "other"]),
   current_company: z.string().nullable(),
-  esop_rsu: z.number().multipleOf(0.01).nullable()
+  esop_rsu: z.number().multipleOf(0.01).nullable(),
 });
 
 export const updateOrphanCandidateSchema = z.object({
@@ -111,15 +137,25 @@ export const updateOrphanCandidateSchema = z.object({
   notice_period: z.string().nullable(),
   description: z.string().nullable(),
   achievement: z.array(z.string()).nullable(),
-  gender: z.enum(['male', 'female', 'other']),
+  gender: z.enum(["male", "female", "other"]),
   current_company: z.string().nullable(),
   esop_rsu: z.number().multipleOf(0.01).nullable(),
   candidate_profile_share_date: z.string().nullable(),
-  candidate_status: z.enum(['yet_to_share', 'joined', 'negotiation', 'on_hold', 'feedback_pending', 'dropped_out', 'rejected', 'in_process']).nullable(),
+  candidate_status: z
+    .enum([
+      "yet_to_share",
+      "joined",
+      "negotiation",
+      "on_hold",
+      "feedback_pending",
+      "dropped_out",
+      "rejected",
+      "in_process",
+    ])
+    .nullable(),
   candidate_round_completed: z.number().nullable(),
   candidate_reject_reason: z.string().nullable(),
 });
-
 
 export const updateCandidateScoreSchema = z.object({
   candidate_parameter_scores: z.array(
@@ -127,7 +163,7 @@ export const updateCandidateScoreSchema = z.object({
       parameter_id: z.number(),
       parameter_score: z.number(),
     })
-  )
+  ),
 });
 
 export const createCompanySchema = z.object({
@@ -148,17 +184,14 @@ export const updateRoleSchema = z.object({
   role_name: z.string(),
 });
 
-
 export const createQuotientWeiSchema = z.object({
   quotientW: z.array(
-    z.object(
-      {
-        quotient_id: z.number(),
-        quotient_name: z.string(),
-        quotient_weightage: z.number()
-      }
-    )
-  )
+    z.object({
+      quotient_id: z.number(),
+      quotient_name: z.string(),
+      quotient_weightage: z.number(),
+    })
+  ),
 });
 
 export const createQuotientSchema = z.object({
@@ -171,14 +204,12 @@ export const updateQuotientSchema = z.object({
 
 export const createParameterWeiSchema = z.object({
   parameterW: z.array(
-    z.object(
-      {
-        parameter_id: z.number(),
-        parameter_name: z.string(),
-        parameter_weightage: z.number()
-      }
-    )
-  )
+    z.object({
+      parameter_id: z.number(),
+      parameter_name: z.string(),
+      parameter_weightage: z.number(),
+    })
+  ),
 });
 
 export const createParameterSchema = z.object({
@@ -194,7 +225,7 @@ export const userRegistrationSchema = z.object({
   last_name: z.string(),
   email: z.string().email(),
   password: z.string().min(6),
-  is_admin: z.number().min(0).max(1)
+  is_admin: z.number().min(0).max(1),
 });
 
 export const updateUserDetailsSchema = z.object({
@@ -246,9 +277,22 @@ export const updateGroupSchema = z.object({
 });
 
 export const addUserToGroupSchema = z.object({
-  user_id: z.number()
+  user_id: z.number(),
 });
 
 export const updateUserGroupSchema = z.object({
-  group_id: z.number()
+  group_id: z.number(),
 });
+
+export const createSkill = z.object({
+  skill: z.array(
+    z.object({
+      skill_name: z.string(),
+      is_active: z.number().min(0).max(1).default(1),
+    })
+  )
+});
+
+// export const createSkill = z.object({
+//   skill_name: z.string(),
+// });

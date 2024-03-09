@@ -37,7 +37,7 @@ export const candidateStatus = mysqlTable(
     ]).notNull(),
     roundDone: tinyint("round_done"),
     reasonReject: varchar("reason_reject", { length: 255 }),
-	isActive: tinyint("is_active").default(1),
+    isActive: tinyint("is_active").default(1),
   },
   (table) => {
     return {
@@ -75,7 +75,7 @@ export const candidates = mysqlTable(
     gender: mysqlEnum("gender", ["male", "female", "other"]),
     currCmp: varchar("curr_cmp", { length: 255 }),
     esopRsu: decimal("esop_rsu", { precision: 5, scale: 2 }),
-	isActive: tinyint("is_active").default(1),
+    isActive: tinyint("is_active").default(1),
   },
   (table) => {
     return {
@@ -92,7 +92,7 @@ export const companies = mysqlTable(
     id: bigint("id", { mode: "number" }).autoincrement().notNull(),
     name: varchar("name", { length: 255 }).notNull(),
     companyPhoto: varchar("company_photo", { length: 255 }),
-	isActive: tinyint("is_active").default(1),
+    isActive: tinyint("is_active").default(1),
     createdAt: timestamp("created_at", { mode: "string" })
       .defaultNow()
       .notNull(),
@@ -147,7 +147,7 @@ export const groups = mysqlTable(
     groupsCanEdit: tinyint("groups_can_edit").default(0),
     groupsCanCreate: tinyint("groups_can_create").default(0),
     groupsCanDelete: tinyint("groups_can_delete").default(0),
-	isActive: tinyint("is_active").default(1),
+    isActive: tinyint("is_active").default(1),
     createdAt: timestamp("created_at", { mode: "string" })
       .defaultNow()
       .notNull(),
@@ -209,7 +209,7 @@ export const parameters = mysqlTable(
     id: bigint("id", { mode: "number" }).autoincrement().notNull(),
     parameter: text("parameter").notNull(),
     quotientId: bigint("quotient_id", { mode: "number" }).notNull(),
-	isActive: tinyint("is_active").default(1),
+    isActive: tinyint("is_active").default(1),
     createdAt: timestamp("created_at", { mode: "string" })
       .defaultNow()
       .notNull(),
@@ -271,7 +271,7 @@ export const quotients = mysqlTable(
   {
     id: bigint("id", { mode: "number" }).autoincrement().notNull(),
     quotient: varchar("quotient", { length: 150 }).notNull(),
-	isActive: tinyint("is_active").default(1),
+    isActive: tinyint("is_active").default(1),
     createdAt: timestamp("created_at", { mode: "string" })
       .defaultNow()
       .notNull(),
@@ -289,7 +289,7 @@ export const skillSet = mysqlTable(
   {
     id: bigint("id", { mode: "number" }).autoincrement().notNull(),
     skill: varchar("skill", { length: 255 }).notNull(),
-	isActive: tinyint("is_active").default(1),
+    isActive: tinyint("is_active").default(1),
     createdAt: timestamp("created_at", { mode: "string" })
       .defaultNow()
       .notNull(),
@@ -302,7 +302,7 @@ export const skillSet = mysqlTable(
   }
 );
 
-export const CandidateSkillSet = mysqlTable(
+export const candidateSkillSet = mysqlTable(
   "candidate_skillset",
   {
     id: bigint("id", { mode: "number" }).autoincrement().notNull(),
@@ -327,7 +327,7 @@ export const roles = mysqlTable(
     id: bigint("id", { mode: "number" }).autoincrement().notNull(),
     name: varchar("name", { length: 255 }).notNull(),
     companyId: bigint("company_id", { mode: "number" }).notNull(),
-	isActive: tinyint("is_active").default(1),
+    isActive: tinyint("is_active").default(1),
     createdAt: timestamp("created_at", { mode: "string" }).default(
       sql`CURRENT_TIMESTAMP`
     ),
@@ -370,6 +370,23 @@ export const statusHistory = mysqlTable(
   }
 );
 
+// export const candidateScoreHistory = mysqlTable(
+//   "candidate_score_history",
+//   {
+//     id: bigint("id", { mode: "number" }).autoincrement().notNull(),
+//     candidateId: bigint("candidate_id", { mode: "number" }).notNull(),
+//     quotientId: bigint("quotient_id", { mode: "number" }).notNull(),
+//     gpScore: decimal("gp_score", { precision: 4, scale: 2 }).notNull(),
+//   },
+//   (table) => {
+//     return {
+//       candidateIdIdx: index("candidate_id_idx").on(table.candidateId),
+//       quotientIdIdx: index("quotient_id_idx").on(table.quotientId),
+//       candidateScoreHistoryId: primaryKey(table.id),
+//     };
+//   }
+// );
+
 export const userGroups = mysqlTable(
   "user_groups",
   {
@@ -398,7 +415,7 @@ export const users = mysqlTable(
     firstName: varchar("first_name", { length: 200 }),
     lastName: varchar("last_name", { length: 200 }),
     isAdmin: tinyint("is_admin").default(0),
-	isActive: tinyint("is_active").default(1),
+    isActive: tinyint("is_active").default(1),
   },
   (table) => {
     return {
@@ -424,3 +441,5 @@ export type User = InferSelectModel<typeof users>;
 export type UserGroups = InferSelectModel<typeof userGroups>;
 export type Groups = InferSelectModel<typeof groups>;
 export type GroupPermissions = InferSelectModel<typeof groupPermissions>;
+export type SkillSet = InferSelectModel<typeof skillSet>;
+export type CandidateSkillSet = InferSelectModel<typeof candidateSkillSet>;
